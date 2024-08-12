@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Province;
 use App\Http\Requests\ParentRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class ParentController extends Controller
         $data['menu'] = 'Guardian'; 
 
         if($request->ajax()){
-            return Datatables::of(User::where('role','parent'))
+            return Datatables::of(User::where('role','guardian'))
             ->addIndexColumn()
             ->editColumn('fullname', function($row) {
                 return ucfirst($row->firstname). ' '.ucfirst($row->lastname);
@@ -54,7 +55,7 @@ class ParentController extends Controller
             $inputs['image'] = 'uploads/users/' . $imageName;
         }
 
-        $inputs['role'] = 'parent';
+        $inputs['role'] = 'guardian';
         $inputs['status'] = 'inactive';
         $parent = User::create($inputs);
 
@@ -65,6 +66,8 @@ class ParentController extends Controller
 
     public function edit($id){
         $data['menu'] = 'Guardian';
+        $data['provinceData'] = getActiveProvince();
+        $data['schoolData'] = getActiveSchool();
         $data['parent'] = User::where('id',$id)->findorFail($id);
         return view('admin.parent.edit',$data);
     }

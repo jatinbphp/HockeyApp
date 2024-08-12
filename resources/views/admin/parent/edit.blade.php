@@ -28,6 +28,8 @@
                             @include('admin.common.footer-buttons', ['route' => 'parent.index', 'type' => 'update'])
                         </div>
                     {!! Form::close() !!}
+
+                    @include('admin.children.modalForm')
                 </div>
             </div>
         </div>

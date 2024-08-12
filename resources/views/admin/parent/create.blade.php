@@ -28,6 +28,8 @@
                             @include('admin.common.footer-buttons', ['route' => 'parent.index', 'type' => 'create'])
                         </div>
                     {!! Form::close() !!}
+
+                    
                 </div>
             </div>
         </div>

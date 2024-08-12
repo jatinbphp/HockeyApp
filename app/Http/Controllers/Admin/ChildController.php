@@ -45,70 +45,43 @@ class ChildController extends Controller
         return view('admin.children.create',$data);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
+        $input = $request->all();
 
-        echo "<pre>";
-        print_r($request);
-        exit;
+        $lookingSponsor = 0;
+        if(isset($request->looking_sponsor)){
+            $lookingSponsor = 1;
+        }
 
         Child::updateOrCreate([
             'id' => $request->child_id
-        ],
-        [
-            'firstname' => $request->firstname, 
-            'lastname' => $request->lastname
-        ]);        
-     
-        return response()->json(['success'=>'Children added successfully.']);
+        ],[
+            'parent_id' => $request->parent_id, 
+            'firstname' => $request->child_firstname, 
+            'lastname' => $request->child_lastname,
+            'username' => $request->child_username,
+            'email' => $request->email,
+            'password' => $request->child_password,
+            'date_of_birth' => date('Y-m-d',strtotime($request->child_dob)),
+            'phone' => $request->child_phone,
+            'province_id' => $request->province_id,
+            'school_id' => $request->school_id,
+            'looking_sponsor' => $lookingSponsor,
+        ]);     
+
+        return response()->json(['success'=>'Children saved successfully.']);
 
     }
-
+ 
     public function edit($id){
         $children = Child::find($id);
         return response()->json($children);
     }
-
-    public function update(ChildRequest $request,$id){
-
-        if(empty($request['password'])){
-            unset($request['password']);
-        }
-
-        $input = $request->all();
-
-        $user = Child::findorFail($id);
-
-        if ($file = $request->file('image')) {
-            $imageName = Str::random(20) . "." . $file->getClientOriginalExtension();
-            
-            $file->move(public_path('uploads/children'), $imageName);
-
-            $input['image'] = 'uploads/children/' . $imageName;
-
-            if (!empty($user->image) && file_exists(public_path($user->image))) {
-                unlink(public_path($user->image));
-            }
-        } else {
-            $input['image'] = $user->image;
-        }
-        
-        $user->update($input);
-
-        \Session::flash('success','User has been updated successfully!');
-        return redirect()->route('children.index');
-    }
-
+ 
     public function destroy($id)
     {
-        $users = Child::findOrFail($id);
-        if(!empty($users)){
-            if (!empty($users['image']) && file_exists($users['image'])) {
-                unlink($users['image']);
-            }
-            $users->delete();
-            return 1;
-        }else{
-            return 0;
-        }
+        Child::find($id)->delete();
+        return response()->json(['success' => 'Children deleted successfully!']);
     }
 }

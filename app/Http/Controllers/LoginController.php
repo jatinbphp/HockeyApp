@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+
+use App\Models\User;
+
+
 
 class LoginController extends Controller
 {
@@ -13,38 +18,41 @@ class LoginController extends Controller
     public function index(Request $request){
         // Validate incoming request data
         $this->validate($request, [
-            'username' => 'required',
+            'email' => 'required',
             'password' => 'required',
         ]);
 
         // Prepare data for API request
         $data = [
-            'username' => $request->input('username'),
+            'email' => $request->input('email'),
             'password' => $request->input('password'),            
         ];
 
-        $user = User::where('email','=',$request->email)->first();
+        $user = User::where('email',$request->email)->first();
 
         if($user){
             if(Hash::check($request->password, $user->password)){
                 $request->session()->put('loginId', $user->id);
-                return redirect('dashboard');
+                return redirect('admin/dashboard');
             } else {
-                return back()->with('fail','Password not match!');
+                return back()->with('danger','Password not match!');
             }
         } else {
-            return back()->with('fail','This Username is not register.');
+            return back()->with('danger','This Username is not register.');
         }     
         
     }
 
     public function logout()
     {
-        $data = array();
-        if(Session::has('loginId')){
+        // Check if the session has a 'loginId'
+        if (Session::has('loginId')) {
+            // Remove 'loginId' from the session
             Session::pull('loginId');
-            return redirect('login');
         }
+
+        // Redirect to the home page
+        return redirect('/');
     }
 }
  

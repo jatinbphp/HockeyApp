@@ -25,8 +25,8 @@ class ChildRequest extends FormRequest
         $userId = $this->route('children');
 
         $rules = [
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
+            'child_firstname' => 'required|string|max:255',
+            'child_lastname' => 'required|string|max:255',
             // 'username' => 'required|string|max:255',
             // 'password' => 'confirmed|min:6',
             // 'email' => [
@@ -46,8 +46,8 @@ class ChildRequest extends FormRequest
     public function messages(){
 
         return [
-            'firstname' => 'The firstname field is required.',
-            'lastname' => 'The lastname field is required.',
+            'child_firstname' => 'The firstname field is required.',
+            'child_lastname' => 'The lastname field is required.',
             // 'username' => 'The username field is required.',
             // 'email.email' => 'The email address field must be a valid email address.',
             // 'email.unique' => 'Email already exists.'

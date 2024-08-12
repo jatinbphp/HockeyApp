@@ -6,10 +6,10 @@
         'menu' => $menu
     ])
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="display:none;">
         <div class="container-fluid">
             <!-- Info boxes -->
-            <div class="row">
+            <div class="row hidden">
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="info-box">
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>

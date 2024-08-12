@@ -17,6 +17,12 @@ class CommonController extends Controller
         DB::table($request['table_name'])->where('id', $request['id'])->update((array) $updateInput);
     }
 
+    public function changeSkillStatus(Request $request){
+        $updateInput = DB::table($request['table_name'])->where('id', $request['id'])->first();
+        $updateInput->status = ($request['type'] == 'off') ? 'off' : 'on';
+        DB::table($request['table_name'])->where('id', $request['id'])->update((array) $updateInput);
+    }
+
     public function page_not_found(){
         $data['menu'] = '404';
         return view('admin.errors.404', $data);

@@ -27,4 +27,12 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    protected function unauthenticated($request, \Illuminate\Auth\AuthenticationException $exception)
+    {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Access denied: You must be logged in to perform this action. Please authenticate and try again.',
+        ], 401);
+    }
 }

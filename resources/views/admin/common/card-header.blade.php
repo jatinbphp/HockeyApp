@@ -6,3 +6,11 @@
 	    </div>
 	</div>
 @endisset
+
+@isset($sendNewRoute)
+	<div class="row">
+	    <div class="col-md-12">
+	        <a href="{{ $sendNewRoute }}" class="btn btn-sm btn-info float-right"><i class="fa fa-plus pr-1"></i></i> Send Notification</a>
+	    </div>
+	</div>
+@endisset

@@ -9,25 +9,33 @@
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
         <!-- Font Awesome Icons -->
-        <link rel="stylesheet" href="{{ URL('assets/plugins/fontawesome-free/css/all.min.css')}}" />
+        <!-- <link rel="stylesheet" href="{{ URL::asset('assets/plugins/fontawesome-free/css/all.min.css')}}" /> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
         <!-- overlayScrollbars -->
-        <link rel="stylesheet" href="{{ URL('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}" />
+        <link rel="stylesheet" href="{{ URL::asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}" />
         <!-- Theme style -->
-        <link rel="stylesheet" href="{{ URL('assets/dist/css/adminlte.min.css')}}" />
-        <link rel="stylesheet" href="{{ URL('assets/dist/css/custom.css')}}" />
+        <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/adminlte.min.css')}}" />
+        <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/custom.css')}}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.3/themes/base/jquery-ui.min.css" />
 
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda-themeless.min.css">
+        <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.min.css') }}">
+        <link rel="stylesheet" href="{{ URL::asset('assets/plugins/summernote/summernote.min.css') }}">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css">
+
 
     </head>
     <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
         <div class="wrapper">
             <!-- Preloader -->
             <div class="preloader flex-column justify-content-center align-items-center">
-                <img class="animation__wobble" src="{{ URL('assets/dist/img/AdminLTELogo.png')}}"  height="60" width="60" />
+                <img class="animation__wobble" src="{{ URL::asset('assets/dist/img/AdminLTELogo.png')}}"  height="60" width="60" />
             </div>
 
             <!-- Navbar -->
@@ -57,7 +65,7 @@
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
                 <a href="{{route('admin.dashboard')}}" class="brand-link">
-                    {{-- <img src="{{ URL('assets/dist/img/logo-black.png')}}" alt="{{ config('app.name', 'Hockey App') }}" class="brand-image" /> --}}
+                    {{-- <img src="{{ URL::asset('assets/dist/img/logo-black.png')}}" alt="{{ config('app.name', 'Hockey App') }}" class="brand-image" /> --}}
                     <span class="brand-text font-weight-light">Hockey App</span>
                 </a>
 
@@ -66,7 +74,7 @@
                     <!-- Sidebar user panel (optional) -->
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-                            <img src="{{ URL('assets/dist/img/avatar.png')}}" class="img-circle elevation-2" alt="User Image" />
+                            <img src="{{ URL::asset('assets/dist/img/avatar.png')}}" class="img-circle elevation-2" alt="User Image" />
                         </div>
                         <div class="info">
                             <a href="#" class="d-block">Super Admin</a>
@@ -146,6 +154,78 @@
                             </li>
 
                             <li class="nav-item">
+                                <a href="{{route('skill.index')}}" class="nav-link @if(isset($menu) && $menu=='Skill') active @endif">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>
+                                        Manage Skill
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('sponsors.index')}}" class="nav-link @if(isset($menu) && $menu=='Sponsors') active @endif">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>
+                                        Manage Sponsors
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('skill-review.index')}}" class="nav-link @if(isset($menu) && $menu=='SkillReview') active @endif">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>
+                                        Skill Review
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('consent.index')}}" class="nav-link @if(isset($menu) && $menu=='Consent Message') active @endif">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>
+                                        Consent Message
+                                    </p>
+                                </a>
+                            </li> 
+
+                            <li class="nav-item">
+                                <a href="{{route('cms_page.index')}}" class="nav-link @if(isset($menu) && $menu=='CMS') active @endif">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>
+                                        CMS Pages
+                                    </p>
+                                </a>
+                            </li>  
+
+                            <li class="nav-item">
+                                <a href="{{route('notification.index')}}" class="nav-link @if(isset($menu) && $menu=='Notification') active @endif">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>
+                                        Notification
+                                    </p>
+                                </a>
+                            </li> 
+
+                            <li class="nav-item">
+                                <a href="{{route('email-templates.index')}}" class="nav-link @if(isset($menu) && $menu=='Email Template') active @endif">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>
+                                        Email Templates
+                                    </p>
+                                </a>
+                            </li>     
+
+                            <li class="nav-item">
+                                <a href="{{route('contactus.index')}}" class="nav-link @if(isset($menu) && $menu=='ContactUs') active @endif">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>
+                                        Contact Us
+                                    </p>
+                                </a>
+                            </li>                        
+
+                            <li class="nav-item">
                                 <a href="{{ route('admin.logout') }}" class="nav-link">
                                     <i class="nav-icon fa fa-sign-out-alt"></i> <p class="">Log out</p>
                                 </a>
@@ -161,6 +241,15 @@
             <!-- Content Wrapper. Contains page content -->
             @yield('content')
             <!-- /.content-wrapper -->
+
+            <!-- Modal -->
+            <div class="modal fade" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="commonModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <!-- Modal content -->
+                    </div>
+                </div>
+            </div>
 
             <!-- Control Sidebar -->
             <aside class="control-sidebar control-sidebar-dark">
@@ -179,29 +268,46 @@
 
         <!-- REQUIRED SCRIPTS -->
         <!-- jQuery -->
-        <script src="{{ URL('assets/plugins/jquery/jquery.min.js')}}"></script>
+        <script src="{{ URL::asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+        <script src="{{ URL::asset('assets/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
         <!-- Bootstrap -->
-        <script src="{{ URL('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        <script src="{{ URL::asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <!-- overlayScrollbars -->
-        <script src="{{ URL('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
+        <script src="{{ URL::asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
         <!-- AdminLTE App -->
-        <script src="{{ URL('assets/dist/js/adminlte.js')}}"></script>
+        <script src="{{ URL::asset('assets/dist/js/adminlte.js')}}"></script>
         <!-- AdminLTE for demo purposes -->
-        <script src="{{ URL('assets/dist/js/demo.js')}}"></script>
+        <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
 
         <!-- AdminLTE for datatables -->
-        <script src="{{ URL('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-        <script src="{{ URL('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
-        <script src="{{ URL('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
-        <script src="{{ URL('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
 
-        <script src="{{ URL('assets/dist/js/table-actions.js')}}?{{ time() }}"></script>
+        <script src="{{ URL::asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+        <script src="{{ URL::asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+        <script src="{{ URL::asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+        <script src="{{ URL::asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+
+
+        <script src="{{ URL::asset('assets/dist/js/table-actions.js')}}?{{ time() }}"></script>
+        <script src="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.min.js')}}"></script>
+        <script src="{{ URL::asset('assets/plugins/summernote/summernote.min.js')}}"></script>       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/spin.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda.min.js"></script>       
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.js"></script>
+
+
         <script>
             $(document).ready(function() {
                 Ladda.bind('button[type=submit]');
+
+                /*Datepicker*/
+                $('.datepicker').datepicker({
+                    format: 'yyyy-m-d',
+                    autoclose: true,
+                });
+
+                $('select .selectDropdown').selectpicker();
+
             });
         </script>
         

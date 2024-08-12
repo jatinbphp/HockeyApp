@@ -9,7 +9,15 @@ use App\Http\Controllers\Admin\ParentController;
 use App\Http\Controllers\Admin\ChildController;
 use App\Http\Controllers\Admin\ProvinceController;
 use App\Http\Controllers\Admin\SchoolController;
+use App\Http\Controllers\Admin\SkillController;
+use App\Http\Controllers\Admin\ConsentMessageController;
+use App\Http\Controllers\Admin\SponsorsController;
+use App\Http\Controllers\Admin\EmailTemplatesController;
 use App\Http\Controllers\Admin\CommonController;
+use App\Http\Controllers\Admin\CmsPagesController;
+use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\SkillReviewController;
+use App\Http\Controllers\Admin\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,34 +35,63 @@ use App\Http\Controllers\Admin\CommonController;
 // });
 
 
-Route::get('/', function () {
+Route::get('', function () {
     return view('login');
-})->name('login');
+})->name('login')->middleware(['removePublic']);
 
 Route::post('login',[LoginController::class, 'index'])->name('user.login');
 
 Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
 
-Route::get('dashboard',[DashboardController::class, 'index'])->name('admin.dashboard');
+Route::prefix('admin')->middleware(['removePublic'])->group(function () {
 
-/* USERS */
-Route::resource('users', UsersController::class);
-Route::resource('parent', ParentController::class);
-Route::resource('children', ChildController::class);
+    Route::get('dashboard',[DashboardController::class, 'index'])->name('admin.dashboard');
 
-Route::post('users/additional-fields', [CommonController::class,'additionalFieldsForUser'])->name('users.additional_fields');
+    /* USERS */
+    Route::resource('users', UsersController::class);
+    Route::resource('parent', ParentController::class);
+    Route::resource('children', ChildController::class);
 
-/* COMMON FOR CHANGES STATUS */
-Route::post('common/changestatus', [CommonController::class,'changeStatus'])->name('common.changestatus');
+    Route::post('users/additional-fields', [CommonController::class,'additionalFieldsForUser'])->name('users.additional_fields');
+
+    /* COMMON FOR CHANGES STATUS */
+    Route::post('common/changestatus', [CommonController::class,'changeStatus'])->name('common.changestatus');
 
 
-/* CATEGROY */
-Route::resource('category', CategoriesController::class);
+    /* CATEGROY */
+    Route::resource('category', CategoriesController::class);
 
-/* PROVINCE */
-Route::resource('province', ProvinceController::class);
+    /* PROVINCE */
+    Route::resource('province', ProvinceController::class);
 
-/* SCHOOL */
-Route::resource('school', SchoolController::class);
+    /* SCHOOL */
+    Route::resource('school', SchoolController::class);
 
+    /* SKILL */
+    Route::resource('skill', SkillController::class);
+
+    /* CONSENT MESSAGE */
+    Route::resource('consent', ConsentMessageController::class);
+
+     /* CMS PAGES */
+    Route::resource('cms_page', CmsPagesController::class);
+
+    /* SPONSORS */
+    Route::resource('sponsors', SponsorsController::class);
+
+    /* EMAIL TEMPLATES */
+    Route::resource('email-templates', EmailTemplatesController::class);
+
+    /* NOTIFICATION */
+    Route::resource('notification', NotificationController::class);
+
+    /* CONTACT US */
+    Route::resource('contactus', ContactUsController::class);
+    Route::get('/contactus/{contactus}', [ContactUsController::class, 'show'])->name('contactus.show');
+
+    /* SKILL REVIEW */
+    Route::resource('skill-review', SkillReviewController::class);
+    Route::get('/skill-review/{skill_review}', [SkillReviewController::class, 'show'])->name('skill-review.show');
+    Route::post('skill-review/update_status', [SkillReviewController::class,'updateOrderStatus'])->name('skill-review.update_status');
+});
 

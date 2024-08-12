@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs" id="myTabs">
     <li class="nav-item">
-        <a class="nav-link active" id="tab1" data-toggle="tab" href="#content1">Guardian Information</a>
+        <a class="nav-link active partentTabSectionId" id="tab1" data-toggle="tab" href="#content1">Guardian Information</a>
     </li>
     <li class="nav-item">
         <a class="nav-link @if(!isset($parent)) disabled @endif" id="tab2" data-toggle="tab" href="#content2">Children Information</a>
@@ -141,7 +141,7 @@
                         <tbody>
                         </tbody>
                     </table>
-                    @include('admin.children.modalForm')
+                    
                 </div>
             </div>
         </div>
@@ -155,55 +155,15 @@
 
 $(document).ready(function(){
 
-    /* CHILDREN ADD/EDIT FROM MODAL POPUP */
-
-    /* ADD NEW CHILDREN */
-    $('#createNewChilren').click(function () {
-        $('#saveBtn').val("create-children");
-        $('#child_id').val('');
-        $('#childForm').trigger("reset");
-        $('#modelHeading').html("Create New Children");
-        $('#childModel').modal('show');
+    /* HIDE/SHOW FOOTER BUTTON --> IF CHILD TAB ACTIVE THEN HIDE FOOTER BUTTONS */
+    $('.nav-tabs > li > a').on("click",function(e){
+        e.preventDefault();
+        if($(this).hasClass('partentTabSectionId')){
+            $('.card-footer').show();
+        }else{
+            $('.card-footer').hide();
+        }        
     });
-
-    /* EDIT CHILDREN */
-    $('body').on('click', '.editProduct', function () {
-        var child_id = $(this).data('id');
-        $.get("{{ route('children.index') }}" +'/' + child_id +'/edit', function (data) {
-            $('#modelHeading').html("Edit Product");
-            $('#saveBtn').val("edit-children");
-            $('#childModel').modal('show');
-            $('#child_id').val(data.id);
-            $('#firstname').val(data.firstname);
-            $('#lastname').val(data.lastname);
-        })
-    });
-
-    // /* SAVE CHILDREN DATA BY AJAX REQUEST */
-    // $('#saveBtn').click(function (e) {
-    //     e.preventDefault();
-    //     $(this).html('Sending..');
-      
-    //     $.ajax({
-    //         data: $('#childForm').serialize(),
-    //         url: "{{ route('children.store') }}",
-    //         headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
-    //         type: "POST",
-    //         dataType: 'json',
-    //         success: function (data) {
-        
-    //             $('#childForm').trigger("reset");
-    //             $('#childModel').modal('hide');
-    //             child_table.draw();
-            
-    //         },
-    //         error: function (data) {
-    //             console.log('Error:', data);
-    //             $('#saveBtn').html('Save Changes');
-    //         }
-    //     });
-    // });
-   
 });
 </script>
 @endsection
