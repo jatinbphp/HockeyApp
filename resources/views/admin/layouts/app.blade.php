@@ -14,7 +14,7 @@
         <!-- overlayScrollbars -->
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}" />
         <!-- Theme style -->
-        <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/adminlte.min.css')}}" />
+        <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/adminlte.min.css')}}?{{ time() }}" />
         <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/custom.css')}}" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.3/themes/base/jquery-ui.min.css" />
 
@@ -31,7 +31,7 @@
 
 
     </head>
-    <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
         <div class="wrapper">
             <!-- Preloader -->
             <div class="preloader flex-column justify-content-center align-items-center">

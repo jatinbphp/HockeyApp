@@ -25,7 +25,7 @@ class MainController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', [
-            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors']
+            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore']
         ]);
     }
 
@@ -343,7 +343,151 @@ class MainController extends Controller
                 'message' => 'No active sponsors found',
                 'data' => (object)[]
             ], 404);
+        } 
+    }
+
+    public function getGuardianProfile(Request $request){
+
+        try{
+
+            $validator = Validator::make($request->post(), [
+                'user_id' => 'required'
+            ]);
+
+            if ($validator->fails()) {  
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => implode(',', $validator->errors()->all()),
+                    'data' => (object)[]
+                ], 200);
+
+            }
+        
+            $userData = User::where('id', $request->user_id)->get();
+           
+            if (!$userData->isEmpty()) {         
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Profile retrieved successfully',
+                    'data' => $userData
+                ],200);         
+
+            }else{
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Profile not found',
+                    'data' => (object)[]
+                ], 404);
+            } 
+            
+
+        }catch(Exception $e){
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while fetching the profile'
+            ], 500);
+
         }
- 
+    }
+
+    public function getChildrenProfile(Request $request){
+
+        try{
+
+            $validator = Validator::make($request->post(), [
+                'user_id' => 'required'
+            ]);
+
+            if ($validator->fails()) {  
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => implode(',', $validator->errors()->all()),
+                    'data' => (object)[]
+                ], 200);
+
+            }
+        
+            $userData = Child::where('id', $request->user_id)->get();
+           
+            if (!$userData->isEmpty()) {         
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Profile retrieved successfully',
+                    'data' => $userData
+                ],200);         
+
+            }else{
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Profile not found',
+                    'data' => (object)[]
+                ], 404);
+            } 
+            
+
+        }catch(Exception $e){
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while fetching the profile'
+            ], 500);
+
+        }
+    }
+
+
+    public function getChildrensByParentId(Request $request){
+
+        try{
+
+            $validator = Validator::make($request->post(), [
+                'parent_id' => 'required'
+            ]);
+
+            if ($validator->fails()) {  
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => implode(',', $validator->errors()->all()),
+                    'data' => (object)[]
+                ], 200);
+
+            }          
+
+            $userData = Child::where('parent_id', $request->parent_id)->get();
+        
+            if (!$userData->isEmpty()) {         
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Children data retrieved successfully',
+                    'data' => $userData
+                ],200);         
+
+            }else{
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Children not found',
+                    'data' => (object)[]
+                ], 404);
+            } 
+            
+
+        }catch(Exception $e){
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while fetching the profile'
+            ], 500);
+
+        }
     }
 }

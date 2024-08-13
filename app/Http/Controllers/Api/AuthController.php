@@ -16,7 +16,7 @@ class AuthController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', [
-            'except' => ['login','register','childrenRegister','contactUs']
+            'except' => ['login','register','childrenRegister','contactUs','getActiveSkill']
         ]);
     }
 
@@ -43,7 +43,8 @@ class AuthController extends Controller
         $user = $this->attemptLogin(User::class, $credentials);
         if (!$user) {
             // If User authentication fails, try to authenticate against the Child model
-            $user = $this->attemptLogin(Child::class, $credentials);
+            $user = $this->attemptLogin(Child::class, $credentials);            
+
         }
 
         if (!$user) {
@@ -72,6 +73,13 @@ class AuthController extends Controller
             'session_token' => $token
         ]);
 
+        
+        if($user->role == "guardian"){
+            $user->role = $user->role;
+        }else{
+            $user->role = "children";
+        }
+        
         return response()->json([
             'status' => 'success',
             'message' => 'Login Successful!',
@@ -194,54 +202,6 @@ class AuthController extends Controller
         ],200);
 
     }
-
-    // /* CHILDREN REGISTRATION */
-    // public function childrenRegister11(Request $request){
-
-    //     $request->validate([
-    //         'firstname' => 'required',
-    //         'lastname' => 'required',
-    //         'email' => 'required|email|unique:users|unique:children',
-    //         'username' => 'required',
-    //         'password' => 'required',
-    //         'phone' => 'required|numeric',
-    //         'date_of_birth' => 'required',
-    //         'province' => 'required',
-    //         'school' => 'required',
-    //     ]);
-
-    //     $parentId = (!empty($request->parent_id))?$request->parent_id:0;
-
-    //     $user = Child::create([
-    //         'parent_id' => $parentId,
-    //         'firstname' => $request->firstname,
-    //         'lastname' => $request->lastname,
-    //         'email' => $request->email,
-    //         'username' => $request->username,
-    //         'password' => $request->password,
-    //         'phone' => $request->phone,
-    //         'date_of_birth' => $request->date_of_birth,
-    //         'province' => $request->province,
-    //         'school' => $request->school,
-    //         'looking_sponsor' => (($request->looking_sponsor)?'1':'0'),   
-    //         'terms' => (($request->terms)?'1':'0')
-    //     ]);
-
-    //     $token = Auth::login($user);
-
-    //     $user->update([
-    //         'device_type' => $request->device_type,
-    //         'device_id' => $request->device_id,
-    //         'session_token' => $token
-    //     ]);     
-
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'message' => 'Register Successfully!',
-    //         'user' => $user
-    //     ]);
-
-    // }
 
     public function childrenRegister(Request $request)
     {

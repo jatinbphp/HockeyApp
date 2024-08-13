@@ -30,16 +30,22 @@ Route::controller(AuthController::class)->middleware(['removePublic'])->group(fu
 Route::get('getSchool', [MainController::class, 'getActiveSchool']);
 Route::get('getProvince', [MainController::class, 'getActiveProvince']); 
 Route::get('getSponsors', [MainController::class, 'getSponsors']);
+Route::get('getSkill', [MainController::class, 'getActiveSkill']);    
+Route::get('getSkillById/{id}', [MainController::class, 'getActiveSkillById']);  
+
+Route::post('getChildrenProfile', [MainController::class, 'getChildrenProfile']);      
+Route::post('getChildrensByParentId', [MainController::class, 'getChildrensByParentId']);      
+
+Route::post('submitScore', [MainController::class, 'submitScore']);
 
 Route::middleware('auth:api')->group(function () {
-    // Route::get('getCategories', [MainController::class, 'getActiveCategories']); 
-    Route::get('getSkill', [MainController::class, 'getActiveSkill']);    
-    Route::get('getSkillById/{id}', [MainController::class, 'getActiveSkillById']);  
+    // Route::get('getCategories', [MainController::class, 'getActiveCategories']);
       
     Route::get('getRankings', [MainController::class, 'getActiveRankings']);
     Route::get('getRankingById/{id}', [MainController::class, 'getActiveRankingsById']);      
     
-    Route::post('submitScore', [MainController::class, 'submitScore']);
+    Route::post('getGuardianProfile', [MainController::class, 'getGuardianProfile']);      
+   
 });
 
 Route::post('/payfast/create-payment', [PayFastController::class, 'createPayment'])->name('payfast.create');

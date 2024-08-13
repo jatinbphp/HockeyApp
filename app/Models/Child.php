@@ -15,7 +15,6 @@ class Child extends Authenticatable implements JWTSubject
     use HasFactory,SoftDeletes,Notifiable;
 
     protected $fillable = [
-        'id',
         'parent_id',
         'firstname',
         'lastname',
