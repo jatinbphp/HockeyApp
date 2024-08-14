@@ -496,9 +496,7 @@ class MainController extends Controller
         $validator = Validator::make($request->post(), [
             'firstname' => 'required',
             'lastname' => 'required',
-            'username' => 'required',
             'email' => 'required|email|unique:users,email,' . $request->user_id . '|unique:children,email',
-            'password' => 'required|confirmed',
             'phone' => 'required|numeric',   
         ]);
 
@@ -545,7 +543,6 @@ class MainController extends Controller
             'lastname' => 'required',
             'username' => 'required',
             'email' => 'required|email|unique:children,email,' . $request->user_id . '|unique:users,email',
-            'password' => 'required|confirmed',
             'phone' => 'required|numeric',
             'date_of_birth' => 'required',
             'province_id' => 'required', 
