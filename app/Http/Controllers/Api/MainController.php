@@ -25,7 +25,7 @@ class MainController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', [
-            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore']
+            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore','guardianProfileUpdate','childrenProfileUpdate']
         ]);
     }
 
@@ -488,6 +488,103 @@ class MainController extends Controller
                 'message' => 'An error occurred while fetching the profile'
             ], 500);
 
+        }
+    }
+
+    public function guardianProfileUpdate(Request $request){
+
+        $validator = Validator::make($request->post(), [
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'username' => 'required',
+            'email' => 'required|email|unique:users,email,' . $request->user_id . '|unique:children,email',
+            'password' => 'required|confirmed',
+            'phone' => 'required|numeric',   
+        ]);
+
+        if ($validator->fails()) {           
+            return response()->json([
+                'status' => 'error',
+                'message' => implode(',', $validator->errors()->all()),
+                'data' => (object)[]
+            ], 200);
+        }
+
+        $input = $request->all();
+
+        if (!empty($request->user_id)) {
+            $user = User::find($request->user_id);
+
+            if (!empty($user)) {
+                $user->update($input);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Guardian Updated Successfully!',
+                    'data' => $user
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'User not found!',
+                    'data' => (object)[]
+                ], 200);
+            }
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to Update Guardian!',
+                'data' => (object)[]
+            ], 200);
+        }
+    }
+
+    public function childrenProfileUpdate(Request $request){
+
+        $validator = Validator::make($request->post(), [
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'username' => 'required',
+            'email' => 'required|email|unique:children,email,' . $request->user_id . '|unique:users,email',
+            'password' => 'required|confirmed',
+            'phone' => 'required|numeric',
+            'date_of_birth' => 'required',
+            'province_id' => 'required', 
+            'school_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {           
+            return response()->json([
+                'status' => 'error',
+                'message' => implode(',', $validator->errors()->all()),
+                'data' => (object)[]
+            ], 200);
+        }
+
+        $input = $request->all();
+
+        if (!empty($request->user_id)) {
+            $children = Child::find($request->user_id);
+
+            if (!empty($children)) {
+                $children->update($input);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Children Updated Successfully!',
+                    'data' => $children
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Children not found!',
+                    'data' => (object)[]
+                ], 200);
+            }
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to Update Children!',
+                'data' => (object)[]
+            ], 200);
         }
     }
 }
