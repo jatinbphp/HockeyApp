@@ -29,7 +29,8 @@ class Child extends Authenticatable implements JWTSubject
         'status',
         'session_token',
         'device_type',
-        'device_id'
+        'device_id',
+        'image'
     ];
 
 

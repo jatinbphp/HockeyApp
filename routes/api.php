@@ -50,7 +50,7 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::post('guardianProfileUpdate',[MainController::class, 'guardianProfileUpdate']);
 Route::post('childrenProfileUpdate',[MainController::class, 'childrenProfileUpdate']);
-Route::post('childrenProfileUpdate',[MainController::class, 'multipleChildrenProfileUpdate']);
+Route::post('multiplechildrenProfileUpdate',[MainController::class, 'multipleChildrenProfileUpdate']);
 Route::post('/payfast/create-payment', [PayFastController::class, 'createPayment'])->name('payfast.create');
 Route::post('/payfast/notify', [PayFastController::class, 'notify'])->name('payfast.notify');
 Route::get('/payfast/return', [PayFastController::class, 'return'])->name('payfast.return');

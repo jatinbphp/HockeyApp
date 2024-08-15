@@ -511,21 +511,18 @@ class MainController extends Controller
 
         $input = $request->all();
 
+        if($file = $request->file('image')){
+            if (!empty($user['image'])) {
+                @unlink($user['image']);
+            }
+            $input['image'] = $this->fileMove($file,'users');
+        }
+
         if (!empty($request->user_id)) {
             $user = User::find($request->user_id);
 
             if (!empty($user)) {
-                
-                if($photo = $request->file('image')){
-                    if(!empty($user['image']) && file_exists('public/'.$user['image'])){
-                        unlink('public/'.$user['image']);
-                    }
-                    $input['image'] = $this->image($photo,'users','profile');
-                }
-
                 $user->update($input);
-                $user['image'] = !empty($user['image']) ? url($user['image']) : '';
-
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Guardian Updated Successfully!',
@@ -558,6 +555,7 @@ class MainController extends Controller
             'date_of_birth' => 'required',
             'province_id' => 'required', 
             'school_id' => 'required',
+            'image' => 'nullable|mimes:jpeg,jpg,bmp,png'
         ]);
 
         if ($validator->fails()) {           
@@ -570,9 +568,15 @@ class MainController extends Controller
 
         $input = $request->all();
 
+        if($file = $request->file('image')){
+            if (!empty($user['image'])) {
+                @unlink($user['image']);
+            }
+            $input['image'] = $this->fileMove($file,'users');
+        }
+
         if (!empty($request->user_id)) {
             $children = Child::find($request->user_id);
-
             if (!empty($children)) {
                 $children->update($input);
                 return response()->json([
@@ -620,7 +624,8 @@ class MainController extends Controller
                 'phone' => 'required|numeric',
                 'date_of_birth' => 'required',
                 'province_id' => 'required',
-                'school_id' => 'required'
+                'school_id' => 'required',
+                'image' => 'nullable|mimes:jpeg,jpg,bmp,png'
             ]);
 
             if ($validator->fails()) {
@@ -642,6 +647,13 @@ class MainController extends Controller
                     // Optionally, hash the password here if it was provided and not empty
                     $input['password'] = $input['password'];
                 }
+
+            if($file = $request->file('image')){
+                if (!empty($user['image'])) {
+                    @unlink($user['image']);
+                }
+                $input['image'] = $this->fileMove($file,'users');
+            }
 
                 $child->update($input);
                 $updatedChildren[] = $child;
