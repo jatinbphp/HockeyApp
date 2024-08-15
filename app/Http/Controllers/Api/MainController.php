@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 use App\Services\PayFastService;
 use App\Models\User;
 use App\Models\Categories;
@@ -25,7 +24,7 @@ class MainController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', [
-            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore','guardianProfileUpdate','childrenProfileUpdate']
+            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore','guardianProfileUpdate','childrenProfileUpdate','getActiveSkillById','getGuardianProfile']
         ]);
     }
 
@@ -247,7 +246,7 @@ class MainController extends Controller
                 'data' => (object)[]
             ], 404);
         }
- 
+
     }
 
     public function submitScore(Request $request){
@@ -271,7 +270,7 @@ class MainController extends Controller
         $score = Score::create([
             'skill_id' => $request->skill_id,          
             'student_id' => $request->student_id,           
-            'province_id' => $getProvince->province_id,
+            'province_id' => ((!empty($getProvince->province_id))?$getProvince->province_id:0),
             'score' => $request->score,           
             'time_duration' => $request->time_duration,           
         ]);
@@ -283,67 +282,62 @@ class MainController extends Controller
         ],200);
     }
 
+    public function getProfileById(Request $request){
 
-    public function getActiveRankings(){
+        try{
 
-        $getRanking = Score::select('skill_id', DB::raw('SUM(score) as total_score'))
-        ->where('status', 'accept')
-        ->groupBy('skill_id')
-        ->get();
-        
-        if (!$getRanking->isEmpty()) {
+            $validator = Validator::make($request->post(), [
+                'user_id' => 'required',
+                'role' => 'required'
+            ]);
 
-            // Transform the sponsors data to include full image URL
-            $rankings = $getRanking->map(function ($ranking) {
-                $ranking->skill_name = getSkillName($ranking->skill_id);
-                return $ranking;
-            });
+            if ($validator->fails()) {  
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'success',
-                'data' => $rankings
-            ],200);         
+                return response()->json([
+                    'status' => 'error',
+                    'message' => implode(',', $validator->errors()->all()),
+                    'data' => (object)[]
+                ], 200);
 
-        }else{
+            }
+
+            $userData = [];
+
+            if($request->role == "guardian"){
+
+                $userData = User::where('id', $request->user_id)->get();
+
+            }else{
+
+                $userData = Child::where('id', $request->user_id)->get();
+            }
+
+            if (!$userData->isEmpty()) {         
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Profile retrieved successfully',
+                    'data' => $userData
+                ],200);         
+
+            }else{
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Profile not found',
+                    'data' => (object)[]
+                ], 404);
+            } 
+            
+
+        }catch(Exception $e){
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'No active sponsors found',
-                'data' => (object)[]
-            ], 404);
+                'message' => 'An error occurred while fetching the profile'
+            ], 500);
+
         }
- 
-    }
-
-    public function getActiveRankingsById($id){
-
-        $getRanking = Score::where('id', $id)
-        ->where('status', 'accept')
-        ->get();
-        
-        if (!$getRanking->isEmpty()) {
-
-            // Transform the sponsors data to include full image URL
-            $rankings = $getRanking->map(function ($ranking) {
-                $ranking->skill_name = getSkillName($ranking->skill_id);
-                return $ranking;
-            });
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'success',
-                'data' => $rankings
-            ],200);         
-
-        }else{
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'No active sponsors found',
-                'data' => (object)[]
-            ], 404);
-        } 
     }
 
     public function getGuardianProfile(Request $request){
@@ -442,7 +436,6 @@ class MainController extends Controller
         }
     }
 
-
     public function getChildrensByParentId(Request $request){
 
         try{
@@ -514,6 +507,13 @@ class MainController extends Controller
             $user = User::find($request->user_id);
 
             if (!empty($user)) {
+                if (empty($input['password'])) {
+                    unset($input['password']); // Remove the password key from input if it's empty
+                } else {
+                    // Optionally, hash the password here if it was provided and not empty
+                    $input['password'] = $input['password'];
+                }
+
                 $user->update($input);
                 return response()->json([
                     'status' => 'success',
@@ -542,11 +542,11 @@ class MainController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'username' => 'required',
-            'email' => 'required|email|unique:children,email,' . $request->user_id . '|unique:users,email',
+            'email' => 'required|email|unique:children,email,' . $request->user_id . '|unique:users,email',          
             'phone' => 'required|numeric',
             'date_of_birth' => 'required',
             'province_id' => 'required', 
-            'school_id' => 'required',
+            'school_id' => 'required'
         ]);
 
         if ($validator->fails()) {           
@@ -563,6 +563,14 @@ class MainController extends Controller
             $children = Child::find($request->user_id);
 
             if (!empty($children)) {
+
+                if (empty($input['password'])) {
+                    unset($input['password']); // Remove the password key from input if it's empty
+                } else {
+                    // Optionally, hash the password here if it was provided and not empty
+                    $input['password'] = $input['password'];
+                }
+
                 $children->update($input);
                 return response()->json([
                     'status' => 'success',
@@ -584,4 +592,5 @@ class MainController extends Controller
             ], 200);
         }
     }
+ 
 }

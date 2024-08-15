@@ -33,19 +33,20 @@ Route::get('getSponsors', [MainController::class, 'getSponsors']);
 Route::get('getSkill', [MainController::class, 'getActiveSkill']);    
 Route::get('getSkillById/{id}', [MainController::class, 'getActiveSkillById']);  
 
-Route::post('getChildrenProfile', [MainController::class, 'getChildrenProfile']);      
-Route::post('getChildrensByParentId', [MainController::class, 'getChildrensByParentId']);      
+Route::post('getChildrenProfile', [MainController::class, 'getChildrenProfile']);   
+Route::post('getChildrensByParentId', [MainController::class, 'getChildrensByParentId']); 
+Route::post('getGuardianProfile', [MainController::class, 'getGuardianProfile']); 
 
 Route::post('submitScore', [MainController::class, 'submitScore']);
 
 Route::middleware('auth:api')->group(function () {
-    // Route::get('getCategories', [MainController::class, 'getActiveCategories']);
-      
-    Route::get('getRankings', [MainController::class, 'getActiveRankings']);
-    Route::get('getRankingById/{id}', [MainController::class, 'getActiveRankingsById']);      
+    // Route::get('getCategories', [MainController::class, 'getActiveCategories']); 
+    // Route::get('getSkill', [MainController::class, 'getActiveSkill']);    
+    // Route::get('getSkillById/{id}', [MainController::class, 'getActiveSkillById']);    
     
-    Route::post('getGuardianProfile', [MainController::class, 'getGuardianProfile']);
-         
+    Route::post('getProfileById', [MainController::class, 'getProfileById']);    
+        
+   
 });
 Route::post('guardianProfileUpdate',[MainController::class, 'guardianProfileUpdate']);
 Route::post('childrenProfileUpdate',[MainController::class, 'childrenProfileUpdate']);
