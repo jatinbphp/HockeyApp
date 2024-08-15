@@ -523,6 +523,7 @@ class MainController extends Controller
 
             if (!empty($user)) {
                 $user->update($input);
+                $user->image = (!empty($user->image))? url($user->image): '';
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Guardian Updated Successfully!',
@@ -579,6 +580,7 @@ class MainController extends Controller
             $children = Child::find($request->user_id);
             if (!empty($children)) {
                 $children->update($input);
+                $children->image = (!empty($children->image))? url($children->image): '';
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Children Updated Successfully!',
