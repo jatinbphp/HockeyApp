@@ -509,17 +509,21 @@ class MainController extends Controller
             ], 200);
         }
 
-        $input = $request->all();
-
-        if($file = $request->file('image')){
-            if (!empty($user['image'])) {
-                @unlink($user['image']);
-            }
-            $input['image'] = $this->fileMove($file,'users');
+        if(empty($request['password'])){
+            unset($request['password']);
         }
+
+        $input = $request->all();
 
         if (!empty($request->user_id)) {
             $user = User::find($request->user_id);
+
+            if($file = $request->file('image')){
+                if (!empty($user['image'])) {
+                    @unlink($user['image']);
+                }
+                $input['image'] = $this->fileMove($file,'users');
+            }
 
             if (!empty($user)) {
                 $user->update($input);
@@ -567,17 +571,22 @@ class MainController extends Controller
             ], 200);
         }
 
-        $input = $request->all();
-
-        if($file = $request->file('image')){
-            if (!empty($user['image'])) {
-                @unlink($user['image']);
-            }
-            $input['image'] = $this->fileMove($file,'users');
+        if(empty($request['password'])){
+            unset($request['password']);
         }
+
+        $input = $request->all();
 
         if (!empty($request->user_id)) {
             $children = Child::find($request->user_id);
+
+            if($file = $request->file('image')){
+                if (!empty($children['image'])) {
+                    @unlink($children['image']);
+                }
+                $input['image'] = $this->fileMove($file,'users');
+            }
+
             if (!empty($children)) {
                 $children->update($input);
                 $children->image = (!empty($children->image))? url($children->image): '';
@@ -641,7 +650,6 @@ class MainController extends Controller
             $input = $childData;
 
             $child = Child::find($childData['user_id']);
-
             if ($child) {
                 if (empty($input['password'])) {
                     unset($input['password']); // Remove the password key from input if it's empty
@@ -650,14 +658,18 @@ class MainController extends Controller
                     $input['password'] = $input['password'];
                 }
 
-            if($file = $request->file('image')){
-                if (!empty($user['image'])) {
-                    @unlink($user['image']);
+                if ($request->hasFile('children.' . array_search($childData, $childrenData) . '.image')) {
+                    $file = $request->file('children.' . array_search($childData, $childrenData) . '.image');
+    
+                    if (!empty($child->image)) {
+                        @unlink($child['image']);
+                    }
+
+                    $input['image'] = $this->fileMove($file,'users');
                 }
-                $input['image'] = $this->fileMove($file,'users');
-            }
 
                 $child->update($input);
+                $child->image = $child->image ? url($child->image) : '';
                 $updatedChildren[] = $child;
             } else {
                 $errors[] = [
