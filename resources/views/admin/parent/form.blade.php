@@ -127,6 +127,7 @@
 
                 <div class="card-body table-responsive">
                     <input type="hidden" id="route_name" value="{{ route('children.index') }}">
+                    <input type="hidden" value="{{ isset($parent) ? $parent->id : '' }}" id="parent_id">
                     <table id="childTable" class="table table-bordered table-striped datatable-dynamic" style="width:100%;">
                         <thead>
                             <tr>
@@ -163,7 +164,23 @@ $(document).ready(function(){
         }else{
             $('.card-footer').hide();
         }        
-    });
+    });   
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+        var activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            var tabElement = document.getElementById(activeTab);
+            if (tabElement) {
+                new bootstrap.Tab(tabElement).show();
+            }
+        }
+        var tabLinks = document.querySelectorAll('#myTabs a.nav-link');
+        tabLinks.forEach(function (link) {
+            link.addEventListener('click', function () {
+                localStorage.setItem('activeTab', link.id);
+            });
+        });
 });
 </script>
 @endsection

@@ -38,7 +38,12 @@ $(function () {
         serverSide: true, 
         pageLength: 100,
         lengthMenu: [ 100, 200, 300, 400, 500, ],
-        ajax: $("#route_name").val(),
+        ajax: {
+            url: $("#route_name").val(),
+            data: {
+                parent_id: $('#parent_id').val() 
+            }
+        },
         columns: [
             {data: 'firstname', name: 'firstname'},
             {data: 'username', name: 'username'},

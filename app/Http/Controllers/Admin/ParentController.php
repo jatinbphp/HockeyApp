@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Child;
 use App\Models\Province;
 use App\Http\Requests\ParentRequest;
 use Illuminate\Support\Str;
@@ -102,13 +103,10 @@ class ParentController extends Controller
         return redirect()->route('parent.index');
     }
 
-    public function destroy($id)
-    {
-        $users = User::findOrFail($id);
+    public function destroy($id){
+        $users = User::with('children')->findOrFail($id);
         if(!empty($users)){
-            if (!empty($users['image']) && file_exists($users['image'])) {
-                unlink($users['image']);
-            }
+            $users->children()->delete();
             $users->delete();
             return 1;
         }else{

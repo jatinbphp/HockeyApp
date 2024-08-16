@@ -15,9 +15,8 @@ class ChildController extends Controller
 {
     public function index(Request $request){
         $data['menu'] = 'Children'; 
-
         if($request->ajax()){
-            return Datatables::of(Child::all())
+            return Datatables::of(Child::where('parent_id', $request->parent_id))
             ->addIndexColumn()
             ->editColumn('fullname', function($row) {
                 return ucfirst($row->firstname). ' '.ucfirst($row->lastname);
