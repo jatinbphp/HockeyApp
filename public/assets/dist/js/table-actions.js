@@ -9,11 +9,11 @@ $(function () {
         ajax: $("#route_name").val(),
         columns: [
             {data: 'firstname', name: 'firstname'},
-            {data: 'username', name: 'username'},
+            {data: 'lastname', name: 'lastname'},
             {data: 'email', name: 'email'},         
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 
@@ -25,11 +25,11 @@ $(function () {
         ajax: $("#route_name").val(),
         columns: [
             {data: 'firstname', name: 'firstname'},
-            {data: 'username', name: 'username'},
+            {data: 'lastname', name: 'lastname'},
             {data: 'email', name: 'email'},         
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 
@@ -46,11 +46,11 @@ $(function () {
         },
         columns: [
             {data: 'firstname', name: 'firstname'},
-            {data: 'username', name: 'username'},
+            {data: 'lastname', name: 'lastname'},
             {data: 'email', name: 'email'},         
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 

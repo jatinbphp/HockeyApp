@@ -131,12 +131,12 @@
                     <table id="childTable" class="table table-bordered table-striped datatable-dynamic" style="width:100%;">
                         <thead>
                             <tr>
-                                <th>Fullname</th>
-                                <th>Username</th>
+                                <th>Firstname</th>
+                                <th>Lastname</th>
                                 <th>Email</th>                           
                                 <th>Status</th>                           
                                 <th>Created At</th>                           
-                                <th>Action</th> 
+                                <th style="15%">Action</th> 
                             </tr>
                         </thead>
                         <tbody>

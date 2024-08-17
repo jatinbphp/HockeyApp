@@ -63,6 +63,18 @@ class CategoriesController extends Controller
         return redirect()->route('category.index');
     }
 
+    public function show($id) {
+
+        $category = Categories::findOrFail($id);
+        $required_columns = ['id','name','status','created_at'];
+
+        return view('admin.common.show_modal', [
+            'section_info' => $category->toArray(),
+            'type' => 'category',
+            'required_columns' => $required_columns
+        ]);
+    }
+
     public function destroy($id)
     {
         $category = Categories::findOrFail($id);

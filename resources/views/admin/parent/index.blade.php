@@ -25,8 +25,8 @@
                         <table id="parentTable" class="table table-bordered table-striped datatable-dynamic">
                             <thead>
                                 <tr>
-                                    <th>Fullname</th>
-                                    <th>Username</th>
+                                    <th>Firstname</th>
+                                    <th>Lastname</th>
                                     <th>Email</th>                           
                                     <th>Status</th>                           
                                     <th>Created At</th>                           

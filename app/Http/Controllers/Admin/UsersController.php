@@ -18,9 +18,12 @@ class UsersController extends Controller
         if($request->ajax()){
             return Datatables::of(User::where('role','admin'))
             ->addIndexColumn()
-            ->editColumn('fullname', function($row) {
-                return ucfirst($row->firstname). ' '.ucfirst($row->lastname);
-            })  
+            ->editColumn('firstname', function($row) {
+                return ucfirst($row->firstname);
+            }) 
+            ->editColumn('lastname', function($row) {
+                return ucfirst($row->lastname);
+            })   
             ->editColumn('created_at', function($row) {
                 return formatCreatedAt($row->created_at);
             })           
@@ -55,7 +58,6 @@ class UsersController extends Controller
         }
 
         $inputs['role'] = 'admin';
-        $inputs['status'] = 'inactive';
         $user = User::create($inputs);
 
         \Session::flash('success', 'User has been inserted successfully!');
@@ -97,6 +99,18 @@ class UsersController extends Controller
 
         \Session::flash('success','User has been updated successfully!');
         return redirect()->route('users.index');
+    }
+
+    public function show($id) {
+
+        $users = User::findOrFail($id);
+        $required_columns = ['id','image', 'firstname','lastname', 'username','email','status','created_at'];
+
+        return view('admin.common.show_modal', [
+            'section_info' => $users->toArray(),
+            'type' => 'users',
+            'required_columns' => $required_columns
+        ]);
     }
 
     public function destroy($id)

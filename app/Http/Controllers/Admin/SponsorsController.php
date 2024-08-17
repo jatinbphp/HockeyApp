@@ -94,6 +94,18 @@ class SponsorsController extends Controller
 
     }
 
+    public function show($id) {
+
+        $sponsors = Sponsors::findOrFail($id);
+        $required_columns = ['id','image','name','description','website','status','created_at'];
+
+        return view('admin.common.show_modal', [
+            'section_info' => $sponsors->toArray(),
+            'type' => 'sponsor',
+            'required_columns' => $required_columns
+        ]);
+    }
+
     public function destroy($id)
     {
         $sponsors = Sponsors::findOrFail($id);

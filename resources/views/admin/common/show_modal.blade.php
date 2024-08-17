@@ -38,6 +38,12 @@
                                                             @case('province_id')
                                                                 Province:
                                                                 @break
+                                                            @case('school_id')
+                                                                School:
+                                                                @break
+                                                            @case('category_id')
+                                                                Category:
+                                                                @break
                                                             @default
                                                                 {{ ucwords(str_replace('_', ' ', $key)) }}:
                                                         @endswitch
@@ -46,6 +52,9 @@
                                                         @switch($key)
                                                             @case('image')
                                                                 {!! renderImageColumn($section_info[$key]) !!}
+                                                                @break
+                                                            @case('featured_image')
+                                                                {!! renderFeaturedImageColumn($section_info[$key]) !!}
                                                                 @break
                                                             @case('created_at')
                                                                 {!! formatCreatedAt($section_info[$key]) !!}
@@ -68,8 +77,20 @@
                                                             @case('province_id')
                                                                 {{ getProvinceName($section_info[$key]) }}
                                                                 @break
+                                                            @case('school_id')
+                                                                {{ getSchoolName($section_info[$key]) }}
+                                                                @break
+                                                            @case('category_id')
+                                                                {{ getCategoryName($section_info[$key]) }}
+                                                                @break
                                                             @case('score')
                                                                 {{ $section_info[$key].'%' }}
+                                                                @break
+                                                            @case('terms')
+                                                                {!! renderTermsColumn($section_info[$key]) !!}
+                                                                @break
+                                                            @case('looking_sponsor')
+                                                                {!! renderLookingSponsorColumn($section_info[$key]) !!}
                                                                 @break
                                                             @case('access_rights')
                                                                 @if(!empty($section_info[$key]))
@@ -121,7 +142,16 @@ function renderImageColumn($info) {
     if (!empty($info) && file_exists($info)) {
         return '<img src="' . url($info) . '" height="50">';
     } else {
-        return '<img src="' . url('assets/admin/dist/img/no-image.png') . '" height="50">';
+        return '<img src="' . url('assets/dist/img/no-image.png') . '" height="50">';
+    }
+}
+
+function renderFeaturedImageColumn($info) {
+
+    if (!empty($info) && file_exists($info)) {
+        return '<img src="' . url($info) . '" height="50">';
+    } else {
+        return '<img src="' . url('assets/dist/img/no-image.png') . '" height="50">';
     }
 }
 
@@ -136,5 +166,17 @@ function renderIdColumn($info) {
 function renderStatusColumn($info) {
     $class = $info == 'active' ? 'success' : 'danger';
     return '<span class="badge badge-' . $class . '">' . ucfirst($info) . '</span>';
+}
+
+function renderTermsColumn($info) {
+    $class = $info == '1' ? 'success' : 'danger';
+    $termStatus = $info == '1' ? 'Accept' : 'Not Accept';
+    return '<span>' . ucfirst($termStatus) . '</span>';
+}
+
+function renderLookingSponsorColumn($info) {
+    $class = $info == '1' ? 'success' : 'danger';
+    $lookingSponsorStatus = $info == '1' ? 'Yes' : 'No';
+    return '<span>' . ucfirst($lookingSponsorStatus) . '</span>';
 }
 @endphp

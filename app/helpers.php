@@ -44,6 +44,21 @@ if (!function_exists('getProvinceName')) {
     }
 }
 
+/* GET ACTIVE SCHOOL NAME */
+if (!function_exists('getSchoolName')) {
+    function getSchoolName($id){
+        // Assuming Province is the model name
+        $school = School::find($id);
+
+        // Check if school is found
+        if ($school) {
+            return $school->name;
+        } else {
+            return null; // or some default value
+        }
+    }
+}
+
 /* GET ACTIVE SCHOOL DATA */
 if (!function_exists('getActiveSchool')) {
     function getActiveSchool(){

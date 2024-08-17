@@ -75,6 +75,18 @@ class SchoolController extends Controller
         return redirect()->route('school.index');
     }
 
+    public function show($id) {
+
+        $school = School::findOrFail($id);
+        $required_columns = ['id','name','town','province_id','status','created_at'];
+
+        return view('admin.common.show_modal', [
+            'section_info' => $school->toArray(),
+            'type' => 'school',
+            'required_columns' => $required_columns
+        ]);
+    }
+
     public function destroy($id)
     {
         $school = School::findOrFail($id);

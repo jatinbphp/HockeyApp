@@ -20,9 +20,12 @@ class ParentController extends Controller
         if($request->ajax()){
             return Datatables::of(User::where('role','guardian'))
             ->addIndexColumn()
-            ->editColumn('fullname', function($row) {
-                return ucfirst($row->firstname). ' '.ucfirst($row->lastname);
-            })  
+            ->editColumn('firstname', function($row) {
+                return ucfirst($row->firstname);
+            }) 
+            ->editColumn('lastname', function($row) {
+                return ucfirst($row->lastname);
+            })   
             ->editColumn('created_at', function($row) {
                 return formatCreatedAt($row->created_at);
             })           
@@ -57,7 +60,6 @@ class ParentController extends Controller
         }
 
         $inputs['role'] = 'guardian';
-        $inputs['status'] = 'inactive';
         $parent = User::create($inputs);
 
         \Session::flash('success', 'User has been inserted successfully!');
@@ -101,6 +103,18 @@ class ParentController extends Controller
 
         \Session::flash('success','User has been updated successfully!');
         return redirect()->route('parent.index');
+    }
+
+    public function show($id) {
+
+        $users = User::findOrFail($id);
+        $required_columns = ['id','image','firstname','lastname', 'username','email','phone','terms','status','created_at'];
+
+        return view('admin.common.show_modal', [
+            'section_info' => $users->toArray(),
+            'type' => 'guardian',
+            'required_columns' => $required_columns
+        ]);
     }
 
     public function destroy($id){

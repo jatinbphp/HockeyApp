@@ -98,6 +98,18 @@ class SkillController extends Controller
         return redirect()->route('skill.index');
     }
 
+    public function show($id) {
+
+        $skill = Skill::findOrFail($id);
+        $required_columns = ['id','featured_image','name','category_id','short_description','long_description','instruction','score_instruction','video_url','status','created_at'];
+
+        return view('admin.common.show_modal', [
+            'section_info' => $skill->toArray(),
+            'type' => 'skill',
+            'required_columns' => $required_columns
+        ]);
+    }
+
     public function destroy($id)
     {
         $skill = Skill::findOrFail($id);

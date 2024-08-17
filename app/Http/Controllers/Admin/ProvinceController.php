@@ -62,6 +62,18 @@ class ProvinceController extends Controller
         return redirect()->route('province.index');
     }
 
+    public function show($id) {
+
+        $province = Province::findOrFail($id);
+        $required_columns = ['id','name','status','created_at'];
+
+        return view('admin.common.show_modal', [
+            'section_info' => $province->toArray(),
+            'type' => 'province',
+            'required_columns' => $required_columns
+        ]);
+    }
+
     public function destroy($id){
         $province = Province::findorFail($id);
         if(!empty($province)){

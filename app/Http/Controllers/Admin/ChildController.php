@@ -18,9 +18,12 @@ class ChildController extends Controller
         if($request->ajax()){
             return Datatables::of(Child::where('parent_id', $request->parent_id))
             ->addIndexColumn()
-            ->editColumn('fullname', function($row) {
-                return ucfirst($row->firstname). ' '.ucfirst($row->lastname);
-            })  
+            ->editColumn('firstname', function($row) {
+                return ucfirst($row->firstname);
+            }) 
+            ->editColumn('lastname', function($row) {
+                return ucfirst($row->lastname);
+            }) 
             ->editColumn('created_at', function($row) {
                 return formatCreatedAt($row->created_at);
             })           
@@ -77,7 +80,19 @@ class ChildController extends Controller
         $children = Child::find($id);
         return response()->json($children);
     }
- 
+    
+    public function show($id) {
+
+        $users = Child::findOrFail($id);
+        $required_columns = ['id','image', 'firstname','lastname', 'username','email','phone','date_of_birth','province_id','school_id','looking_sponsor','terms','status','created_at'];
+
+        return view('admin.common.show_modal', [
+            'section_info' => $users->toArray(),
+            'type' => 'children',
+            'required_columns' => $required_columns
+        ]);
+    }
+
     public function destroy($id)
     {
         Child::find($id)->delete();
