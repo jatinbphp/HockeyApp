@@ -12,7 +12,7 @@ use DataTables;
 class ContactUsController extends Controller
 {
     public function index(Request $request){
-        $data['menu'] = 'ContactUs'; 
+        $data['menu'] = 'Contact Us'; 
 
         if($request->ajax()){
             return Datatables::of(ContactUs::all())
@@ -38,7 +38,7 @@ class ContactUsController extends Controller
 
         return view('admin.common.show_modal', [
             'section_info' => $contactUs->toArray(),
-            'type' => 'contactUs',
+            'type' => 'contact Us',
             'required_columns' => $required_columns
         ]);
     }

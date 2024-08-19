@@ -28,7 +28,7 @@ class LoginController extends Controller
             'password' => $request->input('password'),            
         ];
 
-        $user = User::where('email',$request->email)->first();
+        $user = User::where(['email' => $request->email,'role' => 'admin'])->first();
 
         if($user){
             if(Hash::check($request->password, $user->password)){
@@ -38,7 +38,7 @@ class LoginController extends Controller
                 return back()->with('danger','Password not match!');
             }
         } else {
-            return back()->with('danger','This Username is not register.');
+            return back()->with('danger','Email not Found.');
         }     
         
     }

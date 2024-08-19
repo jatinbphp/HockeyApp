@@ -217,7 +217,7 @@
                             </li>     
 
                             <li class="nav-item">
-                                <a href="{{route('contactus.index')}}" class="nav-link @if(isset($menu) && $menu=='ContactUs') active @endif">
+                                <a href="{{route('contactus.index')}}" class="nav-link @if(isset($menu) && $menu=='Contact Us') active @endif">
                                     <i class="nav-icon fas fa-list"></i>
                                     <p>
                                         Contact Us

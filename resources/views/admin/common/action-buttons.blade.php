@@ -23,6 +23,14 @@
 
 @endif
 
+@if($section_name=='contact-us')
+
+    <a href="javascript:void(0)" title="View" data-id="{{$id}}" class="btn btn-sm btn-warning tip  view-info" data-url="{{ route('contactus.show', ['contactus' => $id]) }}">
+        <i class="fa fa-eye"></i>
+    </a> 
+
+@endif
+
 @if($section_name == 'users' || $section_name == 'parent' || $section_name == 'category' || $section_name == 'province' || $section_name == 'school' || $section_name == 'skill')
 
     <a href="javascript:void(0)" title="View" data-id="{{$id}}" class="btn btn-sm btn-warning tip  view-info" data-url="{{ route($section_name.'.show', [strtolower(str_replace(' ', '_', $section_title)) => $id]) }}">
@@ -51,12 +59,6 @@
 
 @endif
 
-@if($section_name=='contact-us')
 
-    <a href="javascript:void(0)" title="View" data-id="{{$id}}" class="btn btn-sm btn-warning tip  view-info" data-url="{{ route('contactus.show', ['contactus' => $id]) }}">
-        <i class="fa fa-eye"></i>
-    </a> 
-
-@endif
 
 
