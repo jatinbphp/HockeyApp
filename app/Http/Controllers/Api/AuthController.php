@@ -11,6 +11,9 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\Child;
 use App\Models\ContactUs;
+use App\Models\EmailTemplate;
+use App\Mail\RegistrationMail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -193,7 +196,18 @@ class AuthController extends Controller
             'device_type' => $request->device_type,
             'device_id' => $request->device_id,
             'session_token' => $token
-        ]);     
+        ]); 
+        
+        $template_details= EmailTemplate::find(1);
+        $guardianEmail= $user->email ?? "";
+
+        $mailData = [
+            'salutation' => 'Hello ' . ucfirst($user['firstname']) . ' ' . ucfirst($user['lastname']) . ',',
+            'body' => $template_details->template_message?? "",
+            'subject'=>$template_details->template_subject ?? "",
+        ];
+
+        Mail::to([$guardianEmail])->send(new RegistrationMail($mailData));
 
         return response()->json([
             'status' => 'success',
@@ -220,9 +234,12 @@ class AuthController extends Controller
                 'children.*.school' => 'required',
             ]);
 
+            
+
             $parentId = $request->parent_id ?? 0;
             $childrenData = $request->children;
             $createdChildren = [];
+            $template_details = EmailTemplate::find(1);
 
             foreach ($childrenData as $childData) {
                 $childData['parent_id'] = $parentId;
@@ -238,6 +255,16 @@ class AuthController extends Controller
                 ]);
 
                 $createdChildren[] = $child;
+
+                if ($template_details && $child->email) {
+                    $mailData = [
+                        'salutation' => 'Hello ' . ucfirst($child->firstname) . ' ' . ucfirst($child->lastname) . ',',
+                        'body' => $template_details->template_message ?? "",
+                        'subject' => $template_details->template_subject ?? "",
+                    ];
+    
+                    Mail::to($child->email)->send(new RegistrationMail($mailData));
+                }
             }
 
             return response()->json([

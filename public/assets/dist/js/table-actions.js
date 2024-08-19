@@ -64,7 +64,7 @@ $(function () {
             {data: 'name', name: 'name'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "13%", orderable: false},  
         ],
     });
 
@@ -94,7 +94,7 @@ $(function () {
             {data: 'province_id', name: 'province_id'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "13%", orderable: false},  
         ],
     });
 
@@ -146,7 +146,7 @@ $(function () {
             {data: 'name', name: 'name'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "13%", orderable: false},  
         ],
     });
 
@@ -162,7 +162,7 @@ $(function () {
             {data: 'template_subject', name: 'template_subject'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "8%", orderable: false},  
         ],
     });
     

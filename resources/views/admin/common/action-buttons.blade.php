@@ -44,9 +44,12 @@
         <i class="fa fa-edit"></i>
     </a>
 
-    <button class="btn btn-sm btn-danger deleteRecord" data-id="{{$id}}" type="button" data-url="{{ url('admin/'.$section_name.'/'.$id) }}" data-section="{{$section_name}}_table" title="Delete">
-        <i class="fa fa-trash"></i>
-    </button>
+    @if($section_name!='email-templates')
+        <button class="btn btn-sm btn-danger deleteRecord" data-id="{{$id}}" type="button" data-url="{{ url('admin/'.$section_name.'/'.$id) }}" data-section="{{$section_name}}_table" title="Delete">
+            <i class="fa fa-trash"></i>
+        </button>
+    @endif
+    
 @endif
 
 @if($section_name=='children')

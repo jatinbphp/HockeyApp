@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Child;
 use App\Models\Province;
+use App\Models\EmailTemplate;
 use App\Http\Requests\ParentRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Mail\RegistrationMail;
+use Illuminate\Support\Facades\Mail;
 use DataTables;
 
 class ParentController extends Controller
@@ -52,6 +55,7 @@ class ParentController extends Controller
     public function store(ParentRequest $request){
         
         $inputs = $request->all();
+        $guardianEmail = $inputs['email'] ?? "";
 
         if ($file = $request->file('image')) {
             $imageName = Str::random(20) . '.' . $file->getClientOriginalExtension();   
@@ -61,6 +65,16 @@ class ParentController extends Controller
 
         $inputs['role'] = 'guardian';
         $parent = User::create($inputs);
+
+        $template_details= EmailTemplate::find(1);
+
+        $mailData = [
+            'salutation' => 'Hello ' . ucfirst($inputs['firstname']) . ' ' . ucfirst($inputs['lastname']) . ',',
+            'body' => $template_details->template_message?? "",
+            'subject'=>$template_details->template_subject ?? "",
+        ];
+
+        Mail::to([$guardianEmail])->send(new RegistrationMail($mailData));
 
         \Session::flash('success', 'User has been inserted successfully!');
         return redirect()->route('parent.edit', ['parent' => $parent->id]);

@@ -18,7 +18,7 @@
             <div class="col-12">
                 <div class="card card-info card-outline">
                     <div class="card-header">
-                        @include('admin.common.card-header', ['title' => 'Manage ' . $menu,'addNewRoute' => route('email-templates.create')])
+                        @include('admin.common.card-header', ['title' => 'Manage ' . $menu])
                     </div>
                     <div class="card-body table-responsive">
                         <input type="hidden" id="route_name" value="{{ route('email-templates.index') }}">
