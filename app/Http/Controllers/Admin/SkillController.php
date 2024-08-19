@@ -13,13 +13,13 @@ use DataTables;
 class SkillController extends Controller
 {
     public function index(Request $request){
-        $data['menu'] = 'Skill';
+        $data['menu'] = 'Skill'; 
 
         if($request->ajax()){
             return Datatables::of(Skill::all())
             ->addIndexColumn()
             ->editColumn('featured_image', function($row) {
-                $url= (!empty($row->featured_image))? asset($row->featured_image):''; 
+                $url= (!empty($row->featured_image))? asset($row->featured_image):url('assets/dist/img/no-image.png') ; 
                 return $url; 
             }) 
             ->editColumn('name', function($row) {

@@ -28,7 +28,10 @@ class LoginController extends Controller
             'password' => $request->input('password'),            
         ];
 
-        $user = User::where(['email' => $request->email,'role' => 'admin'])->first();
+        $user = User::where('email',$request->email)
+                ->where('role','admin')
+                ->orWhere('role','super_admin')
+                ->first();
 
         if($user){
             if(Hash::check($request->password, $user->password)){

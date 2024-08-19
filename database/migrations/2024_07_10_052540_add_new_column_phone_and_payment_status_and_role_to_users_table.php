@@ -16,6 +16,18 @@ return new class extends Migration
             $table->string('role')->nullable()->after('phone');
             $table->string('payment_status')->nullable()->after('role');
         });
+
+        \Illuminate\Support\Facades\DB::table('users')->insert([
+            'firstname' => 'Super Admin',
+            'lastname' => 'Super Admin',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('123456'),
+            'phone' => '0123456789',
+            'status' =>'active',
+            'role' => 'super_admin',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     /**

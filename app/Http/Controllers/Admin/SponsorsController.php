@@ -18,8 +18,8 @@ class SponsorsController extends Controller
         if($request->ajax()){
             return Datatables::of(Sponsors::all())
             ->addIndexColumn()
-            ->editColumn('image', function($row) {
-                $url=asset($row->image); 
+            ->editColumn('image', function($row) {               
+                $url= (!empty($row->image))? asset($row->image):url('assets/dist/img/no-image.png') ; 
                 return $url; 
             }) 
             ->editColumn('name', function($row) {
