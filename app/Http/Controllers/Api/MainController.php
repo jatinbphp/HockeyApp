@@ -365,6 +365,9 @@ class MainController extends Controller
             }
         
             $userData = User::where('id', $request->user_id)->get();
+            foreach ($userData as $guardian) {
+                $guardian->image = (!empty($guardian->image)) ? url($guardian->image) : '';
+            }
            
             if (!$userData->isEmpty()) {         
 
@@ -413,6 +416,9 @@ class MainController extends Controller
             }
         
             $userData = Child::where('id', $request->user_id)->get();
+            foreach ($userData as $child) {
+                $child->image = (!empty($child->image)) ? url($child->image) : '';
+            }
            
             if (!$userData->isEmpty()) {         
 
@@ -462,6 +468,9 @@ class MainController extends Controller
             }          
 
             $userData = Child::where('parent_id', $request->parent_id)->get();
+            foreach ($userData as $child) {
+                $child->image = (!empty($child->image)) ? url($child->image) : '';
+            }
         
             if (!$userData->isEmpty()) {         
 
