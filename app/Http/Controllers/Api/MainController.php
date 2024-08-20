@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Services\PayFastService;
+use App\Mail\SkillTestMail;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Categories;
 use App\Models\Province;
@@ -19,6 +21,7 @@ use App\Models\Score;
 use App\Models\Child;
 use App\Models\Sponsors;
 use App\Models\School;
+use App\Models\EmailTemplate;
 use DOMDocument;
 
 class MainController extends Controller
@@ -275,6 +278,35 @@ class MainController extends Controller
             'score' => $request->score,           
             'time_duration' => $request->time_duration,           
         ]);
+
+        $student = Child::find($score->student_id);
+        $skill = Skill::find($score->skill_id);
+        $templateDetails = EmailTemplate::find(3);
+
+        if (!empty($student)) {
+            $placeholders = [
+                '{{firstname}}' => ucfirst($student->firstname),
+                '{{lastname}}' => ucfirst($student->lastname),
+                '{{score}}' => $score->score ?? "",
+                '{{duration}}' => $score->time_duration ?? "",
+                '{{skill_name}}' => $skill->name ?? "",
+            ];
+
+            $messageBody = str_replace(
+                array_keys($placeholders),
+                array_values($placeholders),
+                $templateDetails->template_message
+            );
+
+            $mailData = [
+                'student_name' => ucfirst($student->firstname) . ' ' . ucfirst($student->lastname) . ',',
+                'body' => $messageBody,
+                'subject' => $templateDetails->template_subject ?? "",
+            ];
+
+            Mail::to($student->email)->send(new SkillTestMail($mailData));
+        }
+
 
         return response()->json([
             'status' => 'success',

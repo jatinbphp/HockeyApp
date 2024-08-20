@@ -66,15 +66,27 @@ class ParentController extends Controller
         $inputs['role'] = 'guardian';
         $parent = User::create($inputs);
 
-        $template_details= EmailTemplate::find(1);
+        $template_details = EmailTemplate::find(1);
+
+        $placeholders = [
+            '{{firstname}}' => ucfirst($inputs['firstname']),
+            '{{lastname}}' => ucfirst($inputs['lastname']),
+        ];
+
+        $messageBody = str_replace(
+            array_keys($placeholders), 
+            array_values($placeholders), 
+            $template_details->template_message
+        );
 
         $mailData = [
             'salutation' => 'Hello ' . ucfirst($inputs['firstname']) . ' ' . ucfirst($inputs['lastname']) . ',',
-            'body' => $template_details->template_message?? "",
-            'subject'=>$template_details->template_subject ?? "",
+            'body' => $messageBody,
+            'subject' => $template_details->template_subject ?? "",
         ];
 
         Mail::to([$guardianEmail])->send(new RegistrationMail($mailData));
+
 
         \Session::flash('success', 'User has been inserted successfully!');
         return redirect()->route('parent.edit', ['parent' => $parent->id]);

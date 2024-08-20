@@ -201,13 +201,29 @@ class AuthController extends Controller
         $template_details= EmailTemplate::find(1);
         $guardianEmail= $user->email ?? "";
 
-        $mailData = [
-            'salutation' => 'Hello ' . ucfirst($user['firstname']) . ' ' . ucfirst($user['lastname']) . ',',
-            'body' => $template_details->template_message?? "",
-            'subject'=>$template_details->template_subject ?? "",
-        ];
+        $template_details = EmailTemplate::find(1);
 
-        Mail::to([$guardianEmail])->send(new RegistrationMail($mailData));
+        if(!empty($template_details))
+        {
+            $placeholders = [
+                '{{firstname}}' => ucfirst($user['firstname']),
+                '{{lastname}}' => ucfirst($user['lastname']),
+            ];
+
+            $messageBody = str_replace(
+                array_keys($placeholders), 
+                array_values($placeholders), 
+                $template_details->template_message
+            );
+
+            $mailData = [
+                'salutation' => 'Hello ' . ucfirst($user['firstname']) . ' ' . ucfirst($user['lastname']) . ',',
+                'body' => $messageBody,
+                'subject' => $template_details->template_subject ?? "",
+            ];
+
+            Mail::to([$guardianEmail])->send(new RegistrationMail($mailData));
+        }
 
         return response()->json([
             'status' => 'success',
@@ -257,12 +273,23 @@ class AuthController extends Controller
                 $createdChildren[] = $child;
 
                 if ($template_details && $child->email) {
+                    $placeholders = [
+                        '{{firstname}}' => ucfirst($child['firstname']),
+                        '{{lastname}}' => ucfirst($child['lastname']),
+                    ];
+        
+                    $messageBody = str_replace(
+                        array_keys($placeholders), 
+                        array_values($placeholders), 
+                        $template_details->template_message
+                    );
+        
                     $mailData = [
-                        'salutation' => 'Hello ' . ucfirst($child->firstname) . ' ' . ucfirst($child->lastname) . ',',
-                        'body' => $template_details->template_message ?? "",
+                        'salutation' => 'Hello ' . ucfirst($child['firstname']) . ' ' . ucfirst($child['lastname']) . ',',
+                        'body' => $messageBody,
                         'subject' => $template_details->template_subject ?? "",
                     ];
-    
+        
                     Mail::to($child->email)->send(new RegistrationMail($mailData));
                 }
             }

@@ -121,7 +121,7 @@ $(function () {
             {data: 'category_id', name: 'category_id'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "13%", orderable: false},  
         ],
     });
 
@@ -210,7 +210,7 @@ $(function () {
             {data: 'time_duration', name: 'time_duration'},
             {data: 'status', name: 'status'},
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "13%", orderable: false},  
         ],
     });
 

@@ -5,6 +5,6 @@
     <title>{{ $subject }}</title>
 </head>
 <body>
-    {!! nl2br($body) !!}
+    <p>{!! nl2br(e($body)) !!}</p>
 </body>
 </html>
