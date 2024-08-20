@@ -14,7 +14,7 @@
         <div class="form-group">
             <label for="user_id" id="user_id_label">Select Users/Province/Schools</label>
             
-            {!! Form::select('user_id[]',  [], null, ['class' => 'form-control select2', 'placeholder' => 'Select Driver/Customer', 'id' => 'user_id', 'multiple' => 'multiple']) !!}
+            {!! Form::select('user_id[]',  [], null, ['class' => 'form-control select2', 'placeholder' => 'Select Users/Province/Schools', 'id' => 'user_id', 'multiple' => 'multiple']) !!}
 
             @include('admin.common.errors', ['field' => 'user_id'])
         </div>
