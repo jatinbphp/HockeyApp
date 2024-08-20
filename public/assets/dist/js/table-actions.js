@@ -223,11 +223,8 @@ $(function () {
         lengthMenu: [ 100, 200, 300, 400, 500, ],
         ajax: $("#route_name").val(),
         columns: [
-            {data: 'fullname', name: 'fullname'},
-            {data: 'email', name: 'email'},
-            {data: 'province', name: 'province'},
-            {data: 'school', name: 'school'},
-            {data: 'status', name: 'status'},
+            {data: 'user_id', name: 'user_id'},
+            {data: 'message', name: 'message'},
             {data: 'created_at', "width": "14%", name: 'created_at'},  
             {data: 'action', "width": "12%", orderable: false},  
         ],

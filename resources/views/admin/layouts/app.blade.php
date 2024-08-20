@@ -26,6 +26,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda-themeless.min.css">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/summernote/summernote.min.css') }}">
+        <link rel="stylesheet" href="{{ URL::asset('assets/plugins/select2/css/select2.min.css')}}">
+
         
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css">
 
@@ -278,6 +280,8 @@
         <script src="{{ URL::asset('assets/dist/js/adminlte.js')}}"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
+        <script src="{{ URL::asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
+
 
         <!-- AdminLTE for datatables -->
 
@@ -299,6 +303,7 @@
         <script>
             $(document).ready(function() {
                 Ladda.bind('button[type=submit]');
+                $('.select2').select2();
 
                 /*Datepicker*/
                 $('.datepicker').datepicker({

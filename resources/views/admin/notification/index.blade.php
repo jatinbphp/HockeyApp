@@ -25,11 +25,8 @@
                         <table id="notificationTable" class="table table-bordered table-striped datatable-dynamic">
                             <thead>
                                 <tr>
-                                    <th>Full Name</th>                    
-                                    <th>Email</th>                    
-                                    <th>Province</th>                    
-                                    <th>School</th> 
-                                    <th>Status</th>                    
+                                    <th>Name</th>                    
+                                    <th>Message</th>                    
                                     <th>Created At</th>                           
                                     <th>Action</th>                           
                                 </tr>

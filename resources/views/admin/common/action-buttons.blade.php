@@ -40,9 +40,12 @@
 @endif
 
 @if($section_name!='children')
+
+    @if($section_name!='notification')
     <a href="{{ url('admin/'.$section_name.'/'.$id.'/edit') }}" title="Edit" class="btn btn-sm btn-info tip">
         <i class="fa fa-edit"></i>
     </a>
+    @endif
 
     @if($section_name!='email-templates')
         <button class="btn btn-sm btn-danger deleteRecord" data-id="{{$id}}" type="button" data-url="{{ url('admin/'.$section_name.'/'.$id) }}" data-section="{{$section_name}}_table" title="Delete">

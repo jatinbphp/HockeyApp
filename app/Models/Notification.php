@@ -10,6 +10,21 @@ class Notification extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable = ['id','user_id','device_id','device_type','message','status'];
+    protected $fillable = ['id','user_id','user_type','device_id','device_type','message','status'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
 }
  
