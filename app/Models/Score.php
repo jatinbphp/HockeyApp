@@ -21,4 +21,15 @@ class Score extends Model
         self::STATUS_TYPE_ACCEPT => 'Accept',
         self::STATUS_TYPE_REJECT => 'Reject',    
     ];
+
+    public function skills()
+    {
+        return $this->belongsTo(Skill::class, 'skill_id');
+    }
+
+    public function child()
+    {
+        return $this->belongsTo(Child::class, 'student_id');
+    }
+
 }

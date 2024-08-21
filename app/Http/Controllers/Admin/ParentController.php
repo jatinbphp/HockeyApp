@@ -149,8 +149,8 @@ class ParentController extends Controller
             $users->children()->delete();
             $users->delete();
             return 1;
-        }else{
-            return 0;
         }
+        return 0;
+        
     }
 }

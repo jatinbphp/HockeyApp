@@ -28,7 +28,7 @@ class MainController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', [
-            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore','guardianProfileUpdate','childrenProfileUpdate','multipleChildrenProfileUpdate','getActiveRankings']
+            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore','guardianProfileUpdate','childrenProfileUpdate','multipleChildrenProfileUpdate','getActiveRankings','getActiveRankingsById']
         ]);
     }
 
@@ -318,64 +318,60 @@ class MainController extends Controller
 
     public function getActiveRankings(){
 
-        $getRanking = Score::select('skill_id', DB::raw('SUM(score) as total_score'))
-        ->where('status', 'accept')
-        ->groupBy('skill_id')
-        ->get();
-        
-        if (!$getRanking->isEmpty()) {
-
-            // Transform the sponsors data to include full image URL
-            $rankings = $getRanking->map(function ($ranking) {
-                $ranking->skill_name = getSkillName($ranking->skill_id);
-                return $ranking;
-            });
-
+        $getRanking = Score::with('skills')->where('status', 'accept')->get()->groupBy('skill_id');
+        $rankings = [];
+    
+        foreach ($getRanking as $skillId => $scores) {
+            $firstRanking = $scores->first(); 
+    
+            $rankings[] = [
+                'skill_id' => $firstRanking->skill_id ?? '',
+                'skill_name' => $firstRanking->skills->name ?? '',
+            ];
+        }
+        if (!empty($rankings)) {
             return response()->json([
                 'status' => 'success',
                 'message' => 'success',
                 'data' => $rankings
-            ],200);         
-
-        }else{
-
+            ], 200);
+        } else {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No active sponsors found',
+                'message' => 'No active rankings found',
                 'data' => (object)[]
             ], 404);
         }
  
     }
 
-    public function getActiveRankingsById($id){
-
-        $getRanking = Score::where('id', $id)
-        ->where('status', 'accept')
-        ->get();
+    public function getActiveRankingsById(Request $request){
+    
+        $children_information = Score::with('child')->where('skill_id', $request->skill_id)->get();
         
-        if (!$getRanking->isEmpty()) {
+        foreach ($children_information as $skillId => $scores) {
+    
+            $rankings[] = [
+                'child_name' => $scores->child->firstname.' '.$scores->child->lastname,
+                'score' => $scores->score ?? '',
+            ];
+        }
 
-            // Transform the sponsors data to include full image URL
-            $rankings = $getRanking->map(function ($ranking) {
-                $ranking->skill_name = getSkillName($ranking->skill_id);
-                return $ranking;
-            });
-
+        if(!empty($children_information)){
             return response()->json([
-                'status' => 'success',
-                'message' => 'success',
-                'data' => $rankings
-            ],200);         
-
-        }else{
-
+                    'status' => 'success',
+                    'message' => 'success',
+                    'data' => $rankings
+                ], 200);
+        }
+        else{
             return response()->json([
                 'status' => 'error',
-                'message' => 'No active sponsors found',
+                'message' => 'No active rankings found',
                 'data' => (object)[]
             ], 404);
-        } 
+        }
+        
     }
 
     public function getGuardianProfile(Request $request){

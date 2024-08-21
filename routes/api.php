@@ -40,6 +40,7 @@ Route::post('getGuardianProfile', [MainController::class, 'getGuardianProfile'])
 Route::post('submitScore', [MainController::class, 'submitScore']);
 Route::get('getRankings', [MainController::class, 'getActiveRankings']);
 
+
 Route::middleware('auth:api')->group(function () {
     // Route::get('getCategories', [MainController::class, 'getActiveCategories']); 
     // Route::get('getSkill', [MainController::class, 'getActiveSkill']);    
@@ -56,3 +57,4 @@ Route::post('/payfast/create-payment', [PayFastController::class, 'createPayment
 Route::post('/payfast/notify', [PayFastController::class, 'notify'])->name('payfast.notify');
 Route::get('/payfast/return', [PayFastController::class, 'return'])->name('payfast.return');
 Route::get('/payfast/cancel', [PayFastController::class, 'cancel'])->name('payfast.cancel');
+Route::post('getRankingsById', [MainController::class, 'getActiveRankingsById']);
