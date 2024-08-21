@@ -224,6 +224,8 @@ $(function () {
         ajax: $("#route_name").val(),
         columns: [
             {data: 'user_id', name: 'user_id'},
+            {data: 'province', name: 'province'},
+            {data: 'school', name: 'school'},
             {data: 'message', name: 'message'},
             {data: 'created_at', "width": "14%", name: 'created_at'},  
             {data: 'action', "width": "12%", orderable: false},  

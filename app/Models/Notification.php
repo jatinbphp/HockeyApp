@@ -19,7 +19,12 @@ class Notification extends Model
 
     public function school()
     {
-        return $this->belongsTo(School::class);
+        return $this->belongsTo(School::class, 'user_id'); 
+    }
+
+    public function child()
+    {
+        return $this->belongsTo(Child::class, 'user_id'); 
     }
 
     public function province()

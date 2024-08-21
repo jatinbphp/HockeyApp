@@ -73,4 +73,15 @@ class Child extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'province_id');
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
+
 }

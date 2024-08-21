@@ -31,7 +31,7 @@ class NotificationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required' => 'The field field is required.',
+            'user_id.required' => 'This field is required.',
         ];
     }
 }

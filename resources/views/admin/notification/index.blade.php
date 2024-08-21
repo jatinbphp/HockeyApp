@@ -25,7 +25,9 @@
                         <table id="notificationTable" class="table table-bordered table-striped datatable-dynamic">
                             <thead>
                                 <tr>
-                                    <th>Name</th>                    
+                                    <th>Name</th>
+                                    <th>Province</th>
+                                    <th>School Name</th>                       
                                     <th>Message</th>                    
                                     <th>Created At</th>                           
                                     <th>Action</th>                           

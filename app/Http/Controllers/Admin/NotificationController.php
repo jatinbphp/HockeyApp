@@ -8,6 +8,7 @@ use App\Models\Notification;
 use App\Models\User;
 use App\Models\Province;
 use App\Models\School;
+use App\Models\Child;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\NotificationRequest;
@@ -23,21 +24,10 @@ class NotificationController extends Controller
             return Datatables::of(Notification::all())
             ->addIndexColumn()
             ->editColumn('user_id', function($row) {
-                if ($row->user_type == "users") {
-                    $user = User::find($row->user_id);
-                    if ($user) {
-                        return $user->firstname . ' ' . $user->lastname;
-                    }
-                } elseif ($row->user_type == "School") {
-                    $school = School::find($row->user_id);
-                    if ($school) {
-                        return $school->name;
-                    }
-                } elseif ($row->user_type == "province") {
-                    $province = Province::find($row->user_id);
-                    if ($province) {
-                        return $province->name;
-                    }
+                if ($row->user_type == "guardian") {
+                    return $row->user ? ucfirst($row->user->firstname) . ' ' . $row->user->lastname : '-';
+                } else {
+                    return $row->child ? ucfirst($row->child->firstname) . ' ' . $row->child->lastname : '-';
                 }
             })
             ->editColumn('created_at', function($row) {
@@ -45,7 +35,13 @@ class NotificationController extends Controller
             })
             ->editColumn('message', function($row) {
                 return strip_tags($row->message);
-            })  
+            })
+            ->addColumn('province', function($row) {
+                return $row->child->province->name ?? "-";
+            })
+            ->addColumn('school', function($row) {
+                return $row->child && $row->child->school ? $row->child->school->name : "-";
+            })
             ->addColumn('action', function($row){
                 $row['section_name'] = 'notification';
                 $row['section_title'] = 'Notification';
@@ -60,18 +56,25 @@ class NotificationController extends Controller
     public function create()
     {
         $data['menu'] = 'Notification';
-        $data['users'] = User::select(DB::raw("CONCAT(firstname, ' ', lastname) as name"), 'id')->pluck('name', 'id');
-        $data['provinces'] = Province::select('*')->pluck('name','id');
-        $data['schools'] = School::select('*')->pluck('name','id');
+        $data['users'] = User::select(DB::raw("CONCAT(firstname, ' ', lastname) as name"), 'id')->where('role','guardian')->pluck('name', 'id');
+        $data['provinces'] = Province::pluck('name','id');
+        $data['schools'] = School::pluck('name','id');
+        $data['children'] = Child::select(DB::raw("CONCAT(firstname, ' ', lastname) as name"), 'id')->pluck('name', 'id');
 
         return view("admin.notification.create",$data);
     }
 
     public function store(NotificationRequest $request)
     {
-        $userIds = $request->user_id;
-        $userType= $request->user_type;
-    
+        $userType = $request->user_type;
+        if ($userType == 'province') {
+            $userIds = Child::whereIn('province_id', $request->user_id)->pluck('id');
+        } elseif ($userType == 'School') {
+            $userIds = Child::whereIn('school_id', $request->user_id)->pluck('id');
+        } else {
+            $userIds = $request->user_id;
+        }
+
         foreach($userIds as $userId) {
             Notification::create([
                 'user_id' => $userId,
@@ -89,8 +92,7 @@ class NotificationController extends Controller
         if(!empty($notifications)){
             $notifications->delete();
             return 1;
-        }else{
-            return 0;
         }
+        return 0;
     }
 }
