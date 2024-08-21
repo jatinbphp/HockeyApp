@@ -28,7 +28,7 @@ class MainController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', [
-            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore','guardianProfileUpdate','childrenProfileUpdate','multipleChildrenProfileUpdate']
+            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore','guardianProfileUpdate','childrenProfileUpdate','multipleChildrenProfileUpdate','getActiveRankings']
         ]);
     }
 
