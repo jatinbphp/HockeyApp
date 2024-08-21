@@ -38,6 +38,7 @@ Route::post('getChildrensByParentId', [MainController::class, 'getChildrensByPar
 Route::post('getGuardianProfile', [MainController::class, 'getGuardianProfile']); 
 
 Route::post('submitScore', [MainController::class, 'submitScore']);
+Route::get('getRankings', [MainController::class, 'getActiveRankings']);
 
 Route::middleware('auth:api')->group(function () {
     // Route::get('getCategories', [MainController::class, 'getActiveCategories']); 
