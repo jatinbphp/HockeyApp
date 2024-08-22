@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\CmsPagesController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\SkillReviewController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\RankingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,6 +82,9 @@ Route::prefix('admin')->middleware(['removePublic'])->group(function () {
 
     /* EMAIL TEMPLATES */
     Route::resource('email-templates', EmailTemplatesController::class);
+
+    /* RANKINGS*/
+    Route::get('ranking/index', [RankingController::class,'index'])->name('ranking.index');
 
     /* NOTIFICATION */
     Route::resource('notification', NotificationController::class);

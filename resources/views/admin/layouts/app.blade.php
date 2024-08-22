@@ -183,6 +183,15 @@
                             </li>
 
                             <li class="nav-item">
+                                <a href="{{route('ranking.index')}}" class="nav-link @if(isset($menu) && $menu=='Rankings') active @endif">
+                                    <i class="nav-icon fas fa-list"></i>
+                                    <p>
+                                        Rankings
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a href="{{route('consent.index')}}" class="nav-link @if(isset($menu) && $menu=='Consent Message') active @endif">
                                     <i class="nav-icon fas fa-list"></i>
                                     <p>

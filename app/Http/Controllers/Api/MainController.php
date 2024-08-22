@@ -329,6 +329,7 @@ class MainController extends Controller
                 'skill_name' => $firstRanking->skills->name ?? '',
             ];
         }
+
         if (!empty($rankings)) {
             return response()->json([
                 'status' => 'success',
@@ -346,32 +347,54 @@ class MainController extends Controller
     }
 
     public function getActiveRankingsById(Request $request){
-    
-        $children_information = Score::with('child')->where('skill_id', $request->skill_id)->get();
-        
+
+        $validator = Validator::make($request->post(), [
+            'skill_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {  
+
+            return response()->json([
+                'status' => 'error',
+                'message' => implode(',', $validator->errors()->all()),
+                'data' => (object)[]
+            ], 200);
+
+        }
+
+        $children_information = Score::with('child')
+        ->where(['skill_id' => $request->skill_id, 'status'=>'accept'])
+        ->when(!empty($request->province_id) && $request->province_id != 0, function ($query) use ($request) {
+            return $query->where('province_id', $request->province_id);
+        })
+        ->when(!empty($request->school_id) && $request->school_id != 0, function ($query) use ($request) {
+            return $query->whereHas('child', function ($query) use ($request) {
+                $query->where('school_id', $request->school_id);
+            });
+        })
+        ->get();
+
         foreach ($children_information as $skillId => $scores) {
-    
+
             $rankings[] = [
                 'child_name' => $scores->child->firstname.' '.$scores->child->lastname,
-                'score' => $scores->score ?? '',
+                'score' => $scores->score.'%' ?? '',
             ];
         }
 
-        if(!empty($children_information)){
+        if (!empty($rankings)) {
             return response()->json([
-                    'status' => 'success',
-                    'message' => 'success',
-                    'data' => $rankings
-                ], 200);
-        }
-        else{
+                'status' => 'success',
+                'message' => 'success',
+                'data' => $rankings,
+            ], 200);
+        } else {
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active rankings found',
-                'data' => (object)[]
+                'data' => (object)[],
             ], 404);
         }
-        
     }
 
     public function getGuardianProfile(Request $request){

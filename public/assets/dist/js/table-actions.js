@@ -232,6 +232,34 @@ $(function () {
         ],
     });
 
+    var ranking_table = $('#rankingTable').DataTable({
+        processing: true,
+        serverSide: true, 
+        pageLength: 100,
+        lengthMenu: [ 100, 200, 300, 400, 500, ],
+        ajax: {
+            url: $("#route_name").val(),
+            data: function(d) {
+                d.province_id = $('#province_id').val();
+                d.school_id = $('#school_id').val();
+            }
+        },
+        columns: [
+            {data: 'student_id', name: 'student_id'},
+            {data: 'skill_id', name: 'skill_id'},
+            { 
+                data: 'score', 
+                name: 'score',
+                render: function(data, type, row) {
+                    return data + '%';
+                }
+            },
+            {data: 'ranking', name: 'ranking'},
+            {data: 'created_at', "width": "14%", name: 'created_at'},  
+        ],
+        "order": [[1, "ASC"]]
+    });
+
 
     var sectionTableMap = {
         'users_table': users_table,
@@ -603,6 +631,33 @@ $(function () {
                 swal("Cancelled", "Your data is safe!", "error");
             }
         });
+    });
+
+    $('#clear-filter').click(function() {
+        var dataType = $(this).data('type');
+
+        $('#ranking-filter-Form')[0].reset();
+        $(".select2").val("").trigger("change");
+
+        if(dataType=='ranking'){
+            ranking_table.ajax.reload(null, false);
+        }
+    });
+
+    $('#apply-filter').click(function() {
+        var dataType = $(this).data('type');
+
+        if (dataType == 'ranking') {
+            var province_id = $('#province_id').val();
+            var school_id = $('#school_id').val();
+    
+            ranking_table.ajax.reload(function (json) {
+                ranking_table.ajax.params({
+                    province_id: province_id,
+                    school_id: school_id
+                });
+            }, false);
+        }
     });
 
 }); 
