@@ -242,6 +242,7 @@ $(function () {
             data: function(d) {
                 d.province_id = $('#province_id').val();
                 d.school_id = $('#school_id').val();
+                d.skill_id = $('#skill_id').val();
             }
         },
         columns: [

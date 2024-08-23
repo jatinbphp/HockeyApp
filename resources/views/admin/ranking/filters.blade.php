@@ -4,7 +4,7 @@
             <div class="form-group">
                 @include('admin.common.label', ['field' => 'province_id', 'labelText' => 'Province', 'isRequired' => false])
 
-                {!! Form::select("province_id", ['' => 'Please Select'] + ($province->toArray() ?? []), null, ["class" => "form-control select2", "id" => "province_id"]) !!}           
+                {!! Form::select("province_id", ['' => 'Please Select'] + ($province->toArray() ?? []), null, ["class" => "form-control", "id" => "province_id"]) !!}           
             </div>
         </div>
 
@@ -12,7 +12,15 @@
             <div class="form-group">
                 @include('admin.common.label', ['field' => 'school_id', 'labelText' => 'School', 'isRequired' => false])
 
-                {!! Form::select("school_id", ['' => 'Please Select'] + ($school->toArray() ?? []), null, ["class" => "form-control select2", "id" => "school_id"]) !!}           
+                {!! Form::select("school_id", ['' => 'Please Select'] + ($school->toArray() ?? []), null, ["class" => "form-control", "id" => "school_id"]) !!}           
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                @include('admin.common.label', ['field' => 'skill_id', 'labelText' => 'Skill', 'isRequired' => false])
+
+                {!! Form::select("skill_id", ['' => 'Please Select'] + ($skill->toArray() ?? []), null, ["class" => "form-control", "id" => "skill_id"]) !!}           
             </div>
         </div>
 

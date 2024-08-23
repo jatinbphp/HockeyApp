@@ -58,3 +58,4 @@ Route::post('/payfast/notify', [PayFastController::class, 'notify'])->name('payf
 Route::get('/payfast/return', [PayFastController::class, 'return'])->name('payfast.return');
 Route::get('/payfast/cancel', [PayFastController::class, 'cancel'])->name('payfast.cancel');
 Route::post('getRankingsById', [MainController::class, 'getActiveRankingsById']);
+Route::get('getFees', [MainController::class, 'getFees']);

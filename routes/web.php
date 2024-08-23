@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\SkillReviewController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\RankingController;
+use App\Http\Controllers\Admin\FeesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,6 +89,9 @@ Route::prefix('admin')->middleware(['removePublic'])->group(function () {
 
     /* NOTIFICATION */
     Route::resource('notification', NotificationController::class);
+
+    /* FEES */
+    Route::resource('fees', FeesController::class);
 
     /* CONTACT US */
     Route::resource('contactus', ContactUsController::class);

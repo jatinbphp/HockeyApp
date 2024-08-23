@@ -82,6 +82,8 @@
                             <a href="#" class="d-block">Super Admin</a>
                         </div>
                     </div>
+                   
+                
 
                     <!-- Sidebar Menu -->
                     <nav class="mt-2">
@@ -130,7 +132,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('category.index')}}" class="nav-link @if(isset($menu) && $menu=='Category') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fa fa-sitemap"></i>
                                     <p>
                                         Manage Category
                                     </p>
@@ -139,7 +141,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('province.index')}}" class="nav-link @if(isset($menu) && $menu=='Province') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fa fa-map-marker-alt"></i>
                                     <p>
                                         Manage Province
                                     </p>
@@ -148,7 +150,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('school.index')}}" class="nav-link @if(isset($menu) && $menu=='School') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fa fa-school"></i>
                                     <p>
                                         Manage School
                                     </p>
@@ -157,7 +159,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('skill.index')}}" class="nav-link @if(isset($menu) && $menu=='Skill') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fas fa-lightbulb"></i>
                                     <p>
                                         Manage Skill
                                     </p>
@@ -166,7 +168,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('sponsors.index')}}" class="nav-link @if(isset($menu) && $menu=='Sponsors') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fas fa-handshake"></i>
                                     <p>
                                         Manage Sponsors
                                     </p>
@@ -175,7 +177,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('skill-review.index')}}" class="nav-link @if(isset($menu) && $menu=='SkillReview') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fa fa-clipboard-check"></i>
                                     <p>
                                         Skill Review
                                     </p>
@@ -184,7 +186,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('ranking.index')}}" class="nav-link @if(isset($menu) && $menu=='Rankings') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fa fa-medal"></i>
                                     <p>
                                         Rankings
                                     </p>
@@ -193,7 +195,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('consent.index')}}" class="nav-link @if(isset($menu) && $menu=='Consent Message') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fa fa-check-circle"></i>
                                     <p>
                                         Consent Message
                                     </p>
@@ -202,7 +204,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('cms_page.index')}}" class="nav-link @if(isset($menu) && $menu=='CMS') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fa fa-file-alt"></i>
                                     <p>
                                         CMS Pages
                                     </p>
@@ -211,7 +213,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('notification.index')}}" class="nav-link @if(isset($menu) && $menu=='Notification') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fa fa-bell"></i>
                                     <p>
                                         Notification
                                     </p>
@@ -220,16 +222,25 @@
 
                             <li class="nav-item">
                                 <a href="{{route('email-templates.index')}}" class="nav-link @if(isset($menu) && $menu=='Email Template') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fa fa-envelope"></i>
                                     <p>
                                         Email Templates
                                     </p>
                                 </a>
-                            </li>     
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a href="{{route('fees.index')}}" class="nav-link @if(isset($menu) && $menu=='Fees') active @endif">
+                                    <i class="nav-icon fa fa-dollar-sign"></i>
+                                    <p>
+                                        Fees
+                                    </p>
+                                </a>
+                            </li>  
 
                             <li class="nav-item">
                                 <a href="{{route('contactus.index')}}" class="nav-link @if(isset($menu) && $menu=='Contact Us') active @endif">
-                                    <i class="nav-icon fas fa-list"></i>
+                                    <i class="nav-icon fas fa-address-book"></i>
                                     <p>
                                         Contact Us
                                     </p>

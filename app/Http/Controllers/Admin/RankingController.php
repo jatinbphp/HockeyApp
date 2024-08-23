@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Score;
 use App\Models\Province;
 use App\Models\School;
+use App\Models\Skill;
 use DataTables;
 
 class RankingController extends Controller
@@ -23,6 +24,11 @@ class RankingController extends Controller
             ->when(!empty($request->school_id) && $request->school_id != 0, function ($query) use ($request) {
                 return $query->whereHas('child', function ($query) use ($request) {
                     $query->where('school_id', $request->school_id);
+                });
+            })
+            ->when(!empty($request->skill_id) && $request->skill_id != 0, function ($query) use ($request) {
+                return $query->whereHas('skills', function ($query) use ($request) {
+                    $query->where('skill_id', $request->skill_id);
                 });
             })
             ->get();
@@ -61,6 +67,7 @@ class RankingController extends Controller
     
         $data['province'] = Province::where('status', 'active')->pluck('name', 'id');
         $data['school'] = School::where('status', 'active')->pluck('name', 'id');
+        $data['skill']  = Skill::where('status','active')->pluck('name','id');
     
         return view('admin.ranking.index', $data);
     }

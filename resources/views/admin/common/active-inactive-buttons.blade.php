@@ -9,5 +9,5 @@
 </div> -->
 
 <div class="status-select">
-    {!! Form::select('status', \App\Models\Common::$status, $checkedKey, ['class' => 'form-control select2']) !!}
+    {!! Form::select('status', \App\Models\Common::$status, $checkedKey, ['class' => 'form-control']) !!}
 </div>

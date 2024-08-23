@@ -21,6 +21,7 @@ use App\Models\Score;
 use App\Models\Child;
 use App\Models\Sponsors;
 use App\Models\School;
+use App\Models\Fee;
 use App\Models\EmailTemplate;
 use DOMDocument;
 
@@ -28,7 +29,7 @@ class MainController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', [
-            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore','guardianProfileUpdate','childrenProfileUpdate','multipleChildrenProfileUpdate','getActiveRankings','getActiveRankingsById']
+            'except' => ['login','register','getActiveSchool','getActiveProvince','getSponsors','getActiveSkill','getChildrenProfile','getChildrensByParentId','submitScore','guardianProfileUpdate','childrenProfileUpdate','multipleChildrenProfileUpdate','getActiveRankings','getActiveRankingsById','getFees']
         ]);
     }
 
@@ -753,6 +754,27 @@ class MainController extends Controller
             'message' => 'Children Updated Successfully!',
             'data' => $updatedChildren
         ], 200);
+    }
+
+    public function getFees()
+    {
+        $fees = Fee::pluck('fees')->first();
+        if (!empty($fees)) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Fees retrieved successfully',
+                'data' => [
+                    'fees' => $fees
+                ]
+            ], 200);
+        }
+        else{
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No fees found',
+                'data' => (object)[]
+            ], 404);
+        }
     }
  
 }
