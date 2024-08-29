@@ -74,20 +74,56 @@
                 <!-- Sidebar -->
                 <div class="sidebar">
                     <!-- Sidebar user panel (optional) -->
-                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
                             <img src="{{ URL::asset('assets/dist/img/avatar.png')}}" class="img-circle elevation-2" alt="User Image" />
                         </div>
                         <div class="info">
                             <a href="#" class="d-block">Super Admin</a>
                         </div>
-                    </div>
-                   
+                    </div> -->
                 
 
                     <!-- Sidebar Menu -->
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item has-treeview {{ isset($menu) && $menu == 'Edit Profile' ? 'menu-open' : '' }}" style="border-bottom: 1px solid #4f5962; margin-bottom: 4.5%;">
+
+                            <a href="#" class="nav-link {{ isset($menu) && $menu == 'Edit Profile' ? 'active' : '' }}">
+                                <img src="{{ !empty(Auth::user()->image) && file_exists(Auth::user()->image) ? asset(Auth::user()->image) : url('assets/admin/dist/img/no-image.png') }}" 
+                                    class="img-circle elevation-2" 
+                                    
+                                    style="width: 2.1rem; margin-right: 1.5%;">
+
+                                <p style="padding-right: 6.5%;">
+                                @php
+                                    $userName = 'Guest'; // Default to 'Guest' if the user is not logged in
+
+                                    // Check if user_id exists in the session and fetch the user's name
+                                    if (session()->has('user_id')) {
+                                        $user = \App\Models\User::find(session('user_id'));
+                                        if ($user) {
+                                            $userName = ucfirst($user->firstname).' '.ucfirst($user->lastname);
+                                        }
+                                    }
+                                @endphp
+                                {{ $userName }}
+
+                                <i class="fa fa-angle-left right"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('profile_update.edit', ['profile_update' => session('user_id')]) }}"
+                                class="nav-link {{ isset($menu) && $menu == 'Edit Profile' ? 'active' : '' }}">
+                                        <i class="nav-icon fa fa-pencil-alt"></i>
+                                        <p class="text-warning">Edit Profile</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                             <li class="nav-item">
                                 <a href="{{route('admin.dashboard')}}" class="nav-link @if(isset($menu) && $menu=='Dashboard') active @endif">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>

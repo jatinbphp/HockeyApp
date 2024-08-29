@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\SkillReviewController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\RankingController;
 use App\Http\Controllers\Admin\FeesController;
+use App\Http\Controllers\Admin\ProfileUpdateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,13 +40,13 @@ use App\Http\Controllers\Admin\FeesController;
 
 Route::get('', function () {
     return view('login');
-})->name('login')->middleware(['removePublic']);
+})->name('login')->middleware(['removePublic','guest']);
 
 Route::post('login',[LoginController::class, 'index'])->name('user.login');
 
 Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
 
-Route::prefix('admin')->middleware(['removePublic'])->group(function () {
+Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () {
 
     Route::get('dashboard',[DashboardController::class, 'index'])->name('admin.dashboard');
 
@@ -92,6 +93,9 @@ Route::prefix('admin')->middleware(['removePublic'])->group(function () {
 
     /* FEES */
     Route::resource('fees', FeesController::class);
+
+    /* PROFILE UPDATE */
+    Route::resource('profile_update', ProfileUpdateController::class);
 
     /* CONTACT US */
     Route::resource('contactus', ContactUsController::class);

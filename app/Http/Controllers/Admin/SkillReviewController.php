@@ -66,4 +66,13 @@ class SkillReviewController extends Controller
 
         return false;
     }
+
+    public function destroy($id){
+        $skill_review = Score::findOrFail($id);
+        if(!empty($skill_review)){
+            $skill_review->delete();
+            return 1;
+        }
+        return 0;
+    }
 }

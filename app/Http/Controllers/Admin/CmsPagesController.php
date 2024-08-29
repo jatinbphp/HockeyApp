@@ -45,5 +45,14 @@ class CmsPagesController extends Controller
         \Session::flash('success','Message has been updated successfully!');
         return redirect()->route('cms_page.index');
     }
+
+    public function destroy($id){
+        $cms_pages = CmsPages::findOrFail($id);
+        if(!empty($cms_pages)){
+            $cms_pages->delete();
+            return 1;
+        }
+        return 0;
+    }
 }
  

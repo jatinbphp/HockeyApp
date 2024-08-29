@@ -7,54 +7,39 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
-
 
 class LoginController extends Controller
 {
-   
     public function index(Request $request){
-        // Validate incoming request data
-        $this->validate($request, [
-            'email' => 'required',
+        
+        $request->validate([
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // Prepare data for API request
-        $data = [
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),            
-        ];
-
-        $user = User::where('email',$request->email)
-                ->where('role','admin')
-                ->orWhere('role','super_admin')
-                ->first();
-
-        if($user){
-            if(Hash::check($request->password, $user->password)){
-                $request->session()->put('loginId', $user->id);
-                return redirect('admin/dashboard');
-            } else {
-                return back()->with('danger','Password not match!');
-            }
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 'super_admin']) || 
+            Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 'admin'])) {
+            $user = Auth::user();
+            $request->session()->put('user_id', $user->id);
+            \Log::info('User Authenticated: ' . Auth::id());
+    
+            return redirect()->route('admin.dashboard');
         } else {
-            return back()->with('danger','Email not Found.');
-        }     
+            \Session::flash('danger', 'Invalid Credentials!');
+            return redirect()->route('login');
+        }  
         
     }
 
     public function logout()
     {
-        // Check if the session has a 'loginId'
-        if (Session::has('loginId')) {
-            // Remove 'loginId' from the session
-            Session::pull('loginId');
-        }
+        Auth::logout();
 
-        // Redirect to the home page
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        
         return redirect('/');
     }
 }

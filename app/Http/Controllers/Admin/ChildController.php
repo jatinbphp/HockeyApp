@@ -42,18 +42,35 @@ class ChildController extends Controller
         return view('admin.children.index',$data);
     }
 
-    public function create(){
+    public function create($id){
         $data['menu'] = 'Children';
+       
         return view('admin.children.create',$data);
     }
 
-    public function store(Request $request)
+    public function store(ChildRequest $request)
     {
         $input = $request->all();
+
 
         $lookingSponsor = 0;
         if(isset($request->looking_sponsor)){
             $lookingSponsor = 1;
+        }
+
+        $user = $request->child_id ? Child::find($request->child_id) : null;
+
+        if ($file = $request->file('child_image')) {
+            $imageName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/childrens'), $imageName);
+            $input['image'] = 'uploads/childrens/' . $imageName;
+    
+            if ($user && !empty($user->image) && file_exists(public_path($user->image))) {
+                unlink(public_path($user->image));
+            }
+        } else {
+            \Log::info('No File Received');
+            $input['image'] = $user ? $user->image : null;
         }
 
         Child::updateOrCreate([
@@ -63,13 +80,14 @@ class ChildController extends Controller
             'firstname' => $request->child_firstname, 
             'lastname' => $request->child_lastname,
             'username' => $request->child_username,
-            'email' => $request->email,
+            'email' => $request->email, // Update here
             'password' => $request->child_password,
             'date_of_birth' => date('Y-m-d',strtotime($request->child_dob)),
             'phone' => $request->child_phone,
             'province_id' => $request->province_id,
             'school_id' => $request->school_id,
             'looking_sponsor' => $lookingSponsor,
+            'image' => $input['image'],
         ]);     
 
         return response()->json(['success'=>'Children saved successfully.']);

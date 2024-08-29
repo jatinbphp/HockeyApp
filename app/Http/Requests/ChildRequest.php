@@ -22,35 +22,26 @@ class ChildRequest extends FormRequest
      */
     public function rules(): array
     {
-        $userId = $this->route('children');
+       // Get the ID from the route for updating purposes
+       $childId = $this->route('child'); 
 
-        $rules = [
-            'child_firstname' => 'required|string|max:255',
-            'child_lastname' => 'required|string|max:255',
-            // 'username' => 'required|string|max:255',
-            // 'password' => 'confirmed|min:6',
-            // 'email' => [
-            //     'required',
-            //     'email',
-            //     Rule::unique('children','email')->ignore($userId)
-            // ]
-        ];
+       // Default rules
+       $rules = [
+           'child_firstname' => 'required|string|max:255',
+           'child_lastname' => 'required|string|max:255',
+           'child_username' => 'required|string|max:255',
+           'child_dob' => 'required|date',
+           'child_phone' => 'required|numeric',
+           'province_id' => 'required',
+           'school_id' => 'required',
+           
+       ];
 
-        // if ($this->isMethod('patch')) {
-        //     $rules['password'] = 'nullable|confirmed|min:6';
-        // }
+       // Apply password rule based on request method
+       
 
-        return $rules;
+       return $rules;
     }
 
-    public function messages(){
-
-        return [
-            'child_firstname' => 'The firstname field is required.',
-            'child_lastname' => 'The lastname field is required.',
-            // 'username' => 'The username field is required.',
-            // 'email.email' => 'The email address field must be a valid email address.',
-            // 'email.unique' => 'Email already exists.'
-        ];
-    }
+    
 }

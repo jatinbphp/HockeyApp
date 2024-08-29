@@ -16,12 +16,12 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if user is authenticated and has an admin role
-        if(Auth::check() && Auth::user()->role == 'super_admin'){
-            return $next($request);
-        }
+         $userId = $request->session()->get('user_id');
 
-        // Redirect or abort if user is not admin
-        return redirect('/')->with('error', 'You are not authorized to access this section.');
+         if (empty($userId)) {
+             return redirect()->route('login')->with('danger', 'Please log in to access this page.');
+         }
+
+         return $next($request);
     }
 }

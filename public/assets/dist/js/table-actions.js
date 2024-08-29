@@ -272,9 +272,9 @@ $(function () {
         'skill_table': skill_table,
         'sponsors_table': sponsors_table,
         'email_template': email_template,
-        'cms_table': cms_table,
+        'cms_page_table': cms_table,
         'contactus_table': contactus_table,
-        'skillreview_table': skillreview_table,
+        'skill-review_table': skillreview_table,
         'notification_table': notification_table,
     };
 
@@ -422,33 +422,53 @@ $(function () {
     /* SAVE CHILDREN DATA BY AJAX REQUEST */
     $('#saveBtn').click(function (e) {
         e.preventDefault();
-        // $(this).html('Sending..');
-        var url = $('#modal_redirect_url').val();
-        var formdata = $(document).find('#childForm').serialize();
-        console.log(formdata);
 
+        $('#childModel').on('show.bs.modal', function () {
+            $('#childForm').find('.text-danger').remove();
+        });
+    
+        // Clear previous validation errors when modal is hidden
+        $('#childModel').on('hidden.bs.modal', function () {
+            $('#childForm').find('.text-danger').remove();
+        });
+    
+        var url = $('#modal_redirect_url').val();
+        var formData = new FormData($('#childForm')[0]); // Create FormData object with form data
+    
         $.ajax({
-            data: formdata,
+            data: formData,
             url: url,
             headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
             type: "POST",
+            contentType: false, // Important for file uploads
+            processData: false, // Important for file uploads
             dataType: 'json',
             success: function (data) {
-        
                 $('#childForm').trigger("reset");
                 $('#childModel').modal('hide');
                 children_table.draw();
-
+    
                 $('#saveBtn').removeAttr('data-loading');
                 $('#saveBtn').removeAttr('disabled');
-            
             },
-            error: function (data) {
-                console.log('Error:', data);
-                // $('#saveBtn').html('Save Changes');
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    var errors = xhr.responseJSON.errors;
+                    $.each(errors, function(key, value) {
+                        $("#" + key).closest('.form-group').append(`
+                            <span class="text-danger">
+                                <strong>${value}</strong>
+                            </span>
+                        `);
+                    });
+                }
             }
         });
     });
+
+
+    
+    
 
     /* EDIT CHILDREN */
     $(document).on('click', '.editChild', function () {

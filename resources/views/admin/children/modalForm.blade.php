@@ -124,7 +124,25 @@
 
                         </div>
                     </div> 
-                        
+
+                    <div class="col-md-6">
+                        <div class="form-group{{ $errors->has('child_image') ? ' has-error' : '' }}">
+                            @include('admin.common.label', ['field' => 'child_image', 'labelText' => 'Image', 'isRequired' => false])
+                            <div class="">
+                                <div class="fileError">
+                                    {!! Form::file('child_image', ['class' => '', 'id'=> 'image', 'accept'=>'image/*', 'onChange'=>'AjaxUploadImage(this)']) !!}
+                                </div>
+                                
+                                <img src="{{ !empty($children['image']) && file_exists(public_path($children['image'])) ? asset($children['image']) : url('assets/dist/img/no-image.png') }}" 
+                                    alt="User Image" 
+                                    style="border: 1px solid #ccc; margin-top: 5px;" 
+                                    width="150" 
+                                    id="DisplayImage">
+                            </div>
+                        </div>
+                    </div>
+
+                                            
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Save</button>
                     </div>
@@ -135,15 +153,5 @@
         </div>
     </div>
 </div>   
-
-@section('jquery')
-<script type="text/javascript">
-
-$(document).ready(function(){
-
-    
-});
-</script>
-@endsection
 
  
