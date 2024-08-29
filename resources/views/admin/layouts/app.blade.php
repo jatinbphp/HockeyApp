@@ -90,7 +90,7 @@
                         <li class="nav-item has-treeview {{ isset($menu) && $menu == 'Edit Profile' ? 'menu-open' : '' }}" style="border-bottom: 1px solid #4f5962; margin-bottom: 4.5%;">
 
                             <a href="#" class="nav-link {{ isset($menu) && $menu == 'Edit Profile' ? 'active' : '' }}">
-                                <img src="{{ !empty(Auth::user()->image) && file_exists(Auth::user()->image) ? asset(Auth::user()->image) : url('assets/admin/dist/img/no-image.png') }}" 
+                                <img src="{{ !empty(Auth::user()->image) && file_exists(Auth::user()->image) ? asset(Auth::user()->image) : url('assets/dist/img/no-image.png') }}" 
                                     class="img-circle elevation-2" 
                                     
                                     style="width: 2.1rem; margin-right: 1.5%;">
