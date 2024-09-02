@@ -31,31 +31,27 @@ Route::get('getSchool', [MainController::class, 'getActiveSchool']);
 Route::get('getProvince', [MainController::class, 'getActiveProvince']); 
 Route::get('getSponsors', [MainController::class, 'getSponsors']);
 Route::get('getSkill', [MainController::class, 'getActiveSkill']);    
-Route::get('getSkillById/{id}', [MainController::class, 'getActiveSkillById']);  
 
-Route::post('getChildrenProfile', [MainController::class, 'getChildrenProfile']);   
-Route::post('getChildrensByParentId', [MainController::class, 'getChildrensByParentId']); 
-Route::post('getGuardianProfile', [MainController::class, 'getGuardianProfile']); 
-
-Route::post('submitScore', [MainController::class, 'submitScore']);
-Route::get('getRankings', [MainController::class, 'getActiveRankings']);
-
-
-Route::middleware('auth:api')->group(function () {
+Route::middleware('check.token')->group(function () {
     // Route::get('getCategories', [MainController::class, 'getActiveCategories']); 
     // Route::get('getSkill', [MainController::class, 'getActiveSkill']);    
     // Route::get('getSkillById/{id}', [MainController::class, 'getActiveSkillById']);    
     
     Route::post('getProfileById', [MainController::class, 'getProfileById']);    
-        
-   
+    Route::post('guardianProfileUpdate',[MainController::class, 'guardianProfileUpdate']);
+    Route::post('childrenProfileUpdate',[MainController::class, 'childrenProfileUpdate']);
+    Route::post('multiplechildrenProfileUpdate',[MainController::class, 'multipleChildrenProfileUpdate']);
+    Route::post('getRankingsById', [MainController::class, 'getActiveRankingsById']);
+    Route::get('getFees', [MainController::class, 'getFees']);
+    Route::get('getSkillById/{id}', [MainController::class, 'getActiveSkillById']);  
+    Route::post('getChildrenProfile', [MainController::class, 'getChildrenProfile']);   
+    Route::post('getChildrensByParentId', [MainController::class, 'getChildrensByParentId']); 
+    Route::post('getGuardianProfile', [MainController::class, 'getGuardianProfile']); 
+    Route::post('submitScore', [MainController::class, 'submitScore']);
+    Route::get('getRankings', [MainController::class, 'getActiveRankings']);
 });
-Route::post('guardianProfileUpdate',[MainController::class, 'guardianProfileUpdate']);
-Route::post('childrenProfileUpdate',[MainController::class, 'childrenProfileUpdate']);
-Route::post('multiplechildrenProfileUpdate',[MainController::class, 'multipleChildrenProfileUpdate']);
+
 Route::post('/payfast/create-payment', [PayFastController::class, 'createPayment'])->name('payfast.create');
 Route::post('/payfast/notify', [PayFastController::class, 'notify'])->name('payfast.notify');
 Route::get('/payfast/return', [PayFastController::class, 'return'])->name('payfast.return');
 Route::get('/payfast/cancel', [PayFastController::class, 'cancel'])->name('payfast.cancel');
-Route::post('getRankingsById', [MainController::class, 'getActiveRankingsById']);
-Route::get('getFees', [MainController::class, 'getFees']);

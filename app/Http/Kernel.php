@@ -67,6 +67,6 @@ class Kernel extends HttpKernel
         'removePublic' => \App\Http\Middleware\RemovePublic::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticate::class,
-
+        'check.token' => \App\Http\Middleware\CheckTokenMiddleware::class,
     ];
 }
