@@ -24,7 +24,8 @@ Route::controller(AuthController::class)->middleware(['removePublic'])->group(fu
     Route::post('childrenRegister', 'childrenRegister');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
-    Route::post('contactUs', 'contactUs');    
+    Route::post('contactUs', 'contactUs');   
+    Route::post('resetPassword','resetPassword');
 });
 
 Route::get('getSchool', [MainController::class, 'getActiveSchool']);

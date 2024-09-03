@@ -32,7 +32,8 @@ class User extends Authenticatable implements JWTSubject
         'session_token',
         'device_type',
         'device_id',
-        'terms'
+        'terms',
+        'remember_token'
     ];
 
     /**

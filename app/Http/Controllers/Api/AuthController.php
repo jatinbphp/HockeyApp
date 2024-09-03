@@ -13,13 +13,17 @@ use App\Models\Child;
 use App\Models\ContactUs;
 use App\Models\EmailTemplate;
 use App\Mail\RegistrationMail;
+use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+
+
 
 class AuthController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', [
-            'except' => ['login','register','childrenRegister','contactUs','getActiveSkill']
+            'except' => ['login','register','childrenRegister','contactUs','getActiveSkill','resetPassword']
         ]);
     }
 
@@ -347,5 +351,52 @@ class AuthController extends Controller
             'message' => 'Thank you! Your message has been successfully sent. We will get back to you shortly.',
             'data' => $contact
         ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->post(), [
+            'password' => 'required|confirmed|min:6',
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        if ($validator->fails()) {  
+            return response()->json([
+                'status' => 'error',
+                'message' => implode(',', $validator->errors()->all()),
+                'data' => (object)[]
+            ], 200);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!empty($user)) {
+
+            $token = Str::random(60);
+            $user->update(['remember_token' => $token]);
+            $resetUrl = url('/password/reset/' . $token. '?email=' . urlencode($user->email));
+
+            $mailData["email"] = $user->email;
+            $mailData["title"] = "Reset Your Password";
+            $mailData["salutation"] = "Dear ".$user->firstname.' '.$user->lastname;
+            $mailData["body"] = "Please click below link for reset your password.";
+            $mailData["resetUrl"] = $resetUrl;
+
+            Mail::to($request->email)->send(new ResetPasswordMail($mailData));
+            $response["status"] = 'success';
+            $response["message"] = 'Password reset link has been sent to your email.';
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Password reset link has been sent to your email',
+                'data' => $user,
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found!',
+                'data' => (object)[]
+            ], 404);
+        }
     }
 }

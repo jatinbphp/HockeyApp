@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\RankingController;
 use App\Http\Controllers\Admin\FeesController;
 use App\Http\Controllers\Admin\ProfileUpdateController;
+use App\Http\Controllers\Admin\ResetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,5 +106,12 @@ Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () 
     Route::resource('skill-review', SkillReviewController::class);
     Route::get('/skill-review/{skill_review}', [SkillReviewController::class, 'show'])->name('skill-review.show');
     Route::post('skill-review/update_status', [SkillReviewController::class,'updateOrderStatus'])->name('skill-review.update_status');
+
+    
 });
+
+/* PASSWORD RESET */
+Route::get('password/reset/{token}', [ResetPasswordController::class,'showResetForm'])->name('show.reset.form');
+Route::post('password/reset/update', [ResetPasswordController::class,'resetPassword'])->name('reset.password');
+
 
