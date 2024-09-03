@@ -41,7 +41,7 @@
 
 @if($section_name!='children')
 
-    @if($section_name!='notification')
+    @if($section_name!='notification' && $section_name!='skill-review' && $section_name!='contactus')
     <a href="{{ url('admin/'.$section_name.'/'.$id.'/edit') }}" title="Edit" class="btn btn-sm btn-info tip">
         <i class="fa fa-edit"></i>
     </a>

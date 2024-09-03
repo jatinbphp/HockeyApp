@@ -21,7 +21,7 @@ class ContactUsController extends Controller
                 return formatCreatedAt($row->created_at);
             }) 
             ->addColumn('action', function($row){
-                $row['section_name'] = 'contact-us';
+                $row['section_name'] = 'contactus';
                 $row['section_title'] = 'contact-us';
                 return view('admin.common.action-buttons', $row);
             })
@@ -41,5 +41,16 @@ class ContactUsController extends Controller
             'type' => 'contact Us',
             'required_columns' => $required_columns
         ]);
+    }
+
+    public function destroy($id){
+
+        $contact_us = ContactUs::findOrFail($id);
+        if(!empty($contact_us)){
+            $contact_us->delete();
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }

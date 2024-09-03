@@ -100,7 +100,7 @@
                         <div class="form-group{{ $errors->has('province_id') ? ' has-error' : '' }}">
                             @include('admin.common.label', ['field' => 'province_id', 'labelText' => 'Select Province', 'isRequired' => true])
 
-                            {!! Form::select('province_id', isset($provinceData) ? $provinceData : [], null, ['class' => 'form-control', 'placeholder' => 'Select Province', 'id' => 'province_id']) !!}
+                            {!! Form::select('province_id', isset($provinceData) ? $provinceData : [], null, ['class' => 'form-control select2', 'placeholder' => 'Select Province', 'id' => 'province_id', 'style' => 'width:100%']) !!}
 
                             @include('admin.common.errors', ['field' => 'province_id'])
                         </div>
@@ -110,7 +110,7 @@
                         <div class="form-group{{ $errors->has('school_id') ? ' has-error' : '' }}">
                             @include('admin.common.label', ['field' => 'school_id', 'labelText' => 'Select School', 'isRequired' => true])
 
-                            {!! Form::select('school_id', isset($schoolData) ? $schoolData : [], null, ['class' => 'form-control', 'placeholder' => 'Select School', 'id' => 'school_id']) !!}
+                            {!! Form::select('school_id', isset($schoolData) ? $schoolData : [], null, ['class' => 'form-control select2', 'placeholder' => 'Select School', 'id' => 'school_id', 'style' => 'width:100%']) !!}
 
                             @include('admin.common.errors', ['field' => 'school_id'])
                         </div>

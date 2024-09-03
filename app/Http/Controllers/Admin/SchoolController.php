@@ -90,11 +90,13 @@ class SchoolController extends Controller
     public function destroy($id)
     {
         $school = School::findOrFail($id);
-        if(!empty($school)){
-            $school->delete();
-            return 1;
-        }else{
-            return 0;
+
+        if ($school->children()->exists()) {
+            return 0; 
         }
+    
+        $school->delete();
+        return 1; 
+        
     }
 }

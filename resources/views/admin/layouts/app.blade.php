@@ -90,28 +90,26 @@
                         <li class="nav-item has-treeview {{ isset($menu) && $menu == 'Edit Profile' ? 'menu-open' : '' }}" style="border-bottom: 1px solid #4f5962; margin-bottom: 4.5%;">
 
                             <a href="#" class="nav-link {{ isset($menu) && $menu == 'Edit Profile' ? 'active' : '' }}">
-                                <img src="{{ !empty(Auth::user()->image) && file_exists(Auth::user()->image) ? asset(Auth::user()->image) : url('assets/dist/img/no-image.png') }}" 
-                                    class="img-circle elevation-2" 
-                                    
-                                    style="width: 2.1rem; margin-right: 1.5%;">
-
-                                <p style="padding-right: 6.5%;">
                                 @php
                                     $userName = 'Guest'; // Default to 'Guest' if the user is not logged in
+                                    $userImage = 'assets/dist/img/no-image.png';
 
-                                    // Check if user_id exists in the session and fetch the user's name
+                                    // Check if user_id exists in the session and fetch the user's details
                                     if (session()->has('user_id')) {
                                         $user = \App\Models\User::find(session('user_id'));
                                         if ($user) {
                                             $userName = ucfirst($user->firstname).' '.ucfirst($user->lastname);
+                                            // Check if the image exists and update the image path
+                                            $userImage = !empty($user->image) && file_exists(public_path($user->image)) ? asset($user->image) : url('assets/dist/img/no-image.png');
                                         }
                                     }
                                 @endphp
-                                {{ $userName }}
 
+                                <img src="{{ $userImage }}" alt="User Image" class="img-circle elevation-2"  style="width: 2.1rem; margin-right: 1.5%;">
+                                {{ $userName }}
                                 <i class="fa fa-angle-left right"></i>
-                                </p>
                             </a>
+
 
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">

@@ -71,8 +71,8 @@
                     {!! Form::file('image', ['class' => '', 'id'=> 'image','accept'=>'image/*', 'onChange'=>'AjaxUploadImage(this)']) !!}
                 </div>
                 
-                @if(!empty($users['image']) && file_exists(public_path($users['image'])))
-                <img src="{{asset($users['image'])}}" alt="User Image" style="border: 1px solid #ccc;margin-top: 5px;" width="150" id="DisplayImage">
+                @if(!empty($profile_update['image']) && file_exists(public_path($profile_update['image'])))
+                <img src="{{asset($profile_update['image'])}}" alt="User Image" style="border: 1px solid #ccc;margin-top: 5px;" width="150" id="DisplayImage">
                 @else
                     <img src=" {{url('assets/dist/img/no-image.png')}}" alt="User Image" style="border: 1px solid #ccc;margin-top: 5px;padding: 20px;" width="150" id="DisplayImage">
                 @endif

@@ -11,5 +11,10 @@ class School extends Model
     use HasFactory,SoftDeletes;
 
     protected $fillable = ['name','town','province_id','status'];
+
+    public function children()
+    {
+        return $this->hasMany(Child::class, 'school_id');
+    }
 }
  

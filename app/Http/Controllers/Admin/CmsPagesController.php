@@ -42,7 +42,7 @@ class CmsPagesController extends Controller
         $cms = CmsPages::findOrFail($id);
         $cms->update($inputs);
 
-        \Session::flash('success','Message has been updated successfully!');
+        \Session::flash('success','Content has been updated successfully!');
         return redirect()->route('cms_page.index');
     }
 

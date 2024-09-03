@@ -11,4 +11,14 @@ class Province extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name','status'];
+
+    public function children()
+    {
+        return $this->hasMany(Child::class, 'school_id');
+    }
+
+    public function school()
+    {
+        return $this->hasMany(School::class,'province_id');
+    }
 }

@@ -113,12 +113,13 @@ class SkillController extends Controller
     public function destroy($id)
     {
         $skill = Skill::findOrFail($id);
-        if(!empty($skill)){
-            $skill->delete();
-            return 1;
-        }else{
-            return 0;
+
+        if ($skill->score()->exists()) {
+            return 0; 
         }
+    
+        $skill->delete();
+        return 1; 
     }
 }
  

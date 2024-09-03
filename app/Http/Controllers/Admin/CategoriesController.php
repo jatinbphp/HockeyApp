@@ -77,12 +77,21 @@ class CategoriesController extends Controller
 
     public function destroy($id)
     {
-        $category = Categories::findOrFail($id);
-        if(!empty($category)){
-            $category->delete();
-            return 1;
-        }else{
-            return 0;
+        // $category = Categories::findOrFail($id);
+        // if(!empty($category)){
+        //     $category->delete();
+        //     return 1;
+        // }else{
+        //     return 0;
+        // }
+
+        $category = Categories::findorFail($id);
+
+        if ($category->skill()->exists() ) {
+            return 0; 
         }
+    
+        $category->delete();
+        return 1; 
     }
 }

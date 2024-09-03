@@ -10,6 +10,6 @@ class CmsPages extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable = ['page_name,page_content'];
+    protected $fillable = ['page_name','page_content'];
 }
  

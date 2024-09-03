@@ -305,6 +305,11 @@ $(function () {
                     headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
                     success: function(data){
 
+                        if(data == 0){
+                            swal("Error", "You can't delete this because it is currently assigned", "error");
+                            return false;
+                        }
+
                         var table = sectionTableMap[section];
                         console.log(table);
 
@@ -487,8 +492,11 @@ $(function () {
             $('#child_username').val(data.username);
             $('#child_email').val(data.email);
             // $('#child_dob').val(data.date_of_birth);
-            $('#child_phone').val(data.phone);
+            $('#province_id').val(data.province_id).trigger('change');
+            $('#school_id').val(data.school_id).trigger('change');
 
+            $('#child_phone').val(data.phone);
+            console.log('TEST');
             $('#child_dob').datepicker("setDate", data.date_of_birth );
 
             $('#looking_sponsor').prop('checked',false);
