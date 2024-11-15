@@ -131,12 +131,13 @@
                     <table id="childTable" class="table table-bordered table-striped datatable-dynamic" style="width:100%;">
                         <thead>
                             <tr>
-                                <th>Firstname</th>
+                                <th>Fullname</th>
                                 <th>Lastname</th>
+                                <th>Username</th>
                                 <th>Email</th>                           
                                 <th>Status</th>                           
                                 <th>Created At</th>                           
-                                <th style="15%">Action</th> 
+                                <th style="15%">Action</th>  
                             </tr>
                         </thead>
                         <tbody>
@@ -164,7 +165,7 @@ $(document).ready(function(){
         }else{
             $('.card-footer').hide();
         }        
-    });   
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function () {

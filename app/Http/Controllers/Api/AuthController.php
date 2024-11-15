@@ -17,20 +17,18 @@ use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-
-
 class AuthController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', [
-            'except' => ['login','register','childrenRegister','contactUs','getActiveSkill','resetPassword']
+            'except' => ['login','register','childrenRegister','contactUs','getActiveSkill','resetPassword','forgotPassword']
         ]);
     }
 
     public function login(Request $request)
     {
         $validator = Validator::make($request->post(), [
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required',
             // 'device_type' => 'required|string',
             // 'device_id' => 'required|string'
@@ -44,20 +42,21 @@ class AuthController extends Controller
             ], 200);
         }
 
-        $credentials = $request->only('email', 'password');
+        $loginField = filter_var($request->input('email'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $credentials = ['login' => $request->input('email'), 'password' => $request->input('password')];
+        // $credentials = $request->only('email', 'password');
 
         // Try to authenticate against the User model
-        $user = $this->attemptLogin(User::class, $credentials);
+        $user = $this->attemptLogin(User::class, $credentials, $loginField);
         if (!$user) {
             // If User authentication fails, try to authenticate against the Child model
-            $user = $this->attemptLogin(Child::class, $credentials);            
-
+            $user = $this->attemptLogin(Child::class, $credentials, $loginField);
         }
 
         if (!$user) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Email or Password not match!',
+                'message' => 'Username or Password not match!',
                 'data' => (object)[]
             ], 401);
         }
@@ -80,7 +79,6 @@ class AuthController extends Controller
             'session_token' => $token
         ]);
 
-        
         if($user->role == "guardian"){
             $user->role = $user->role;
         }else{
@@ -94,9 +92,9 @@ class AuthController extends Controller
         ], 200);
     }
 
-    protected function attemptLogin($model, $credentials)
+    protected function attemptLogin($model, $credentials, $loginField)
     {
-        $user = $model::where('email', $credentials['email'])->first();
+        $user = $model::where($loginField, $credentials['login'])->first();
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
             return $user;
@@ -191,6 +189,7 @@ class AuthController extends Controller
             'password' => $request->password,
             'phone' => $request->phone,
             'terms' => (($request->terms)?'1':'0'),
+            'older_than_18' => '0',
             'role' => 'guardian'
         ]);
 
@@ -200,12 +199,10 @@ class AuthController extends Controller
             'device_type' => $request->device_type,
             'device_id' => $request->device_id,
             'session_token' => $token
-        ]); 
-        
+        ]);     
+
         $template_details= EmailTemplate::find(1);
         $guardianEmail= $user->email ?? "";
-
-        $template_details = EmailTemplate::find(1);
 
         if(!empty($template_details))
         {
@@ -237,6 +234,7 @@ class AuthController extends Controller
 
     }
 
+    /* CHILDREN REGISTRATION */
     public function childrenRegister(Request $request)
     {
         try{
@@ -246,15 +244,13 @@ class AuthController extends Controller
                 'children.*.firstname' => 'required',
                 'children.*.lastname' => 'required',
                 'children.*.email' => 'required|email|unique:users,email|unique:children,email',
-                'children.*.username' => 'required',
+                'children.*.username' => 'required|unique:users,username|unique:children,username',
                 'children.*.password' => 'required',
                 'children.*.phone' => 'required|numeric',
                 'children.*.date_of_birth' => 'required|date',
                 'children.*.province' => 'required',
                 'children.*.school' => 'required',
             ]);
-
-            
 
             $parentId = $request->parent_id ?? 0;
             $childrenData = $request->children;
@@ -263,6 +259,9 @@ class AuthController extends Controller
 
             foreach ($childrenData as $childData) {
                 $childData['parent_id'] = $parentId;
+                $childData['province_id'] = $childData['province'];
+                $childData['school_id'] = $childData['school'];
+
                 $childData['password'] = bcrypt($childData['password']); // Hash password
 
                 $child = Child::create($childData);
@@ -390,6 +389,70 @@ class AuthController extends Controller
                 'status' => 'success',
                 'message' => 'Password reset link has been sent to your email',
                 'data' => $user,
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found!',
+                'data' => (object)[]
+            ], 404);
+        }
+    }
+
+    public function forgotPassword(Request $request){
+        $validator = Validator::make($request->post(), [
+            'username' => 'required'
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => implode(',', $validator->errors()->all()),
+                'data' => (object)[]
+            ], 200);
+        }
+    
+        // Try finding the user in both tables
+        $user = User::where('username', $request->username)->first();
+        $child = Child::where('username', $request->username)->first();
+    
+        // Use the found model or set response if not found
+        $foundUser = $user ?: $child;
+    
+        if (!empty($foundUser)) {
+            $token = Str::random(60);
+            $foundUser->update(['remember_token' => $token]);
+            $resetUrl = url('/password/reset/' . $token . '?username=' . urlencode($foundUser->username));            
+
+            if(!empty($child) && !empty($child->email)){
+
+                // Mail sending logic here
+                $mailData["email"] = $child->email;
+                $mailData["title"] = "Reset Your Password";
+                $mailData["salutation"] = "Dear " . $child->firstname . ' ' . $child->lastname;
+                $mailData["body"] = "Please click the link below to reset your password.";
+                $mailData["resetUrl"] = $resetUrl;
+        
+                Mail::to($child->email)->send(new ResetPasswordMail($mailData));
+
+            }else{
+
+                // Mail sending logic here
+                $mailData["email"] = $user->email;
+                $mailData["title"] = "Reset Your Password";
+                $mailData["salutation"] = "Dear " . $user->firstname . ' ' . $user->lastname;
+                $mailData["body"] = "Please click the link below to reset your password.";
+                $mailData["resetUrl"] = $resetUrl;
+        
+                Mail::to($user->email)->send(new ResetPasswordMail($mailData));
+            }
+           
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Password reset link has been sent to your email.',
+                'data' => $foundUser,
+                'resetUrl' => $resetUrl
             ], 200);
         } else {
             return response()->json([

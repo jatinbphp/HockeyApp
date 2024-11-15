@@ -15,6 +15,7 @@ class ChildController extends Controller
 {
     public function index(Request $request){
         $data['menu'] = 'Children'; 
+
         if($request->ajax()){
             return Datatables::of(Child::where('parent_id', $request->parent_id))
             ->addIndexColumn()
@@ -23,6 +24,9 @@ class ChildController extends Controller
             }) 
             ->editColumn('lastname', function($row) {
                 return ucfirst($row->lastname);
+            }) 
+            ->editColumn('username', function($row) {
+                return $row->username;
             }) 
             ->editColumn('created_at', function($row) {
                 return formatCreatedAt($row->created_at);
@@ -44,14 +48,12 @@ class ChildController extends Controller
 
     public function create($id){
         $data['menu'] = 'Children';
-       
         return view('admin.children.create',$data);
     }
 
     public function store(ChildRequest $request)
     {
         $input = $request->all();
-
 
         $lookingSponsor = 0;
         if(isset($request->looking_sponsor)){
@@ -80,7 +82,7 @@ class ChildController extends Controller
             'firstname' => $request->child_firstname, 
             'lastname' => $request->child_lastname,
             'username' => $request->child_username,
-            'email' => $request->email, // Update here
+            'email' => $request->email,
             'password' => $request->child_password,
             'date_of_birth' => date('Y-m-d',strtotime($request->child_dob)),
             'phone' => $request->child_phone,
@@ -96,9 +98,22 @@ class ChildController extends Controller
  
     public function edit($id){
         $children = Child::find($id);
+
+        // Check if child exists and if the image column is not empty
+        if ($children && !empty($children->image)) {
+            // Check if the image file exists in storage
+            if (file_exists(public_path($children->image))) {
+                $children->image = url($children->image);
+            } else {
+                $children->image = url('assets/dist/img/no-image.png');
+            }
+        } else {
+            $children->image = url('assets/dist/img/no-image.png');
+        }
+
         return response()->json($children);
     }
-    
+
     public function show($id) {
 
         $users = Child::findOrFail($id);
@@ -110,7 +125,7 @@ class ChildController extends Controller
             'required_columns' => $required_columns
         ]);
     }
-
+ 
     public function destroy($id)
     {
         Child::find($id)->delete();

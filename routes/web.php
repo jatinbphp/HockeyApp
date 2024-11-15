@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\RankingController;
 use App\Http\Controllers\Admin\FeesController;
 use App\Http\Controllers\Admin\ProfileUpdateController;
 use App\Http\Controllers\Admin\ResetPasswordController;
+use App\Http\Controllers\Admin\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +74,7 @@ Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () 
 
     /* SKILL */
     Route::resource('skill', SkillController::class);
+    Route::post('/skill/reorder', [SkillController::class, 'reorder'])->name('skill.reorder');
 
     /* CONSENT MESSAGE */
     Route::resource('consent', ConsentMessageController::class);
@@ -106,12 +108,16 @@ Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () 
     Route::resource('skill-review', SkillReviewController::class);
     Route::get('/skill-review/{skill_review}', [SkillReviewController::class, 'show'])->name('skill-review.show');
     Route::post('skill-review/update_status', [SkillReviewController::class,'updateOrderStatus'])->name('skill-review.update_status');
-
-    
 });
 
 /* PASSWORD RESET */
 Route::get('password/reset/{token}', [ResetPasswordController::class,'showResetForm'])->name('show.reset.form');
+
 Route::post('password/reset/update', [ResetPasswordController::class,'resetPassword'])->name('reset.password');
 
+/*Payment*/
+Route::get('/payment/success', [PaymentController::class,'paymentReturn'])->name('payment.return-url')->middleware(['removePublic']);
 
+Route::get('/payment/cancel', [PaymentController::class,'paymentCancel'])->name('payment.cancel-url')->middleware(['removePublic']);
+
+Route::post('/payment/notify', [PaymentController::class,'paymentNotify'])->name('payment.notify-url')->middleware(['removePublic']);

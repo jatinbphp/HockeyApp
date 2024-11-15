@@ -132,3 +132,79 @@ if (!function_exists('getSkillName')) {
         }
     }
 }
+
+if(!function_exists('getPaymentUrl')){
+    function getPaymentUrl($data){ 
+
+        $payfastData = [
+            'merchant_id' => env('PAYFAST_MERCHANT_ID'),
+            'merchant_key' => env('PAYFAST_MERCHANT_KEY'),
+            'return_url' => route('payment.return-url'),
+            'cancel_url' => route('payment.cancel-url'),
+            'notify_url' => route('payment.notify-url'),
+            'name_first' => $data['name'],
+            'email_address' => $data['email'],
+            'm_payment_id' => $data['mPaymnentId'],
+            'amount' => $data['totAmtToPay'],
+            'item_name' => 'Order#'.$data['mPaymnentId'],
+            'custom_int1' => $data['child_id'],
+            'custom_int2' => $data['parent_id'],
+            'custom_str2' => "SINGLE_PAYMENT",
+            // 'payment_method' => $data['payment_method']
+        ];
+
+        $payfastData['signature'] = generatePayfastSignature($payfastData,env('PAYFAST_PASSPHRASE'));
+
+        $payfastUrl = (env('PAYFAST_TEST_MODE') == "true") ? 'https://sandbox.payfast.co.za/eng/process?' : 'https://www.payfast.co.za/eng/process?';
+        $queryString = http_build_query($payfastData);
+
+        return $payfastUrl.$queryString;
+    }
+}
+
+if(!function_exists('getPaymentUrlForMultiple')){
+    function getPaymentUrlForMultiple($data){ 
+
+        $payfastData = [
+            'merchant_id' => env('PAYFAST_MERCHANT_ID'),
+            'merchant_key' => env('PAYFAST_MERCHANT_KEY'),
+            'return_url' => route('payment.return-url'),
+            'cancel_url' => route('payment.cancel-url'),
+            'notify_url' => route('payment.notify-url'),
+            'name_first' => $data['name'],
+            'email_address' => $data['email'],
+            'm_payment_id' => $data['mPaymnentId'],
+            'amount' => $data['totAmtToPay'],
+            'item_name' => 'Order#'.$data['mPaymnentId'],
+            'custom_int2' => $data['parent_id'],
+            'custom_str1' => $data['child_ids'], // Store all child IDs in one field
+            'custom_str2' => "MULITPLE_PAYMENT",
+            // 'payment_method' => $data['payment_method']
+        ];
+
+        $payfastData['signature'] = generatePayfastSignature($payfastData,env('PAYFAST_PASSPHRASE'));
+
+        $payfastUrl = (env('PAYFAST_TEST_MODE') == "true") ? 'https://sandbox.payfast.co.za/eng/process?' : 'https://www.payfast.co.za/eng/process?';
+        $queryString = http_build_query($payfastData);
+
+        return $payfastUrl.$queryString;
+    }
+}
+
+if(! function_exists('generatePayfastSignature')){
+    function generatePayfastSignature($data, $passPhrase = null) {
+        // Create parameter string
+        $pfOutput = '';
+        foreach( $data as $key => $val ) {
+            if($val !== '') {
+                $pfOutput .= $key .'='. urlencode( trim( $val ) ) .'&';
+            }
+        }
+        // Remove last ampersand
+        $getString = substr( $pfOutput, 0, -1 );
+        if( $passPhrase !== null ) {
+            $getString .= '&passphrase='. urlencode( trim( $passPhrase ) );
+        }
+        return md5( $getString );
+    } 
+}

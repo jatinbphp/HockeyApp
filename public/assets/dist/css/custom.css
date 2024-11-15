@@ -2,6 +2,10 @@ input#looking_sponsor {
     width: 30px;
 }
 
+.drag-handle {
+    cursor: move;
+}
+
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 38px !important;
 }

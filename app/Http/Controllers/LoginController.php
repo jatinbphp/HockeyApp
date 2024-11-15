@@ -9,13 +9,17 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+
+
 
 class LoginController extends Controller
 {
+   
     public function index(Request $request){
-        
-        $request->validate([
-            'email' => 'required|email',
+        // Validate incoming request data
+        $this->validate($request, [
+            'email' => 'required',
             'password' => 'required',
         ]);
 
@@ -33,10 +37,10 @@ class LoginController extends Controller
         
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
 
+        Auth::logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
         

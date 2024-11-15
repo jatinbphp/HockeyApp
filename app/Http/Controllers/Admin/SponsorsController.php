@@ -18,7 +18,7 @@ class SponsorsController extends Controller
         if($request->ajax()){
             return Datatables::of(Sponsors::all())
             ->addIndexColumn()
-            ->editColumn('image', function($row) {               
+            ->editColumn('image', function($row) {
                 $url= (!empty($row->image))? asset($row->image):url('assets/dist/img/no-image.png') ; 
                 return $url; 
             }) 
@@ -105,7 +105,7 @@ class SponsorsController extends Controller
             'required_columns' => $required_columns
         ]);
     }
-
+    
     public function destroy($id)
     {
         $sponsors = Sponsors::findOrFail($id);

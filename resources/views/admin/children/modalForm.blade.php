@@ -133,16 +133,15 @@
                                     {!! Form::file('child_image', ['class' => '', 'id'=> 'image', 'accept'=>'image/*', 'onChange'=>'AjaxUploadImage(this)']) !!}
                                 </div>
                                 
-                                <img src="{{ !empty($children['image']) && file_exists(public_path($children['image'])) ? asset($children['image']) : url('assets/dist/img/no-image.png') }}" 
+                                <img src="{{ url('assets/dist/img/no-image.png') }}" 
                                     alt="User Image" 
                                     style="border: 1px solid #ccc; margin-top: 5px;" 
                                     width="150" 
-                                    id="DisplayImage">
+                                    id="childImage">
                             </div>
                         </div>
                     </div>
-
-                                            
+                        
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Save</button>
                     </div>
@@ -153,5 +152,6 @@
         </div>
     </div>
 </div>   
+
 
  

@@ -1,7 +1,7 @@
 {!! Form::hidden('redirects_to', URL::previous()) !!}
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4">
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
             @include('admin.common.label', ['field' => 'fees', 'labelText' => 'Fees', 'isRequired' => true])
 

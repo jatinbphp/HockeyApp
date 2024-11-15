@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('school_id')->default(0);
             $table->tinyInteger('looking_sponsor')->default(0);
             $table->string('status')->default('active');
+            $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
         });

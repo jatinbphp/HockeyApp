@@ -75,15 +75,12 @@ class ProvinceController extends Controller
     }
 
     public function destroy($id){
-    
         $province = Province::findorFail($id);
-
-        if ($province->children()->exists() || $province->school()->exists() ) {
-            return 0; 
+        if(!empty($province)){
+            $province->delete();
+            return 1;
+        }else{
+            return 0;
         }
-    
-        $province->delete();
-        return 1; 
-        
     }
 }

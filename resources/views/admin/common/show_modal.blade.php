@@ -92,6 +92,20 @@
                                                             @case('looking_sponsor')
                                                                 {!! renderLookingSponsorColumn($section_info[$key]) !!}
                                                                 @break
+                                                            @case('video')
+                                                                @php
+                                                                    $videoPath = $section_info[$key] ?? ''; // Get the path from the array
+                                                                    $fullPath = public_path($videoPath); // Generate the full path
+                                                                @endphp
+
+                                                                @if(!empty($videoPath) && file_exists($fullPath))
+                                                                    <a href="{{ asset($videoPath) }}" target="_blank" class="btn btn-primary btn-xs">
+                                                                        Watch Video
+                                                                    </a>
+                                                                @else
+                                                                    <p>Video not available</p>
+                                                                @endif
+                                                                @break
                                                             @case('access_rights')
                                                                 @if(!empty($section_info[$key]))
                                                                     @foreach(json_decode($section_info[$key]) as $accessRight)
@@ -138,8 +152,8 @@
 
 @php
 function renderImageColumn($info) {
-
-    if (!empty($info) && file_exists($info)) {
+    $filePath = public_path($info);
+    if (!empty($info) && file_exists($filePath)) {
         return '<img src="' . url($info) . '" height="50">';
     } else {
         return '<img src="' . url('assets/dist/img/no-image.png') . '" height="50">';
@@ -147,8 +161,8 @@ function renderImageColumn($info) {
 }
 
 function renderFeaturedImageColumn($info) {
-
-    if (!empty($info) && file_exists($info)) {
+    $filePath = public_path($info);
+    if (!empty($info) && file_exists($filePath)) {
         return '<img src="' . url($info) . '" height="50">';
     } else {
         return '<img src="' . url('assets/dist/img/no-image.png') . '" height="50">';
@@ -163,8 +177,25 @@ function renderIdColumn($info) {
     return '#' . $info;
 }
 
+// function renderStatusColumn($info) {
+//     $class = $info == 'active' ? 'success' : 'danger';
+//     return '<span class="badge badge-' . $class . '">' . ucfirst($info) . '</span>';
+// }
+
 function renderStatusColumn($info) {
-    $class = $info == 'active' ? 'success' : 'danger';
+    // Define status-to-class mapping
+    $statusClasses = [
+        'active' => 'success',
+        'inactive' => 'secondary',
+        'pending' => 'warning',
+        'accept' => 'primary',
+        'reject' => 'danger',
+    ];
+
+    // Get the corresponding class for the status or default to 'dark' if status is unknown
+    $class = isset($statusClasses[$info]) ? $statusClasses[$info] : 'dark';
+
+    // Return the formatted HTML with the appropriate class and capitalized status
     return '<span class="badge badge-' . $class . '">' . ucfirst($info) . '</span>';
 }
 

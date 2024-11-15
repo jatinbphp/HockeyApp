@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cms_pages', function (Blueprint $table) {
             $table->id();
             $table->string('page_name')->nullable();
-            $table->string('page_content')->nullable();
+            $table->longText('page_content')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +28,12 @@ return new class extends Migration
         \Illuminate\Support\Facades\DB::table('cms_pages')->insert([
             'id' => '2',
             'page_name' => 'Benefits of Joining',
+            'page_content' => '',
+        ]);
+
+        \Illuminate\Support\Facades\DB::table('cms_pages')->insert([
+            'id' => '3',
+            'page_name' => 'How does it work?',
             'page_content' => '',
         ]);
     }

@@ -13,14 +13,30 @@ use DataTables;
 class SkillController extends Controller
 {
     public function index(Request $request){
-        $data['menu'] = 'Skill'; 
+        $data['menu'] = 'Skill';
 
         if($request->ajax()){
-            return Datatables::of(Skill::all())
+            return Datatables::of(Skill::orderBy('position')->get())
             ->addIndexColumn()
+            ->setRowAttr([
+                'data-id' => function($row) {
+                    return $row->id;
+                },
+            ])
+            ->addColumn('drag', function() {
+                $url = route('skill.reorder'); // Generate the URL for reordering
+                return '<span class="drag-handle" data-url="' . $url . '"><i class="fa fa-arrows"></i></span>'; // Add drag handle icon with dynamic URL
+            })
             ->editColumn('featured_image', function($row) {
-                $url= (!empty($row->featured_image))? asset($row->featured_image):url('assets/dist/img/no-image.png') ; 
-                return $url; 
+                $defaultImage = url('assets/dist/img/no-image.png');
+                $imagePath = public_path($row->featured_image);
+
+                $url = (!empty($row->featured_image) && file_exists($imagePath)) 
+                    ? asset($row->featured_image) 
+                    : $defaultImage;
+                
+                    
+                return $url;
             }) 
             ->editColumn('name', function($row) {
                 return ucfirst($row->name);
@@ -40,6 +56,7 @@ class SkillController extends Controller
                 $row['section_title'] = 'Skill'; 
                 return view('admin.common.action-buttons', $row);
             })
+            ->rawColumns(['drag']) // Specify columns containing HTML
             ->make(true);
         }
 
@@ -59,6 +76,12 @@ class SkillController extends Controller
             $imageName = Str::random(20) . '.' . $file->getClientOriginalExtension();   
             $file->move(public_path('uploads/skill'), $imageName);    
             $inputs['featured_image'] = 'uploads/skill/' . $imageName;
+        }
+
+        if ($file = $request->file('icon_image')) {
+            $imageName = Str::random(20) . '.' . $file->getClientOriginalExtension();   
+            $file->move(public_path('uploads/skill'), $imageName);    
+            $inputs['icon_image'] = 'uploads/skill/' . $imageName;
         }
 
         $skill = Skill::create($inputs);
@@ -92,6 +115,21 @@ class SkillController extends Controller
             $inputs['featured_image'] = $skill->featured_image;
         }
 
+
+        if ($file = $request->file('icon_image')) {
+            $imageName = Str::random(20) . "." . $file->getClientOriginalExtension();
+            
+            $file->move(public_path('uploads/skill'), $imageName);
+
+            $inputs['icon_image'] = 'uploads/skill/' . $imageName;
+
+            if (!empty($skill->icon_image) && file_exists(public_path($skill->icon_image))) {
+                unlink(public_path($skill->icon_image));
+            }
+        } else {
+            $inputs['icon_image'] = $skill->icon_image;
+        }
+
         $skill->update($inputs);
 
         \Session::flash('success','Skill has been updated successfully!');
@@ -110,6 +148,7 @@ class SkillController extends Controller
         ]);
     }
 
+
     public function destroy($id)
     {
         $skill = Skill::findOrFail($id);
@@ -120,6 +159,16 @@ class SkillController extends Controller
     
         $skill->delete();
         return 1; 
+    }
+
+    public function reorder(Request $request)
+    {
+        $order = $request->input('order');
+
+        foreach ($order as $item) {
+            Skill::where('id', $item['id'])->update(['position' => $item['position']]);
+        }
+        return response()->json(['status' => 'success']);
     }
 }
  

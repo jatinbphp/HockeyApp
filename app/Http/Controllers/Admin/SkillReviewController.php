@@ -15,7 +15,7 @@ class SkillReviewController extends Controller
         $data['menu'] = 'Skill Review'; 
 
         if($request->ajax()){
-            return Datatables::of(Score::all())
+            return Datatables::of(Score::orderBy('created_at','DESC')->get())
             ->addIndexColumn()
              ->editColumn('skill_id', function($row) {
                 return ucfirst(getSkillName($row->skill_id));
@@ -46,7 +46,7 @@ class SkillReviewController extends Controller
     public function show($id) {
 
         $skillReview = Score::findOrFail($id);
-        $required_columns = ['id', 'skill_id','student_id', 'province_id','score','time_duration','status','created_at'];
+        $required_columns = ['id', 'skill_id','student_id', 'province_id','score','time_duration','status','created_at','video'];
 
         return view('admin.common.show_modal', [
             'section_info' => $skillReview->toArray(),

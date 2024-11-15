@@ -19,7 +19,10 @@ class RankingController extends Controller
         $scores = Score::with(['child', 'skills'])
             ->where(['status' => 'accept'])
             ->when(!empty($request->province_id) && $request->province_id != 0, function ($query) use ($request) {
-                return $query->where('province_id', $request->province_id);
+                // return $query->where('province_id', $request->province_id);
+                return $query->whereHas('child', function ($query) use ($request) {
+                    $query->where('province_id', $request->province_id);
+                });
             })
             ->when(!empty($request->school_id) && $request->school_id != 0, function ($query) use ($request) {
                 return $query->whereHas('child', function ($query) use ($request) {
@@ -51,7 +54,15 @@ class RankingController extends Controller
             return Datatables::of($rankedScores)
                 ->addIndexColumn()
                 ->editColumn('student_id', function ($row) {
-                    return $row->child->firstname . ' ' . $row->child->lastname;
+                    $firstname = $row->child->firstname ?? '';
+                    $lastname = $row->child->lastname ?? '';
+                    $username = $row->child->username ?? '';
+                    
+                    if ($firstname || $lastname) {
+                        return trim($firstname . ' ' . $lastname);
+                    }else{
+                        return $username;
+                    }
                 })
                 ->editColumn('skill_id', function ($row) {
                     return $row->skills->name;
@@ -65,9 +76,9 @@ class RankingController extends Controller
                 ->make(true);
         }
     
-        $data['province'] = Province::where('status', 'active')->pluck('name', 'id');
-        $data['school'] = School::where('status', 'active')->pluck('name', 'id');
-        $data['skill']  = Skill::where('status','active')->pluck('name','id');
+        $data['province'] = Province::where('status', 'active')->orderBy('name', 'asc')->pluck('name', 'id');
+        $data['school'] = School::where('status', 'active')->orderBy('name', 'asc')->pluck('name', 'id');
+        $data['skill']  = Skill::where('status','active')->orderBy('name', 'asc')->pluck('name','id');
     
         return view('admin.ranking.index', $data);
     }

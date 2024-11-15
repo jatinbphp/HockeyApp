@@ -19,23 +19,26 @@ class CheckTokenMiddleware
     {
        $authorizationHeader = $request->header('Authorization');
 
-       if (!$authorizationHeader) {
-           return response()->json(['error' => 'Token is required'], 401);
-       }
+        // Check if Authorization header exists and contains 'Bearer' token
+        if (!$authorizationHeader || !str_starts_with($authorizationHeader, 'Bearer ')) {
+            return response()->json(['error' => 'Token is required or incorrectly formatted'], 401);
+        }
 
        $token = substr($authorizationHeader, 7);
 
-       if (!$this->isValidToken($token)) {
-           return response()->json(['error' => 'Invalid token'], 401);
-       }
+        // Validate token existence and authenticity
+        if (empty($token) || !$this->isValidToken($token)) {
+            return response()->json(['error' => 'Invalid token'], 401);
+        }
+
        return $next($request);
     }
 
-    protected function isValidToken($token)
+    protected function isValidToken($token): bool
     {
-        $user = User::where('session_token', $token)->first();
-        $child = Child::where('session_token', $token)->first();
-        
-        return $user !== null || $child !== null;
+        $userExists = User::where('session_token', $token)->exists();
+        $childExists = Child::where('session_token', $token)->exists();
+
+        return $userExists || $childExists;
     }
 }

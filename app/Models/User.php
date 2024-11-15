@@ -33,6 +33,7 @@ class User extends Authenticatable implements JWTSubject
         'device_type',
         'device_id',
         'terms',
+        'remember_token',
         'remember_token'
     ];
 
@@ -43,7 +44,6 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**

@@ -30,7 +30,7 @@
                         {{ csrf_field() }}
 
                         <input type="hidden" name="token" value="{{ $token }}">
-                        <input type="hidden" name="email" value="{{ $email }}">
+                        <input type="hidden" name="username" value="{{ $username }}">
                         
                         <div class="input-group {{ $errors->has('password') ? ' has-error' : '' }} has-feedback mb-3">
                             <input type="password" id="password" name="password" class="form-control" placeholder="Password">

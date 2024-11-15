@@ -16,6 +16,5 @@ class Categories extends Model
     {
         return $this->hasMany(Skill::class,'category_id');
     }
-
     
 }

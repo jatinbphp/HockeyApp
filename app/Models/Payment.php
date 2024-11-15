@@ -10,10 +10,13 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'parent_id',
+        'child_id',
         'order_id',
-        'amount',
-        'item_name',
-        'item_description',
+        'amount',       
         'status',
+        'transaction_id',
+        'response',
+        'payment_date',
     ];
 }

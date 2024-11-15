@@ -27,6 +27,7 @@
                                 <tr>
                                     <th>Firstname</th>
                                     <th>Lastname</th>
+                                    <th>Username</th>
                                     <th>Email</th>                           
                                     <th>Status</th>                           
                                     <th>Created At</th>                           

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->longText('score_instruction')->nullable();
             $table->text('video_url')->nullable();
             $table->string('featured_image')->nullable();
+            $table->integer('position')->default(99999);
             $table->string('status')->default('active');
             $table->softDeletes();
             $table->timestamps();

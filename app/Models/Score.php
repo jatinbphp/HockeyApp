@@ -10,7 +10,7 @@ class Score extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable = ['skill_id','student_id','province_id','score','time_duration','status'];
+    protected $fillable = ['skill_id','student_id','province_id','score','time_duration','status','video'];
 
     const STATUS_TYPE_PENDING  = 'pending';
     const STATUS_TYPE_ACCEPT   = 'accept';
@@ -31,5 +31,4 @@ class Score extends Model
     {
         return $this->belongsTo(Child::class, 'student_id');
     }
-
 }

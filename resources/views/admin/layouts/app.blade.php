@@ -21,14 +21,11 @@
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda-themeless.min.css">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/summernote/summernote.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/select2/css/select2.min.css')}}">
-
-        
         <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css"> -->
 
 
@@ -82,45 +79,11 @@
                             <a href="#" class="d-block">Super Admin</a>
                         </div>
                     </div> -->
-                
 
                     <!-- Sidebar Menu -->
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <li class="nav-item has-treeview {{ isset($menu) && $menu == 'Edit Profile' ? 'menu-open' : '' }}" style="border-bottom: 1px solid #4f5962; margin-bottom: 4.5%;">
-
-                            <a href="#" class="nav-link {{ isset($menu) && $menu == 'Edit Profile' ? 'active' : '' }}">
-                                @php
-                                    $userName = 'Guest'; // Default to 'Guest' if the user is not logged in
-                                    $userImage = 'assets/dist/img/no-image.png';
-
-                                    // Check if user_id exists in the session and fetch the user's details
-                                    if (session()->has('user_id')) {
-                                        $user = \App\Models\User::find(session('user_id'));
-                                        if ($user) {
-                                            $userName = ucfirst($user->firstname).' '.ucfirst($user->lastname);
-                                            // Check if the image exists and update the image path
-                                            $userImage = !empty($user->image) && file_exists(public_path($user->image)) ? asset($user->image) : url('assets/dist/img/no-image.png');
-                                        }
-                                    }
-                                @endphp
-
-                                <img src="{{ $userImage }}" alt="User Image" class="img-circle elevation-2"  style="width: 2.1rem; margin-right: 1.5%;">
-                                {{ $userName }}
-                                <i class="fa fa-angle-left right"></i>
-                            </a>
-
-
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('profile_update.edit', ['profile_update' => session('user_id')]) }}"
-                                class="nav-link {{ isset($menu) && $menu == 'Edit Profile' ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-pencil-alt"></i>
-                                        <p class="text-warning">Edit Profile</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        
 
                             <li class="nav-item">
                                 <a href="{{route('admin.dashboard')}}" class="nav-link @if(isset($menu) && $menu=='Dashboard') active @endif">
@@ -210,7 +173,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="{{route('skill-review.index')}}" class="nav-link @if(isset($menu) && $menu=='SkillReview') active @endif">
+                                <a href="{{route('skill-review.index')}}" class="nav-link @if(isset($menu) && $menu=='Skill Review') active @endif">
                                     <i class="nav-icon fa fa-clipboard-check"></i>
                                     <p>
                                         Skill Review
@@ -261,7 +224,7 @@
                                         Email Templates
                                     </p>
                                 </a>
-                            </li>
+                            </li>    
                             
                             <li class="nav-item">
                                 <a href="{{route('fees.index')}}" class="nav-link @if(isset($menu) && $menu=='Fees') active @endif">
@@ -274,7 +237,7 @@
 
                             <li class="nav-item">
                                 <a href="{{route('contactus.index')}}" class="nav-link @if(isset($menu) && $menu=='Contact Us') active @endif">
-                                    <i class="nav-icon fas fa-address-book"></i>
+                                    <i class="nav-icon fa fa-address-book"></i>
                                     <p>
                                         Contact Us
                                     </p>
@@ -336,7 +299,6 @@
         <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
         <script src="{{ URL::asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
 
-
         <!-- AdminLTE for datatables -->
 
         <script src="{{ URL::asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -347,12 +309,13 @@
 
         <script src="{{ URL::asset('assets/dist/js/table-actions.js')}}?{{ time() }}"></script>
         <script src="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.min.js')}}"></script>
-        <script src="{{ URL::asset('assets/plugins/summernote/summernote.min.js')}}"></script>       
+        <script src="{{ URL::asset('assets/plugins/summernote/summernote.min.js')}}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/spin.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda.min.js"></script>       
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda.min.js"></script>
+        
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.js"></script> -->
-
+        
 
         <script>
             $(document).ready(function() {
@@ -392,6 +355,31 @@
                     $('#DisplayImage').css("margin-top", "1.5%");
                     $('#DisplayImage').attr('src', e.target.result);
                     $('#DisplayImage').attr('width', '150');
+                }
+            }
+
+
+            /*DISPLAY ICON IMAGE*/
+            function AjaxUploadIconImage(obj,id){
+                var file = obj.files[0];
+                var imagefile = file.type;
+                var match = ["image/jpeg", "image/png", "image/jpg"];
+                if (!((imagefile == match[0]) || (imagefile == match[1]) || (imagefile == match[2])))
+                {
+                    $('#previewing'+URL).attr('src', 'noimage.png');
+                    alert("<p id='error'>Please Select A valid Image File</p>" + "<h4>Note</h4>" + "<span id='error_message'>Only jpeg, jpg and png Images type allowed</span>");
+                    return false;
+                } else{
+                    var reader = new FileReader();
+                    reader.onload = imageIsLoaded;
+                    reader.readAsDataURL(obj.files[0]);
+                }
+
+                function imageIsLoaded(e){
+                    $('#DisplayIconImage').css("display", "block");
+                    $('#DisplayIconImage').css("margin-top", "1.5%");
+                    $('#DisplayIconImage').attr('src', e.target.result);
+                    $('#DisplayIconImage').attr('width', '150');
                 }
             }
         </script>

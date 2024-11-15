@@ -89,6 +89,23 @@
     </div>
 
     <div class="col-md-6">
+        <div class="form-group{{ $errors->has('icon_image') ? ' has-error' : '' }}">
+            @include('admin.common.label', ['field' => 'icon_image', 'labelText' => 'Icon Image', 'isRequired' => false])
+            <div class="">
+                <div class="fileError">
+                    {!! Form::file('icon_image', ['class' => '', 'id'=> 'icon_image','accept'=>'image/*', 'onChange'=>'AjaxUploadIconImage(this)']) !!}
+                </div>
+                
+                @if(!empty($skill['icon_image']) && file_exists(public_path($skill['icon_image'])))
+                <img src="{{asset($skill['icon_image'])}}" alt="User Image" style="border: 1px solid #ccc;margin-top: 5px;" width="150" id="DisplayIconImage">
+                @else
+                    <img src=" {{url('assets/dist/img/no-image.png')}}" alt="User Image" style="border: 1px solid #ccc;margin-top: 5px;padding: 20px;" width="150" id="DisplayIconImage">
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
         <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
             @include('admin.common.label', ['field' => 'status', 'labelText' => 'Status', 'isRequired' => false])
             

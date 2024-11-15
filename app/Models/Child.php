@@ -15,6 +15,7 @@ class Child extends Authenticatable implements JWTSubject
     use HasFactory,SoftDeletes,Notifiable;
 
     protected $fillable = [
+        'id',
         'parent_id',
         'firstname',
         'lastname',
@@ -30,7 +31,8 @@ class Child extends Authenticatable implements JWTSubject
         'session_token',
         'device_type',
         'device_id',
-        'image'
+        'image',
+        'remember_token'
     ];
 
 
@@ -41,7 +43,6 @@ class Child extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -83,5 +84,4 @@ class Child extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(School::class, 'school_id');
     }
-
 }

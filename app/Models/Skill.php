@@ -19,6 +19,8 @@ class Skill extends Model
         'score_instruction',
         'video_url',
         'featured_image',
+        'icon_image',
+        'position',
         'status'
     ];
 

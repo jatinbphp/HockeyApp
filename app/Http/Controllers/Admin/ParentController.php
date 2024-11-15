@@ -28,7 +28,10 @@ class ParentController extends Controller
             }) 
             ->editColumn('lastname', function($row) {
                 return ucfirst($row->lastname);
-            })   
+            })  
+            ->editColumn('username', function($row) {
+                return $row->username;
+            })     
             ->editColumn('created_at', function($row) {
                 return formatCreatedAt($row->created_at);
             })           
@@ -71,6 +74,8 @@ class ParentController extends Controller
         $placeholders = [
             '{{firstname}}' => ucfirst($inputs['firstname']),
             '{{lastname}}' => ucfirst($inputs['lastname']),
+            '{{username}}' => $inputs['username'],
+            '{{password}}' => $inputs['password'],
         ];
 
         $messageBody = str_replace(
@@ -86,7 +91,6 @@ class ParentController extends Controller
         ];
 
         Mail::to([$guardianEmail])->send(new RegistrationMail($mailData));
-
 
         \Session::flash('success', 'User has been inserted successfully!');
         return redirect()->route('parent.edit', ['parent' => $parent->id]);
@@ -142,7 +146,7 @@ class ParentController extends Controller
             'required_columns' => $required_columns
         ]);
     }
-
+    
     public function destroy($id){
         $users = User::with('children')->findOrFail($id);
         if(!empty($users)){

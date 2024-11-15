@@ -31,6 +31,7 @@
 
 @endif
 
+
 @if($section_name == 'users' || $section_name == 'parent' || $section_name == 'category' || $section_name == 'province' || $section_name == 'school' || $section_name == 'skill')
 
     <a href="javascript:void(0)" title="View" data-id="{{$id}}" class="btn btn-sm btn-warning tip  view-info" data-url="{{ route($section_name.'.show', [strtolower(str_replace(' ', '_', $section_title)) => $id]) }}">
@@ -39,9 +40,10 @@
 
 @endif
 
+
 @if($section_name!='children')
 
-    @if($section_name!='notification' && $section_name!='skill-review' && $section_name!='contactus')
+    @if($section_name!='notification' && $section_name!='skill-review' && $section_name!='contact-us')
     <a href="{{ url('admin/'.$section_name.'/'.$id.'/edit') }}" title="Edit" class="btn btn-sm btn-info tip">
         <i class="fa fa-edit"></i>
     </a>
@@ -55,6 +57,7 @@
     
 @endif
 
+
 @if($section_name=='children')
 
     <a href="javascript:void(0)" data-toggle="tooltip" data-target="#childModel" data-url="{{ url('admin/'.$section_name.'/'.$id) }}" data-id="{{$id}}" data-original-title="Edit" class="edit btn btn-primary btn-sm editChild"><i class="fa fa-edit"></i></a>
@@ -64,7 +67,3 @@
     </button>
 
 @endif
-
-
-
-

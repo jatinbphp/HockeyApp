@@ -1,5 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
+
 <div class="content-wrapper">
 
     @include('admin.common.header', [
@@ -24,6 +25,7 @@
                         <table id="skillTable" class="table table-bordered table-striped datatable-dynamic">
                             <thead>
                                 <tr>
+                                    <th></th>  
                                     <th>Featured Image</th>                               
                                     <th>Skill Name</th>                                
                                     <th>Category</th>                              

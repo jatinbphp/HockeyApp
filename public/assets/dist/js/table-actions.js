@@ -10,6 +10,7 @@ $(function () {
         columns: [
             {data: 'firstname', name: 'firstname'},
             {data: 'lastname', name: 'lastname'},
+            {data: 'username', name: 'username'},
             {data: 'email', name: 'email'},         
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
@@ -26,6 +27,7 @@ $(function () {
         columns: [
             {data: 'firstname', name: 'firstname'},
             {data: 'lastname', name: 'lastname'},
+            {data: 'username', name: 'username'},
             {data: 'email', name: 'email'},         
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
@@ -47,6 +49,7 @@ $(function () {
         columns: [
             {data: 'firstname', name: 'firstname'},
             {data: 'lastname', name: 'lastname'},
+            {data: 'username', name: 'username'},
             {data: 'email', name: 'email'},         
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
@@ -64,7 +67,7 @@ $(function () {
             {data: 'name', name: 'name'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "13%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 
@@ -78,7 +81,7 @@ $(function () {
             {data: 'name', name: 'name'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 
@@ -94,7 +97,7 @@ $(function () {
             {data: 'province_id', name: 'province_id'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "13%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 
@@ -105,6 +108,12 @@ $(function () {
         lengthMenu: [ 100, 200, 300, 400, 500, ],
         ajax: $("#route_name").val(),
         columns: [
+            { 
+                data: 'drag', 
+                name: 'drag', 
+                orderable: false, 
+                searchable: false 
+            }, // Drag handle column
             {
                 "name": "featured_image",
                 "data": "featured_image",
@@ -112,7 +121,7 @@ $(function () {
                     return "<img src=\"" + data + "\" height=\"50\"/>";
                 },
                 "title": "Featured Image",
-                "orderable": true,
+                "orderable": false,
                 "searchable": true
             },
             // {data: 'featured_image', name: 'featured_image'},
@@ -121,9 +130,38 @@ $(function () {
             {data: 'category_id', name: 'category_id'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "13%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
+
+    /* SKILL - ROWS DATA SORTABLE DRAG DROP TO CHANGE SKILL POSITIONS */
+    $('#skillTable tbody').sortable({
+        handle: '.drag-handle', // Sets the drag handle class
+        update: function(event, ui) {
+            let order = [];
+            var route_name = $('.drag-handle').data('url');
+            console.log(route_name);
+
+            $('#skillTable tbody tr').each(function(index, element) {
+                order.push({
+                    id: $(this).data('id'),
+                    position: index + 1
+                });
+            });
+
+            // Send the new order to the server
+            $.ajax({
+                url: route_name,
+                method: 'POST',
+                data: { order: order, _token: $('meta[name="_token"]').attr('content') },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        skill_table.ajax.reload(null, false); // Reload DataTable without resetting pagination
+                    }
+                }
+            });
+        }
+    }).disableSelection();
 
 
     var sponsors_table = $('#sponsorsTable').DataTable({
@@ -146,7 +184,7 @@ $(function () {
             {data: 'name', name: 'name'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "13%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 
@@ -162,7 +200,7 @@ $(function () {
             {data: 'template_subject', name: 'template_subject'},
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "8%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
     
@@ -177,7 +215,7 @@ $(function () {
         columns: [
             {data: 'page_name', name: 'page_name'},
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 
@@ -192,7 +230,7 @@ $(function () {
             {data: 'email', name: 'email'},
             {data: 'phone', name: 'phone'},
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 
@@ -210,7 +248,7 @@ $(function () {
             {data: 'time_duration', name: 'time_duration'},
             {data: 'status', name: 'status'},
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "13%", orderable: false},  
+            {data: 'action', "width": "15%", orderable: false},  
         ],
     });
 
@@ -228,7 +266,7 @@ $(function () {
             {data: 'school', name: 'school'},
             {data: 'message', name: 'message'},
             {data: 'created_at', "width": "14%", name: 'created_at'},  
-            {data: 'action', "width": "12%", orderable: false},  
+            {data: 'action', "width": "12%", orderable: false}, 
         ],
     });
 
@@ -425,6 +463,7 @@ $(function () {
     });
 
     /* SAVE CHILDREN DATA BY AJAX REQUEST */
+    /* SAVE CHILDREN DATA BY AJAX REQUEST */
     $('#saveBtn').click(function (e) {
         e.preventDefault();
 
@@ -472,9 +511,6 @@ $(function () {
     });
 
 
-    
-    
-
     /* EDIT CHILDREN */
     $(document).on('click', '.editChild', function () {
         var child_id = $(this).data('id');
@@ -496,7 +532,7 @@ $(function () {
             $('#school_id').val(data.school_id).trigger('change');
 
             $('#child_phone').val(data.phone);
-            console.log('TEST');
+
             $('#child_dob').datepicker("setDate", data.date_of_birth );
 
             $('#looking_sponsor').prop('checked',false);
@@ -506,6 +542,7 @@ $(function () {
 
             $('#province_id').val(data.province_id);
             $('#school_id').val(data.school_id);
+            $('#childImage').attr('src',data.image);
 
 
         })
@@ -528,6 +565,34 @@ $(function () {
 
     $('#score_instruction').summernote({
         placeholder: 'Write your instruction',
+        tabsize: 2,
+        height: 250,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['insert', ['link']],
+          ['view', ['fullscreen', 'codeview']]
+        ]
+    }); 
+
+    $('#short_description').summernote({
+        placeholder: 'Write short description',
+        tabsize: 2,
+        height: 250,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['insert', ['link']],
+          ['view', ['fullscreen', 'codeview']]
+        ]
+    }); 
+
+    $('#long_description').summernote({
+        placeholder: 'Write long description',
         tabsize: 2,
         height: 250,
         toolbar: [

@@ -23,6 +23,9 @@ class UsersController extends Controller
             }) 
             ->editColumn('lastname', function($row) {
                 return ucfirst($row->lastname);
+            })  
+            ->editColumn('username', function($row) {
+                return $row->username;
             })   
             ->editColumn('created_at', function($row) {
                 return formatCreatedAt($row->created_at);
@@ -52,12 +55,13 @@ class UsersController extends Controller
         $inputs = $request->all();
 
         if ($file = $request->file('image')) {
-            $imageName = Str::random(20) . '.' . $file->getClientOriginalExtension();   
-            $file->move(public_path('uploads/users'), $imageName);    
-            $inputs['image'] = 'uploads/users/' . $imageName;
+            $inputs['image'] = $this->fileMove($file, 'users');
+            // $imageName = Str::random(20) . '.' . $file->getClientOriginalExtension();   
+            // $file->move(public_path('uploads/users'), $imageName);    
+            // $inputs['image'] = 'uploads/users/' . $imageName;
         }
 
-        $inputs['role'] = 'admin';
+        $inputs['role'] = 'admin';       
         $user = User::create($inputs);
 
         \Session::flash('success', 'User has been inserted successfully!');
@@ -81,19 +85,29 @@ class UsersController extends Controller
 
         $user = User::findorFail($id);
 
-        if ($file = $request->file('image')) {
-            $imageName = Str::random(20) . "." . $file->getClientOriginalExtension();
-            
-            $file->move(public_path('uploads/users'), $imageName);
-
-            $input['image'] = 'uploads/users/' . $imageName;
-
-            if (!empty($user->image) && file_exists(public_path($user->image))) {
-                unlink(public_path($user->image));
+        // Handle image upload
+        if($file = $request->file('image')){
+            // Delete old image file if exists
+            if (!empty($user->image) && file_exists($user->image)) {
+                unlink($user->image);
             }
-        } else {
-            $input['image'] = $user->image;
+            // Upload new image file
+            $input['image'] = $this->fileMove($file, 'users');
         }
+
+        // if ($file = $request->file('image')) {
+        //     $imageName = Str::random(20) . "." . $file->getClientOriginalExtension();
+            
+        //     $file->move(public_path('uploads/users'), $imageName);
+
+        //     $input['image'] = 'uploads/users/' . $imageName;
+
+        //     if (!empty($user->image) && file_exists(public_path($user->image))) {
+        //         unlink(public_path($user->image));
+        //     }
+        // } else {
+        //     $input['image'] = $user->image;
+        // }
 
         $user->update($input);
 
