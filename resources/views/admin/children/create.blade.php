@@ -6,8 +6,8 @@
         'menu' => $menu,
         'breadcrumb' => [
             ['route' => route('admin.dashboard'), 'title' => 'Dashboard'],
-            ['route' => route('parent.index'), 'title' => 'Manage Guardian'],
-            ['route' => route('parent.index'), 'title' => $menu]
+            ['route' => route('children.index'), 'title' => 'Manage children'],
+            ['route' => route('children.index'), 'title' => $menu]
         ],
         'active' => 'Add'
     ])
@@ -20,12 +20,12 @@
                     <div class="card-header">
                         @include('admin.common.card-header', ['title' => 'Add ' . $menu]) 
                     </div>
-                    {!! Form::open(['url' => route('parent.store'), 'id' => 'usersForm', 'class' => 'form-horizontal','files'=>true]) !!}
+                    {!! Form::open(['url' => route('children.store'), 'id' => 'usersForm', 'class' => 'form-horizontal','files'=>true]) !!}
                         <div class="card-body">
-                            @include ('admin.parent.form')
+                            @include ('admin.children.form')
                         </div>
                         <div class="card-footer">
-                            @include('admin.common.footer-buttons', ['route' => 'parent.index', 'type' => 'create'])
+                            @include('admin.common.footer-buttons', ['route' => 'children.index', 'type' => 'create'])
                         </div>
                     {!! Form::close() !!}
                 </div>
@@ -33,4 +33,26 @@
         </div>
     </section>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#province_id').on('change', function() {
+            var provinceId = $(this).val();
+            
+            $.ajax({
+                url: '{{ route('school.getSchoolByProvinceId', '') }}/' + provinceId,
+                method: 'GET',
+                success: function(data) {
+                    $('#school_id').empty().append('<option value="">Select School</option>');
+                    $.each(data, function(key, value) {
+                        $('#school_id').append('<option value="' + key + '">' + value + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script>
+@endsection
+
+@section('jquery');
+
 @endsection

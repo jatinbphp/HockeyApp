@@ -22,6 +22,8 @@ return new class extends Migration
             $table->text('video_url')->nullable();
             $table->string('featured_image')->nullable();
             $table->integer('position')->default(99999);
+            $table->integer('score_field_active')->default(0);
+            $table->integer('time_field_active')->default(0);
             $table->string('status')->default('active');
             $table->softDeletes();
             $table->timestamps();

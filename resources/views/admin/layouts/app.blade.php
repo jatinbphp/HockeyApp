@@ -28,7 +28,9 @@
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/select2/css/select2.min.css')}}">
         <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css"> -->
 
-
+        <script>
+            var baseUrl = "{{ url('/') }}";
+        </script>
     </head>
     <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
         <div class="wrapper">
@@ -95,7 +97,7 @@
                             </li>
 
                             @php
-                                $umenuCondition = isset($menu) && in_array($menu, ['Admin','Guardian']);
+                                $umenuCondition = isset($menu) && in_array($menu, ['Admin','Guardian','Children']);
                                 $umainMenuClasses = $umenuCondition ? 'menu-open' : '';
                                 $usubMenuClasses = $umenuCondition ? 'active' : '';
                                 $udisplayStyle = $umenuCondition ? 'block' : 'none';
@@ -121,6 +123,13 @@
                                         <a href="{{route('parent.index')}}" class="nav-link @if(isset($menu) && $menu=='Guardian') active @endif">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Guardian</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{route('children.index')}}" class="nav-link @if(isset($menu) && $menu=='Children') active @endif">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Children</p>
                                         </a>
                                     </li>
 
@@ -186,6 +195,24 @@
                                     <i class="nav-icon fa fa-medal"></i>
                                     <p>
                                         Rankings
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('globalranking.index')}}" class="nav-link @if(isset($menu) && $menu=='Global Rankings') active @endif">
+                                    <i class="nav-icon fa fa-medal"></i>
+                                    <p>
+                                        Global Rankings
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{route('payment.index')}}" class="nav-link @if(isset($menu) && $menu=='Payments') active @endif">
+                                    <i class="nav-icon fa fa-money-bill-wave"></i>
+                                    <p>
+                                        Payments
                                     </p>
                                 </a>
                             </li>

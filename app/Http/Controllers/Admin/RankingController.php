@@ -18,8 +18,11 @@ class RankingController extends Controller
 
         $scores = Score::with(['child', 'skills'])
             ->where(['status' => 'accept'])
+            ->whereHas('child', function ($query) {
+                $query->where('status', 'active') // Ensure the child is active
+                      ->where('deleted_at', null); // Ensure the child is not deleted
+            })
             ->when(!empty($request->province_id) && $request->province_id != 0, function ($query) use ($request) {
-                // return $query->where('province_id', $request->province_id);
                 return $query->whereHas('child', function ($query) use ($request) {
                     $query->where('province_id', $request->province_id);
                 });
@@ -34,22 +37,34 @@ class RankingController extends Controller
                     $query->where('skill_id', $request->skill_id);
                 });
             })
+            ->when(!empty($request->age_group) && $request->age_group != 0, function ($query) use ($request) {
+                return $query->whereHas('child', function ($query) use ($request) {
+                    $query->where('age_group', $request->age_group);
+                });
+            })
+            ->when(!empty($request->gender) && $request->gender != 0, function ($query) use ($request) {
+                return $query->whereHas('child', function ($query) use ($request) {
+                    $query->where('gender', $request->gender);
+                });
+            })
+            ->selectRaw('student_id, skill_id, MAX(score) as max_score')
+            ->whereYear('created_at', date('Y'))
+            ->groupBy('student_id', 'skill_id') 
             ->get();
-    
-        $groupedScores = $scores->groupBy('skill_id');
-        $rankedScores = collect();
 
-        foreach ($groupedScores as $skillId => $skillScores) {
-            $totalCount = $skillScores->count(); 
-            $sortedScores = $skillScores->sortByDesc('score')->values();
+        // Calculate rankings within each group
+        $rankedScores = $scores->groupBy('skill_id')->flatMap(function ($group) {
+            $sorted = $group->sortByDesc('max_score')->values();
+            $totalCount = $sorted->count();
 
-            foreach ($sortedScores as $index => $score) {
-                $rank = $index + 1;
-                $score->ranking = "{$rank}/{$totalCount}";
-                $rankedScores->push($score);
-            }
-        }
-        
+            return $sorted->map(function ($score, $index) use ($totalCount) {
+                // $score->ranking = ($index + 1) . '/' . $totalCount;
+                $score->ranking = ($index + 1);
+                return $score;
+            });
+        });
+
+        // Datatables response
         if ($request->ajax()) {
             return Datatables::of($rankedScores)
                 ->addIndexColumn()
@@ -57,19 +72,25 @@ class RankingController extends Controller
                     $firstname = $row->child->firstname ?? '';
                     $lastname = $row->child->lastname ?? '';
                     $username = $row->child->username ?? '';
-                    
+
                     if ($firstname || $lastname) {
                         return trim($firstname . ' ' . $lastname);
-                    }else{
+                    } else {
                         return $username;
                     }
                 })
+                ->editColumn('age_group', function ($row) {
+                    return $row->child->age_group ?? '';
+                })
+                ->editColumn('gender', function ($row) {
+                    return $row->child->gender ?? '';
+                })
                 ->editColumn('skill_id', function ($row) {
-                    return $row->skills->name;
+                    return $row->skills->name ?? '';
                 })
-                ->editColumn('created_at', function ($row) {
-                    return formatCreatedAt($row->created_at);
-                })
+                ->editColumn('score', function ($row) {
+                    return $row->max_score ?? 0;
+                })             
                 ->addColumn('ranking', function ($row) {
                     return $row->ranking;
                 })
@@ -78,7 +99,7 @@ class RankingController extends Controller
     
         $data['province'] = Province::where('status', 'active')->orderBy('name', 'asc')->pluck('name', 'id');
         $data['school'] = School::where('status', 'active')->orderBy('name', 'asc')->pluck('name', 'id');
-        $data['skill']  = Skill::where('status','active')->orderBy('name', 'asc')->pluck('name','id');
+        $data['skill']  = Skill::where('status','active')->orderBy('position', 'asc')->pluck('name','id');
     
         return view('admin.ranking.index', $data);
     }

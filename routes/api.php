@@ -31,6 +31,7 @@ Route::controller(AuthController::class)->middleware(['removePublic'])->group(fu
 
 Route::get('getSchool', [MainController::class, 'getActiveSchool']);
 Route::get('getProvince', [MainController::class, 'getActiveProvince']); 
+Route::post('getSchoolByProvinceId', [MainController::class, 'getSchoolByProvinceId']); 
 Route::get('getSponsors', [MainController::class, 'getSponsors']);
 Route::get('getSkill', [MainController::class, 'getActiveSkill']);    
  
@@ -62,7 +63,9 @@ Route::middleware('check.token')->group(function () {
     Route::post('getGuardianProfile', [MainController::class, 'getGuardianProfile']); 
     Route::post('submitScore', [MainController::class, 'submitScore']);
     Route::get('getRankings', [MainController::class, 'getActiveRankings']);
+    Route::post('getGlobalRankings', [MainController::class, 'getGlobalRankings']);
     Route::post('getChildPayment', [MainController::class, 'getChildPayment']); 
+    Route::post('getChildPaymentNew', [MainController::class, 'getChildPaymentNew']); 
     Route::post('getPayfastPaymentUrl', [MainController::class, 'getPayfastPaymentUrl']); 
         
    

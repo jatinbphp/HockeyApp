@@ -21,6 +21,8 @@ class Skill extends Model
         'featured_image',
         'icon_image',
         'position',
+        'score_field_active',
+        'time_field_active',
         'status'
     ];
 

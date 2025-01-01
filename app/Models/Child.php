@@ -32,6 +32,8 @@ class Child extends Authenticatable implements JWTSubject
         'device_type',
         'device_id',
         'image',
+        'gender',
+        'age_group',
         'remember_token'
     ];
 
@@ -83,5 +85,26 @@ class Child extends Authenticatable implements JWTSubject
     public function school()
     {
         return $this->belongsTo(School::class, 'school_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Parent::class, 'parent_id');
+    }
+
+    public function getFullNameAttribute(){
+       
+        return $this->firstname.' '.$this->lastname;
+       
+    }
+
+    public function getParentFullNameAttribute(){
+       
+        // Check if the parent exists before trying to access properties
+        if ($this->parent) {
+            return "{$this->parent->firstname} {$this->parent->lastname}";
+        }
+        return 'N/A'; // Default value if no parent is associated
+       
     }
 }

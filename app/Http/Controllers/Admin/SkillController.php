@@ -84,6 +84,19 @@ class SkillController extends Controller
             $inputs['icon_image'] = 'uploads/skill/' . $imageName;
         }
 
+        $score_field_active = 0;
+        if(isset($request->score_field_active)){
+            $score_field_active = 1;
+        }
+
+        $time_field_active = 0;
+        if(isset($request->time_field_active)){
+            $time_field_active = 1;
+        }
+
+        $inputs['score_field_active'] = $score_field_active;
+        $inputs['time_field_active'] = $time_field_active;
+
         $skill = Skill::create($inputs);
 
         \Session::flash('success','Skill has been inserted successfully!');
@@ -130,6 +143,19 @@ class SkillController extends Controller
             $inputs['icon_image'] = $skill->icon_image;
         }
 
+        $score_field_active = 0;
+        if(isset($request->score_field_active)){
+            $score_field_active = 1;
+        }
+
+        $time_field_active = 0;
+        if(isset($request->time_field_active)){
+            $time_field_active = 1;
+        }
+
+        $inputs['score_field_active'] = $score_field_active;
+        $inputs['time_field_active'] = $time_field_active;
+        
         $skill->update($inputs);
 
         \Session::flash('success','Skill has been updated successfully!');

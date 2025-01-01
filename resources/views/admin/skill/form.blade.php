@@ -106,6 +106,24 @@
     </div>
 
     <div class="col-md-6">
+        <div class="form-group">
+            @include('admin.common.label', ['field' => 'score_field_active', 'labelText' => 'Score Field Enable', 'isRequired' => false])
+
+            <input type="checkbox" name="score_field_active" id="score_field_active" class="form-control" {{ isset($skill) && $skill->score_field_active ? 'checked' : '' }}>
+
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @include('admin.common.label', ['field' => 'time_field_active', 'labelText' => 'Time Field Enable', 'isRequired' => false])
+
+            <input type="checkbox" name="time_field_active" id="time_field_active" class="form-control" {{ isset($skill) && $skill->time_field_active ? 'checked' : '' }}>
+
+        </div>
+    </div>
+
+    <div class="col-md-6">
         <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
             @include('admin.common.label', ['field' => 'status', 'labelText' => 'Status', 'isRequired' => false])
             

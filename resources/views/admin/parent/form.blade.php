@@ -128,13 +128,15 @@
                 <div class="card-body table-responsive">
                     <input type="hidden" id="route_name" value="{{ route('children.index') }}">
                     <input type="hidden" value="{{ isset($parent) ? $parent->id : '' }}" id="parent_id">
-                    <table id="childTable" class="table table-bordered table-striped datatable-dynamic" style="width:100%;">
+                    <table id="childsubTable" class="table table-bordered table-striped datatable-dynamic" style="width:100%;">
                         <thead>
                             <tr>
-                                <th>Fullname</th>
-                                <th>Lastname</th>
+                                <th>Parent Name</th>
+                                <th>Children Name</th>          
                                 <th>Username</th>
-                                <th>Email</th>                           
+                                <th>Email</th>    
+                                <th>Payment Status</th>                           
+                                <th>Payment Date</th>                            
                                 <th>Status</th>                           
                                 <th>Created At</th>                           
                                 <th style="15%">Action</th>  

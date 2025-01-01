@@ -12,9 +12,9 @@
                 <!-- <form method="post" id="childForm" name="childForm" class="form-horizontal"> -->
                 <div class="row">
                     {{ Form::hidden('parent_id', Request::segment(3), array('id' => 'parent_id')) }}
-
+                    
                     <input type="hidden" name="child_id" id="child_id">
-                    <input type="hidden" name="modal_redirect_url" id="modal_redirect_url" value="{{ route('children.store') }}">
+                    <input type="hidden" name="modal_redirect_url" id="modal_redirect_url" value="{{ route('children.savechildren') }}">
                    
                     <div class="col-md-6">
                         <div class="form-group{{ $errors->has('child_firstname') ? ' has-error' : '' }}">
@@ -87,6 +87,16 @@
                     </div>
 
                     <div class="col-md-6">
+                        <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
+                            @include('admin.common.label', ['field' => 'gender', 'labelText' => 'Select Gender', 'isRequired' => true])
+                    
+                            {!! Form::select('gender', ['M' => 'Male', 'F' => 'Female'], null, ['class' => 'form-control', 'placeholder' => 'Select Gender', 'id' => 'gender']) !!}
+                    
+                            @include('admin.common.errors', ['field' => 'gender'])
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
                         <div class="form-group{{ $errors->has('child_phone') ? ' has-error' : '' }}">
                         @include('admin.common.label', ['field' => 'child_phone', 'labelText' => 'Phone', 'isRequired' => true])
 
@@ -95,12 +105,13 @@
                         @include('admin.common.errors', ['field' => 'child_phone'])
                         </div>
                     </div>
+                    
                           
                     <div class="col-md-6">
                         <div class="form-group{{ $errors->has('province_id') ? ' has-error' : '' }}">
                             @include('admin.common.label', ['field' => 'province_id', 'labelText' => 'Select Province', 'isRequired' => true])
 
-                            {!! Form::select('province_id', isset($provinceData) ? $provinceData : [], null, ['class' => 'form-control select2', 'placeholder' => 'Select Province', 'id' => 'province_id', 'style' => 'width:100%']) !!}
+                            {!! Form::select('province_id', isset($provinceData) ? $provinceData : [], null, ['class' => 'form-control select2 provinceId_filter', 'placeholder' => 'Select Province', 'id' => 'province_id', 'style' => 'width:100%']) !!}
 
                             @include('admin.common.errors', ['field' => 'province_id'])
                         </div>
@@ -110,7 +121,7 @@
                         <div class="form-group{{ $errors->has('school_id') ? ' has-error' : '' }}">
                             @include('admin.common.label', ['field' => 'school_id', 'labelText' => 'Select School', 'isRequired' => true])
 
-                            {!! Form::select('school_id', isset($schoolData) ? $schoolData : [], null, ['class' => 'form-control select2', 'placeholder' => 'Select School', 'id' => 'school_id', 'style' => 'width:100%']) !!}
+                            {!! Form::select('school_id', isset($schoolData) ? $schoolData : [], null, ['class' => 'form-control select2 schoolId_filter', 'placeholder' => 'Select School', 'id' => 'school_id', 'style' => 'width:100%']) !!}
 
                             @include('admin.common.errors', ['field' => 'school_id'])
                         </div>

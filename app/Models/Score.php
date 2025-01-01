@@ -10,7 +10,7 @@ class Score extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable = ['skill_id','student_id','province_id','score','time_duration','status','video'];
+    protected $fillable = ['skill_id','student_id','province_id','score','time_duration','status','video','submited_score','submited_time'];
 
     const STATUS_TYPE_PENDING  = 'pending';
     const STATUS_TYPE_ACCEPT   = 'accept';

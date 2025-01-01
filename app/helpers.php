@@ -208,3 +208,38 @@ if(! function_exists('generatePayfastSignature')){
         return md5( $getString );
     } 
 }
+
+
+if(! function_exists('getAgeGroup')){
+    function getAgeGroup($dob)
+    {
+        // Extract the birth year
+        $birthYear = date('Y', strtotime($dob));
+        
+        // Get the current year
+        $currentYear = date('Y');
+        
+        // Calculate the child's age
+        $age = $currentYear - $birthYear;
+
+        // Define the age groups
+        $ageGroups = [
+            '0/9'  => 9,
+            '0/11' => 11,
+            '0/13' => 13,
+            '0/14' => 14,
+            '0/16' => 16,
+            '0/19' => 19,
+        ];
+
+        // Find the appropriate age group
+        foreach ($ageGroups as $group => $maxAge) {
+            if ($age <= $maxAge) {
+                return $group;
+            }
+        }
+
+        // Return the highest group if age exceeds all defined groups
+        return '0/19';
+    }
+}

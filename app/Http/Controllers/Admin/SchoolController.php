@@ -99,4 +99,9 @@ class SchoolController extends Controller
         return 1; 
         
     }
+    
+    public function getSchoolByProvinceId($id){
+        $schoolData = School::where('province_id', $id)->pluck('name', 'id');  // Filter schools by selected province_id
+        return response()->json($schoolData);
+    }
 }

@@ -51,9 +51,17 @@ return new class extends Migration
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-    }
 
-    
+        \Illuminate\Support\Facades\DB::table('email_templates')->insert([
+            'template_name_slug' => 'account_verification',
+            'template_name' => 'Email Verfification Template Mail',
+            'template_subject' => 'Confirm Your Email and Activate Your Profile on the Evolution Hockey App',
+            'template_message' => 'Please click the button below to verify your email address.',
+            'status' => 'active',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
 
     /**
      * Reverse the migrations.

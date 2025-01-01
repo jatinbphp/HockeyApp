@@ -32,10 +32,11 @@
                             <thead>
                                 <tr>
                                     <th>Child Name</th>
+                                    <th>Age Group</th>
+                                    <th>Gender</th>
                                     <th>Skill Name</th>
                                     <th>Score</th>
                                     <th>Ranking</th>                        
-                                    <th>Created At</th>                       
                                 </tr>
                             </thead>
                             <tbody>

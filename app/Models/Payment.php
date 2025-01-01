@@ -19,4 +19,9 @@ class Payment extends Model
         'response',
         'payment_date',
     ];
+
+    public function children()
+    {
+        return $this->belongsTo(Child::class, 'child_id', 'id');
+    }
 }

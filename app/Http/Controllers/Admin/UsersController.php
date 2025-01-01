@@ -140,4 +140,24 @@ class UsersController extends Controller
             return 0;
         }
     }
+
+    public function verifyAccount($token)
+    {
+        $verifyUser = User::where('remember_token', $token)->first();
+        $message = 'Sorry, your email cannot be identified.';
+
+        if ($verifyUser) {
+            if (is_null($verifyUser->email_verified_at)) {
+                $verifyUser->email_verified_at = now();
+                $verifyUser->status = 'active';
+                $verifyUser->save();
+                $message = "Your email is verified. You can now log in.";
+            } else {
+                $message = "Your email is already verified. You can now log in.";
+            }
+        }
+
+        return redirect()->route('accountVerified')->with('success', $message);
+    }
+
 }

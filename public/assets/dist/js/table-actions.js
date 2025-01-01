@@ -42,15 +42,41 @@ $(function () {
         lengthMenu: [ 100, 200, 300, 400, 500, ],
         ajax: {
             url: $("#route_name").val(),
+            // data: {
+            //     parent_id: $('#parent_id').val() 
+            // }
+        },
+        columns: [
+            {data: 'parent_name', name: 'parent_name'},
+            {data: 'full_name', name: 'full_name'},
+            {data: 'username', name: 'username'},
+            {data: 'email', name: 'email'},         
+            {data: 'payment_status', name: 'payment_status'},         
+            {data: 'plan_expire_date', name: 'plan_expire_date'},         
+            {data: 'status', "width": "15%",  name: 'status', orderable: false},  
+            {data: 'created_at', "width": "14%", name: 'created_at'},  
+            {data: 'action', "width": "15%", orderable: false},  
+        ],
+    });
+
+    var childrensub_table = $('#childsubTable').DataTable({
+        processing: true,
+        serverSide: true, 
+        pageLength: 100,
+        lengthMenu: [ 100, 200, 300, 400, 500, ],
+        ajax: {
+            url: $("#route_name").val(),
             data: {
                 parent_id: $('#parent_id').val() 
             }
         },
         columns: [
-            {data: 'firstname', name: 'firstname'},
-            {data: 'lastname', name: 'lastname'},
+            {data: 'parent_name', name: 'parent_name'},
+            {data: 'full_name', name: 'full_name'},
             {data: 'username', name: 'username'},
-            {data: 'email', name: 'email'},         
+            {data: 'email', name: 'email'},    
+            {data: 'payment_status', name: 'payment_status'},         
+            {data: 'plan_expire_date', name: 'plan_expire_date'},       
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
             {data: 'created_at', "width": "14%", name: 'created_at'},  
             {data: 'action', "width": "15%", orderable: false},  
@@ -281,29 +307,89 @@ $(function () {
                 d.province_id = $('#province_id').val();
                 d.school_id = $('#school_id').val();
                 d.skill_id = $('#skill_id').val();
+                d.age_group = $('#age_group').val();
+                d.gender = $('#gender').val();
             }
         },
         columns: [
             {data: 'student_id', name: 'student_id'},
+            {data: 'age_group', name: 'age_group'},
+            {data: 'gender', name: 'gender'},
             {data: 'skill_id', name: 'skill_id'},
             { 
                 data: 'score', 
                 name: 'score',
                 render: function(data, type, row) {
-                    return data + '%';
+                    return data;
                 }
             },
             {data: 'ranking', name: 'ranking'},
-            {data: 'created_at', "width": "14%", name: 'created_at'},  
+           
         ],
         "order": [[1, "ASC"]]
     });
 
+    var payment_table = $('#paymentTable').DataTable({
+        processing: true,
+        serverSide: true, 
+        pageLength: 100,
+        lengthMenu: [ 100, 200, 300, 400, 500, ],        
+        ajax: {
+            url: $("#route_name").val(),
+            data: function (d) {
+                d.start_date = $('#start_date').val();
+                d.end_date = $('#end_date').val();
+            }
+        },
+        columns: [
+            {data: 'fullname', name: 'fullname'},
+            {data: 'transaction_id', name: 'transaction_id'},
+            {data: 'amount', name: 'amount'},
+            {data: 'payment_date', name: 'payment_date'},         
+            {data: 'status', "width": "15%",  name: 'status', orderable: false}, 
+            
+        ],
+    });
+
+
+    var global_ranking_table = $('#globalRankingTable').DataTable({
+        processing: true,
+        serverSide: true, 
+        pageLength: 100,
+        lengthMenu: [ 100, 200, 300, 400, 500, ],
+        ajax: {
+            url: $("#route_name").val(),
+            data: function(d) {
+                d.province_id = $('#province_id').val();
+                d.school_id = $('#school_id').val();
+                d.skill_id = $('#skill_id').val();
+                d.age_group = $('#age_group').val();
+                d.gender = $('#gender').val();
+            }
+        },
+        columns: [
+            {data: 'student_id', name: 'student_id'},
+            {data: 'age_group', name: 'age_group'},
+            {data: 'gender', name: 'gender'},
+            // {data: 'skill_id', name: 'skill_id'},
+            { 
+                data: 'score', 
+                name: 'score',
+                render: function(data, type, row) {
+                    return data;
+                }
+            },
+            {data: 'ranking', name: 'ranking'},
+            // {data: 'created_at', "width": "14%", name: 'created_at'},  
+        ],
+        "order": [[3, "DESC"]]
+    });
 
     var sectionTableMap = {
         'users_table': users_table,
         'parent_table': parent_table,
         'children_table': children_table,
+        'childrensub_table': childrensub_table,
         'category_table': category_table,
         'province_table': province_table,
         'school_table': school_table,
@@ -314,6 +400,9 @@ $(function () {
         'contactus_table': contactus_table,
         'skill-review_table': skillreview_table,
         'notification_table': notification_table,
+        'payment_table': payment_table,
+        'global_ranking_table': global_ranking_table,
+        'ranking_table': ranking_table,
     };
 
 
@@ -467,6 +556,9 @@ $(function () {
     $('#saveBtn').click(function (e) {
         e.preventDefault();
 
+        var laddaButton = Ladda.create(document.querySelector('#saveBtn'));
+        laddaButton.start(); // Start the loading animation
+
         $('#childModel').on('show.bs.modal', function () {
             $('#childForm').find('.text-danger').remove();
         });
@@ -490,10 +582,11 @@ $(function () {
             success: function (data) {
                 $('#childForm').trigger("reset");
                 $('#childModel').modal('hide');
-                children_table.draw();
+                childrensub_table.draw();
     
                 $('#saveBtn').removeAttr('data-loading');
                 $('#saveBtn').removeAttr('disabled');
+                laddaButton.stop(); // Stop the loading animation
             },
             error: function(xhr) {
                 if (xhr.status === 422) {
@@ -506,6 +599,7 @@ $(function () {
                         `);
                     });
                 }
+                laddaButton.stop(); // Stop the loading animation
             }
         });
     });
@@ -528,6 +622,7 @@ $(function () {
             $('#child_username').val(data.username);
             $('#child_email').val(data.email);
             // $('#child_dob').val(data.date_of_birth);
+            $('#gender').val(data.gender).trigger('change');
             $('#province_id').val(data.province_id).trigger('change');
             $('#school_id').val(data.school_id).trigger('change');
 
@@ -563,19 +658,19 @@ $(function () {
         ]
     }); 
 
-    $('#score_instruction').summernote({
-        placeholder: 'Write your instruction',
-        tabsize: 2,
-        height: 250,
-        toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'clear']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['insert', ['link']],
-          ['view', ['fullscreen', 'codeview']]
-        ]
-    }); 
+    // $('#score_instruction').summernote({
+    //     placeholder: 'Write your instruction',
+    //     tabsize: 2,
+    //     height: 250,
+    //     toolbar: [
+    //       ['style', ['style']],
+    //       ['font', ['bold', 'underline', 'clear']],
+    //       ['color', ['color']],
+    //       ['para', ['ul', 'ol', 'paragraph']],
+    //       ['insert', ['link']],
+    //       ['view', ['fullscreen', 'codeview']]
+    //     ]
+    // }); 
 
     $('#short_description').summernote({
         placeholder: 'Write short description',
@@ -735,6 +830,8 @@ $(function () {
 
         if(dataType=='ranking'){
             ranking_table.ajax.reload(null, false);
+        }else if (dataType == 'globalranking') {
+            global_ranking_table.ajax.reload(null, false);
         }
     });
 
@@ -744,14 +841,72 @@ $(function () {
         if (dataType == 'ranking') {
             var province_id = $('#province_id').val();
             var school_id = $('#school_id').val();
+            var skill_id = $('#skill_id').val();
+            var age_group = $('#age_group').val();
+            var gender = $('#gender').val();
     
             ranking_table.ajax.reload(function (json) {
                 ranking_table.ajax.params({
                     province_id: province_id,
-                    school_id: school_id
+                    school_id: school_id,
+                    skill_id: skill_id,
+                    age_group: age_group,
+                    gender: gender,
+                });
+            }, false);
+        }else if (dataType == 'globalranking') {
+            var province_id = $('#province_id').val();
+            var school_id = $('#school_id').val();
+            var skill_id = $('#skill_id').val();
+            var age_group = $('#age_group').val();
+            var gender = $('#gender').val();
+    
+            global_ranking_table.ajax.reload(function (json) {
+                global_ranking_table.ajax.params({
+                    province_id: province_id,
+                    school_id: school_id,
+                    skill_id: skill_id,
+                    age_group: age_group,
+                    gender: gender,
                 });
             }, false);
         }
     });
 
+    /* GET SCHOOL BY PROVINCE ID */
+    $('.provinceId_filter').on('change', function() {
+        var provinceId = $(this).val();
+
+        console.log(provinceId);
+        $.ajax({
+            url: baseUrl+'/getSchoolByProvinceId/' + provinceId,
+            method: 'GET',
+            dataType: 'json',
+            headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
+            success: function(data) {
+                $('.schoolId_filter').empty().append('<option value="">Select School</option>');
+                $.each(data, function(key, value) {
+                    $('.schoolId_filter').append('<option value="' + key + '">' + value + '</option>');
+                });
+            }
+        });
+    });
+
+    $('#paymentFilter').click(function () {
+
+        var startDate = $('#start_date').val();
+        var endDate = $('#end_date').val();
+
+         // Validate date inputs
+        if (!startDate || !endDate) {            
+            swal("Error", "Both Start Date and End Date are required.", "error");
+            return; 
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {          
+            swal("Error", "Start Date cannot be later than End Date.", "error");
+            return; 
+        }
+        payment_table.ajax.reload(); // Reload the table with new parameters
+    });
 }); 

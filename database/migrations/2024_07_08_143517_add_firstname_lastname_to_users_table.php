@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('lastname')->nullable()->after('firstname');
             $table->string('username')->nullable()->after('lastname');
             $table->string('image')->nullable()->after('password');
-            $table->string('status')->nullable()->after('image');
+            // $table->string('status')->nullable()->after('image');
         });
     }
 

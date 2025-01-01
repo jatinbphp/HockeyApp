@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::table('children', function (Blueprint $table) {
             $table->string('image')->after('phone')->nullable();
+            $table->string('gender')->after('image')->nullable();
+            $table->string('age_group')->after('gender')->nullable();
         });
     }
 

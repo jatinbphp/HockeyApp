@@ -13,6 +13,7 @@ use App\Models\Child;
 use App\Models\ContactUs;
 use App\Models\EmailTemplate;
 use App\Mail\RegistrationMail;
+use App\Mail\EmailVerificationMail;
 use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -64,7 +65,7 @@ class AuthController extends Controller
         if ($user->status == 'inactive') {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Your account has been inactive',
+                'message' => 'Your account is not verified. Please check your email for the verification link to activate your account.',
                 'data' => (object)[]
             ], 401);
         }
@@ -94,7 +95,8 @@ class AuthController extends Controller
 
     protected function attemptLogin($model, $credentials, $loginField)
     {
-        $user = $model::where($loginField, $credentials['login'])->first();
+        // $user = $model::where($loginField, $credentials['login'])->first();
+        $user = $model::where('username', $credentials['login'])->first();
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
             return $user;
@@ -162,12 +164,14 @@ class AuthController extends Controller
         ],200);
     }
 
+    
     public function register(Request $request){
 
         $validator = Validator::make($request->post(), [
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:users|unique:children',
+            'username' => 'required|unique:users,username|unique:children,username',
             'password' => 'required',
             'phone' => 'required|numeric',  
             'terms' => 'required'        
@@ -186,29 +190,36 @@ class AuthController extends Controller
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'email' => $request->email,
+            'username' => $request->username,
             'password' => $request->password,
             'phone' => $request->phone,
             'terms' => (($request->terms)?'1':'0'),
             'older_than_18' => '0',
-            'role' => 'guardian'
+            'role' => 'guardian',
+            'status' => 'inactive'
         ]);
 
         $token = Auth::login($user);
 
+        $verificationToken = Str::random(60);
+       
         $user->update([
             'device_type' => $request->device_type,
             'device_id' => $request->device_id,
-            'session_token' => $token
+            'session_token' => $token,
+            'remember_token' => $verificationToken
         ]);     
 
-        $template_details= EmailTemplate::find(1);
+        $template_details= EmailTemplate::find(5);
         $guardianEmail= $user->email ?? "";
+      
+        $verificationUrl = url('/account/verify/' . $verificationToken);
 
         if(!empty($template_details))
         {
             $placeholders = [
                 '{{firstname}}' => ucfirst($user['firstname']),
-                '{{lastname}}' => ucfirst($user['lastname']),
+                '{{verifiy_mail_link}}' => $verificationUrl,
             ];
 
             $messageBody = str_replace(
@@ -218,12 +229,12 @@ class AuthController extends Controller
             );
 
             $mailData = [
-                'salutation' => 'Hello ' . ucfirst($user['firstname']) . ' ' . ucfirst($user['lastname']) . ',',
+                'salutation' => 'Hello ' . ucfirst($user['firstname']),
                 'body' => $messageBody,
                 'subject' => $template_details->template_subject ?? "",
             ];
 
-            Mail::to([$guardianEmail])->send(new RegistrationMail($mailData));
+            Mail::to([$guardianEmail])->send(new EmailVerificationMail($mailData));
         }
 
         return response()->json([
@@ -243,13 +254,14 @@ class AuthController extends Controller
                 'children' => 'required|array|min:1',
                 'children.*.firstname' => 'required',
                 'children.*.lastname' => 'required',
-                'children.*.email' => 'required|email|unique:users,email|unique:children,email',
+                'children.*.email' => 'required|email',
                 'children.*.username' => 'required|unique:users,username|unique:children,username',
                 'children.*.password' => 'required',
                 'children.*.phone' => 'required|numeric',
                 'children.*.date_of_birth' => 'required|date',
                 'children.*.province' => 'required',
                 'children.*.school' => 'required',
+                'children.*.gender' => 'required',
             ]);
 
             $parentId = $request->parent_id ?? 0;
@@ -261,6 +273,9 @@ class AuthController extends Controller
                 $childData['parent_id'] = $parentId;
                 $childData['province_id'] = $childData['province'];
                 $childData['school_id'] = $childData['school'];
+
+                $dob = date('Y-m-d',strtotime($childData['date_of_birth']));
+                $childData['age_group'] = getAgeGroup($dob);
 
                 $childData['password'] = bcrypt($childData['password']); // Hash password
 

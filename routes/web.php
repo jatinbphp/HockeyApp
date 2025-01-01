@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\FeesController;
 use App\Http\Controllers\Admin\ProfileUpdateController;
 use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\GlobalRankingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,10 @@ Route::get('', function () {
 Route::post('login',[LoginController::class, 'index'])->name('user.login');
 
 Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
+Route::get('account/verify/{token}', [UsersController::class, 'verifyAccount'])->name('user.verify'); 
+Route::get('accountVerified', function () {
+    return view('emailVerify');
+})->name('accountVerified')->middleware(['removePublic','guest']);
 
 Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () {
 
@@ -56,6 +61,7 @@ Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () 
     Route::resource('users', UsersController::class);
     Route::resource('parent', ParentController::class);
     Route::resource('children', ChildController::class);
+    Route::post('saveChildrenFromPopup', [ChildController::class,'saveChildrenFromPopup'])->name('children.savechildren');
 
     Route::post('users/additional-fields', [CommonController::class,'additionalFieldsForUser'])->name('users.additional_fields');
 
@@ -91,6 +97,9 @@ Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () 
     /* RANKINGS*/
     Route::get('ranking/index', [RankingController::class,'index'])->name('ranking.index');
 
+    /* GLOBAL RANKINGS*/
+    Route::get('globalranking/index', [GlobalRankingController::class,'index'])->name('globalranking.index');
+
     /* NOTIFICATION */
     Route::resource('notification', NotificationController::class);
 
@@ -108,7 +117,11 @@ Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () 
     Route::resource('skill-review', SkillReviewController::class);
     Route::get('/skill-review/{skill_review}', [SkillReviewController::class, 'show'])->name('skill-review.show');
     Route::post('skill-review/update_status', [SkillReviewController::class,'updateOrderStatus'])->name('skill-review.update_status');
+
+    Route::get('/payment/index', [PaymentController::class,'index'])->name('payment.index');
 });
+
+Route::get('getSchoolByProvinceId/{id}', [SchoolController::class, 'getSchoolByProvinceId'])->name('school.getSchoolByProvinceId');
 
 /* PASSWORD RESET */
 Route::get('password/reset/{token}', [ResetPasswordController::class,'showResetForm'])->name('show.reset.form');

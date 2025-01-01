@@ -28,8 +28,8 @@
                                     <th>Skill</th>                    
                                     <th>Student Name</th>                    
                                     <th>Province</th>                    
-                                    <th>Score(%)</th>                    
-                                    <th>Time Duration</th>                    
+                                    <th>Score</th>                    
+                                    <th>Time Duration(seconds)</th>                    
                                     <th>Status</th>                    
                                     <th>Created At</th>                           
                                     <th>Action</th>                           

@@ -4,7 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -28,15 +29,28 @@ class ProfileUpdateRequest extends FormRequest
         $rules = [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
+            'email' => 'required|string|max:255',
             'password' => 'confirmed|min:6',
             'image' => 'mimes:jpg,jpeg,png',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users','email')->ignore($userId)
-            ]
-        ];
+            'username' => [
+            'required',
+            function ($attribute, $value, $fail) use ($userId) {
+                $existsInUsers = DB::table('users')
+                    ->where('username', $value)
+                    ->where('id', '<>', $userId)
+                    ->exists();
+
+                $existsInChildren = DB::table('children')
+                    ->where('username', $value)
+                    ->exists();
+
+                if ($existsInUsers || $existsInChildren) {
+                    $fail('The username has already been taken.');
+                }
+            },
+        ]
+        ]; 
+
 
         if ($this->isMethod('patch')) {
             $rules['password'] = 'nullable|confirmed|min:6';
