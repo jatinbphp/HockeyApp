@@ -66,7 +66,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active categories found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
         
@@ -91,7 +91,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active school found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
         
@@ -122,7 +122,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active school found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
         
@@ -146,7 +146,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active province found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
         
@@ -207,7 +207,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active skill found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
     }
@@ -267,7 +267,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active skill found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
     }
@@ -295,7 +295,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active sponsors found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
 
@@ -314,7 +314,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => implode(',', $validator->errors()->all()),
-                'data' => (object)[]
+                'data' => []
             ], 200);
         }
 
@@ -395,7 +395,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => implode(',', $validator->errors()->all()),
-                'data' => (object)[]
+                'data' => []
             ], 200);
         }
 
@@ -548,7 +548,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active rankings found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
  
@@ -565,7 +565,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => implode(',', $validator->errors()->all()),
-                'data' => (object)[]
+                'data' => []
             ], 200);
 
         }
@@ -682,7 +682,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active rankings found',
-                'data' => (object)[],
+                'data' => [],
             ], 404);
         }
     }
@@ -701,7 +701,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => implode(',', $validator->errors()->all()),
-                    'data' => (object)[]
+                    'data' => []
                 ], 200);
 
             }
@@ -730,7 +730,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Profile not found',
-                    'data' => (object)[]
+                    'data' => []
                 ], 404);
             } 
             
@@ -758,7 +758,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => implode(',', $validator->errors()->all()),
-                    'data' => (object)[]
+                    'data' => []
                 ], 200);
 
             }
@@ -782,7 +782,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Profile not found',
-                    'data' => (object)[]
+                    'data' => []
                 ], 404);
             } 
             
@@ -810,7 +810,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => implode(',', $validator->errors()->all()),
-                    'data' => (object)[]
+                    'data' => []
                 ], 200);
 
             }
@@ -834,7 +834,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Profile not found',
-                    'data' => (object)[]
+                    'data' => []
                 ], 404);
             } 
             
@@ -862,7 +862,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => implode(',', $validator->errors()->all()),
-                    'data' => (object)[]
+                    'data' => []
                 ], 200);
 
             }          
@@ -903,7 +903,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Children not found',
-                    'data' => (object)[]
+                    'data' => []
                 ], 404);
             } 
             
@@ -932,7 +932,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => implode(',', $validator->errors()->all()),
-                'data' => (object)[]
+                'data' => []
             ], 200);
         }
 
@@ -967,14 +967,14 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'User not found!',
-                    'data' => (object)[]
+                    'data' => []
                 ], 200);
             }
         } else {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to Update Guardian!',
-                'data' => (object)[]
+                'data' => []
             ], 200);
         }
     }
@@ -997,7 +997,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => implode(',', $validator->errors()->all()),
-                'data' => (object)[]
+                'data' => []
             ], 200);
         }
 
@@ -1033,14 +1033,14 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Children not found!',
-                    'data' => (object)[]
+                    'data' => []
                 ], 200);
             }
         } else {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to Update Children!',
-                'data' => (object)[]
+                'data' => []
             ], 200);
         }
     }
@@ -1057,7 +1057,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Invalid data format, expected an array of children data.',
-                'data' => (object)[]
+                'data' => []
             ], 200);
         }
 
@@ -1222,7 +1222,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No fees found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
     }
@@ -1240,7 +1240,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => $validator->errors()->first(), // Returns first error message
-                    'data' => (object)[]
+                    'data' => []
                 ], 200);
             }
 
@@ -1300,7 +1300,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Child data not found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
 
         } catch (Exception $e) {
@@ -1326,7 +1326,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => implode(',', $validator->errors()->all()),
-                    'data' => (object)[]
+                    'data' => []
                 ], 200);
             }
 
@@ -1345,7 +1345,7 @@ class MainController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'User or child not found',
-                    'data' => (object)[]
+                    'data' => []
                 ], 404);
             }
 
@@ -1500,7 +1500,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while fetching the payment: ' . $e->getMessage(),
-                'data' => (object)[]
+                'data' => []
             ], 500);
         }
     }
@@ -1559,7 +1559,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => implode(',', $validator->errors()->all()),
-                'data' => (object)[]
+                'data' => []
             ], 200);
 
         }       
@@ -1781,7 +1781,7 @@ class MainController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'No active cms page found',
-                'data' => (object)[]
+                'data' => []
             ], 404);
         }
         
