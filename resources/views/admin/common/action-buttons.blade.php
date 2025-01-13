@@ -49,7 +49,7 @@
 </a>
 @endif
 
-@if($section_name!='email-templates')
+@if($section_name!='email-templates' && $section_name!='pages')
     <button class="btn btn-sm btn-danger deleteRecord" data-id="{{$id}}" type="button" data-url="{{ url('admin/'.$section_name.'/'.$id) }}" data-section="{{$section_name}}_table" title="Delete">
         <i class="fa fa-trash"></i>
     </button>

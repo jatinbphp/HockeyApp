@@ -23,7 +23,9 @@ use App\Http\Controllers\Admin\FeesController;
 use App\Http\Controllers\Admin\ProfileUpdateController;
 use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\GlobalRankingController;
+use App\Http\Controllers\TermsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,9 +121,15 @@ Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () 
     Route::post('skill-review/update_status', [SkillReviewController::class,'updateOrderStatus'])->name('skill-review.update_status');
 
     Route::get('/payment/index', [PaymentController::class,'index'])->name('payment.index');
+
+    /* SCHOOL */
+    Route::resource('pages', PagesController::class);
 });
 
 Route::get('getSchoolByProvinceId/{id}', [SchoolController::class, 'getSchoolByProvinceId'])->name('school.getSchoolByProvinceId');
+
+Route::get('terms', [TermsController::class, 'index'])->name('terms');
+Route::get('policy', [TermsController::class, 'policy'])->name('policy');
 
 /* PASSWORD RESET */
 Route::get('password/reset/{token}', [ResetPasswordController::class,'showResetForm'])->name('show.reset.form');

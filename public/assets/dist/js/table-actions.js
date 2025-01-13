@@ -385,6 +385,18 @@ $(function () {
         "order": [[3, "DESC"]]
     });
 
+    var pages_template = $('#pagesTable').DataTable({
+        processing: true,
+        serverSide: true, 
+        pageLength: 100,
+        lengthMenu: [ 100, 200, 300, 400, 500, ],
+        ajax: $("#route_name").val(),
+        columns: [
+            {data: 'title', name: 'title'},       
+            {data: 'action', "width": "15%", orderable: false},  
+        ],
+    });
+
     var sectionTableMap = {
         'users_table': users_table,
         'parent_table': parent_table,
@@ -403,6 +415,7 @@ $(function () {
         'payment_table': payment_table,
         'global_ranking_table': global_ranking_table,
         'ranking_table': ranking_table,
+        'pages_template': pages_template,
     };
 
 
@@ -747,6 +760,20 @@ $(function () {
 
     $('#page_content').summernote({
         placeholder: 'Enter Message',
+        tabsize: 2,
+        height: 250,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['insert', ['link']],
+          ['view', ['fullscreen', 'codeview']]
+        ]
+    }); 
+
+    $('#content').summernote({
+        placeholder: 'Enter Content',
         tabsize: 2,
         height: 250,
         toolbar: [

@@ -269,7 +269,16 @@
                                         Contact Us
                                     </p>
                                 </a>
-                            </li>                        
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a href="{{route('pages.index')}}" class="nav-link @if(isset($menu) && $menu=='v') active @endif">
+                                    <i class="nav-icon fa fa-file-alt"></i>
+                                    <p>
+                                        CMS Pages
+                                    </p>
+                                </a>
+                            </li>
 
                             <li class="nav-item">
                                 <a href="{{ route('admin.logout') }}" class="nav-link">
