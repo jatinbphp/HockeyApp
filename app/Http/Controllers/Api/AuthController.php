@@ -250,7 +250,7 @@ class AuthController extends Controller
     {
         try{
 
-            $request->validate([
+            $validator = Validator::make($request->post(), [
                 'children' => 'required|array|min:1',
                 'children.*.firstname' => 'required',
                 'children.*.lastname' => 'required',
@@ -263,6 +263,15 @@ class AuthController extends Controller
                 'children.*.school' => 'required',
                 'children.*.gender' => 'required',
             ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => implode(',', $validator->errors()->all()),
+                    'data' => (object)[]
+                ], 200);
+            }
+
 
             $parentId = $request->parent_id ?? 0;
             $childrenData = $request->children;
@@ -276,7 +285,7 @@ class AuthController extends Controller
 
                 $dob = date('Y-m-d',strtotime($childData['date_of_birth']));
                 $childData['age_group'] = getAgeGroup($dob);
-
+                $orgPass = $childData['password'];
                 $childData['password'] = bcrypt($childData['password']); // Hash password
 
                 $child = Child::create($childData);
@@ -294,6 +303,8 @@ class AuthController extends Controller
                     $placeholders = [
                         '{{firstname}}' => ucfirst($child['firstname']),
                         '{{lastname}}' => ucfirst($child['lastname']),
+                        '{{username}}' => $child['username'],
+                        '{{password}}' => $orgPass,
                     ];
         
                     $messageBody = str_replace(

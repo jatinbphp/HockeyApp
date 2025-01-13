@@ -75,7 +75,7 @@ class MainController extends Controller
     /* GET ACTIVE School */
     public function getActiveSchool()
     {
-        $activeSchool = School::select('id','name')->where('status', "active")->get();
+        $activeSchool = School::select('id','name','province_id')->where('status', "active")->get();
         $activeSchool->makeHidden(['deleted_at']);
 
         if (!$activeSchool->isEmpty()) {
@@ -815,10 +815,13 @@ class MainController extends Controller
 
             }
         
-            $userData = Child::where('id', $request->user_id)->get();
+            $userData = Child::with(['school' => function ($query) {
+                $query->select('id', 'name'); // Include only the required fields
+            }])->where('id', $request->user_id)->get();
             
             foreach ($userData as $child) {
                 $child->image = (!empty($child->image)) ? url($child->image) : '';
+                $child->school_name = ($child->school && !empty($child->school->name)) ? $child->school->name : "";
             }
 
             if (!$userData->isEmpty()) {         
@@ -867,10 +870,13 @@ class MainController extends Controller
 
             }          
 
-            $userData = Child::where('parent_id', $request->parent_id)->get();
+            $userData = Child::with(['school' => function ($query) {
+                $query->select('id', 'name'); // Include only the required fields
+            }])->where('parent_id', $request->parent_id)->get();
            
             foreach ($userData as $child) {
                 $child->image = (!empty($child->image)) ? url($child->image) : '';
+                $child->school_name = ($child->school && !empty($child->school->name)) ? $child->school->name : "";
 
                 /* CHECK CHILD PAYMENT */
                 $payment = Payment::select('status','payment_date')->where('child_id', $child->id)->orderBy('payment_date', 'desc')->first();
