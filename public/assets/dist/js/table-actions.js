@@ -53,7 +53,8 @@ $(function () {
             {data: 'email', name: 'email'},         
             {data: 'payment_status', name: 'payment_status'},         
             {data: 'plan_expire_date', name: 'plan_expire_date'},         
-            {data: 'status', "width": "15%",  name: 'status', orderable: false},  
+            {data: 'status', "width": "15%",  name: 'status', orderable: false},
+            {data: 'child_payment_status', name: 'child_payment_status'},   
             {data: 'created_at', "width": "14%", name: 'created_at'},  
             {data: 'action', "width": "15%", orderable: false},  
         ],
@@ -73,11 +74,12 @@ $(function () {
         columns: [
             {data: 'parent_name', name: 'parent_name'},
             {data: 'full_name', name: 'full_name'},
-            {data: 'username', name: 'username'},
+            {data: 'username', name: 'username'}, 
             {data: 'email', name: 'email'},    
             {data: 'payment_status', name: 'payment_status'},         
             {data: 'plan_expire_date', name: 'plan_expire_date'},       
             {data: 'status', "width": "15%",  name: 'status', orderable: false},  
+            {data: 'child_payment_status', name: 'child_payment_status'}, 
             {data: 'created_at', "width": "14%", name: 'created_at'},  
             {data: 'action', "width": "15%", orderable: false},  
         ],
@@ -495,6 +497,52 @@ $(function () {
                 } else {
                     $('#assign_remove_'+id).show();
                     $('#assign_add_'+id).hide();
+                }
+
+                if(section=='users_table'){
+                    users_table.draw(false);
+                } else if(section=='users_table'){
+                    users_table.draw(false);
+                } else if(section=='users_table'){
+                    users_table.draw(false);
+                } else if(section=='options_table'){
+                    options_table.draw(false);
+                }
+            }
+        });
+    });
+
+     //Change Status
+     $('.datatable-dynamic tbody').on('click', '.on_off_child_payment', function (event) {
+        event.preventDefault();
+        var url = $(this).attr('data-url');
+        var id = $(this).attr("data-id");
+        var parentid = $(this).attr("data-parentid");        
+        var type = $(this).attr("data-type"); 
+        var table_name = $(this).attr("data-table_name");
+        var section = $(this).attr("data-table_name");
+
+        var l = Ladda.create(this);
+        l.start();
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                'id': id,
+                'parentid': parentid,
+                'type': type,
+                'table_name': table_name,
+            },
+            headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
+            success: function(data){
+                l.stop();
+
+                if(type=='pending'){
+                    $('#paid_remove_'+id).hide();
+                    $('#paid_add_'+id).show();
+                } else {
+                    $('#paid_remove_'+id).show();
+                    $('#paid_add_'+id).hide();
                 }
 
                 if(section=='users_table'){

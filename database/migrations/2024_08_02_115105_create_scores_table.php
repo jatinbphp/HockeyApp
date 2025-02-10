@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('province_id')->default(0);
             $table->integer('score')->default(0);
             $table->time('time_duration')->nullable();
+            $table->string('submited_score')->default(0);
+            $table->integer('scosubmited_timere')->default(0);
             $table->text('video')->nullable();
             $table->string('status')->default('pending');
             $table->softDeletes();

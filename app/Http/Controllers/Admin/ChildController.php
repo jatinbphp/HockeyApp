@@ -86,6 +86,42 @@ class ChildController extends Controller
                 $row['table_name'] = 'children';
                 return view('admin.common.status-buttons', $row);
             })
+            ->editColumn('child_payment_status', function($row){
+
+                $row['parent_id'] = $row->parent_id;
+
+                $payment = Payment::select('status','payment_date')->where('child_id', $row->id)->orderBy('payment_date', 'desc')->first();
+
+                if($payment){
+
+                    $paymentStatus = $payment->status ?? 'pending';
+                    $paymentDate = $payment->payment_date ? Carbon::parse($payment->payment_date) : null;
+                    $todayDate = Carbon::now();
+
+                    // Check for 1-year renewal period
+                    $oneYearRenewal = $paymentDate && $paymentDate->diffInYears($todayDate) >= 1;
+
+                    if($paymentStatus == 'pending'){
+                        $row['child_payment_status'] = "pending";
+                    }else if($paymentStatus == 'Paid'){
+                        
+                        if($oneYearRenewal){
+                            $row['child_payment_status'] = "Expired";
+                        }else{
+                            $row['child_payment_status'] = "Paid";
+                        }
+
+                    }else{
+                        $row['child_payment_status'] = "pending";
+                    }
+                }else{
+                    $row['child_payment_status'] = "pending";
+                }                
+
+
+                $row['table_name'] = 'children';
+                return view('admin.common.payment-status-buttons', $row);
+            })
             ->addColumn('action', function($row){
                 $row['section_name'] = 'children';
                 $row['section_title'] = 'Children';

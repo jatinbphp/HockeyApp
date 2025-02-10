@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Mail\RegistrationMail;
 use Illuminate\Support\Facades\Mail;
-use DataTables;
+use DataTables; 
 
 class ParentController extends Controller
 {

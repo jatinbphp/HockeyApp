@@ -31,7 +31,8 @@
                                     <th>Email</th>                           
                                     <th>Payment Status</th>                           
                                     <th>Payment Date</th>                           
-                                    <th>Status</th>                           
+                                    <th>Status</th>
+                                    <th>Payment</th>                                         
                                     <th>Created At</th>                           
                                     <th>Action</th>                           
                                 </tr>

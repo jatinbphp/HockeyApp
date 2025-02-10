@@ -70,6 +70,8 @@ Route::prefix('admin')->middleware(['admin','removePublic'])->group(function () 
     /* COMMON FOR CHANGES STATUS */
     Route::post('common/changestatus', [CommonController::class,'changeStatus'])->name('common.changestatus');
 
+    Route::post('common/changePaymentStatus', [CommonController::class,'changePaymentStatus'])->name('common.changePaymentStatus');
+
 
     /* CATEGROY */
     Route::resource('category', CategoriesController::class);
